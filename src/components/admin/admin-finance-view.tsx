@@ -12,13 +12,7 @@ import {
   Building,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -165,7 +159,14 @@ export function AdminFinanceView({
       rows.push([]);
       rows.push(['ZUSAMMENFASSUNG', '', '', '', '', '']);
       rows.push(['Bruttoumsatz', '', '', '', '', (vatSummary.grossCents / 100).toFixed(2)]);
-      rows.push([`MwSt (${vatSummary.vatRate}%)`, '', '', '', '', (vatSummary.vatCents / 100).toFixed(2)]);
+      rows.push([
+        `MwSt (${vatSummary.vatRate}%)`,
+        '',
+        '',
+        '',
+        '',
+        (vatSummary.vatCents / 100).toFixed(2),
+      ]);
       rows.push(['Nettoumsatz', '', '', '', '', (vatSummary.netCents / 100).toFixed(2)]);
       rows.push(['Rückerstattungen', '', '', '', '', (stats.totalRefunds / 100).toFixed(2)]);
       rows.push(['Netto nach Erstattungen', '', '', '', '', (stats.netRevenue / 100).toFixed(2)]);
@@ -246,11 +247,11 @@ Erstellt am: ${formatDate(new Date().toISOString())}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Bruttoumsatz</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatPrice(stats.totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               {stats.totalOrders} Bestellungen, {stats.totalAppointments} Termine
             </p>
           </CardContent>
@@ -259,13 +260,11 @@ Erstellt am: ${formatDate(new Date().toISOString())}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">MwSt ({vatSummary.vatRate}%)</CardTitle>
-            <Building className="h-4 w-4 text-muted-foreground" />
+            <Building className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatPrice(vatSummary.vatCents)}</div>
-            <p className="text-xs text-muted-foreground">
-              abzuführen
-            </p>
+            <p className="text-muted-foreground text-xs">abzuführen</p>
           </CardContent>
         </Card>
 
@@ -278,9 +277,7 @@ Erstellt am: ${formatDate(new Date().toISOString())}
             <div className="text-2xl font-bold text-red-600">
               -{formatPrice(stats.totalRefunds)}
             </div>
-            <p className="text-xs text-muted-foreground">
-              erstattet
-            </p>
+            <p className="text-muted-foreground text-xs">erstattet</p>
           </CardContent>
         </Card>
 
@@ -290,12 +287,8 @@ Erstellt am: ${formatDate(new Date().toISOString())}
             <Wallet className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {formatPrice(stats.netRevenue)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              nach Erstattungen
-            </p>
+            <div className="text-2xl font-bold text-green-600">{formatPrice(stats.netRevenue)}</div>
+            <p className="text-muted-foreground text-xs">nach Erstattungen</p>
           </CardContent>
         </Card>
       </div>
@@ -305,33 +298,28 @@ Erstellt am: ${formatDate(new Date().toISOString())}
         <Card>
           <CardHeader>
             <CardTitle>Umsatz nach Zahlungsart</CardTitle>
-            <CardDescription>
-              Aufschlüsselung der Zahlungsmethoden
-            </CardDescription>
+            <CardDescription>Aufschlüsselung der Zahlungsmethoden</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {paymentMethods.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">
+              <p className="text-muted-foreground py-8 text-center">
                 Keine Zahlungen in diesem Zeitraum
               </p>
             ) : (
               paymentMethods.map((pm) => {
                 const Icon = getPaymentMethodIcon(pm.method);
-                const percentage = totalPaymentAmount > 0
-                  ? Math.round((pm.totalCents / totalPaymentAmount) * 100)
-                  : 0;
+                const percentage =
+                  totalPaymentAmount > 0
+                    ? Math.round((pm.totalCents / totalPaymentAmount) * 100)
+                    : 0;
 
                 return (
                   <div key={pm.method} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Icon className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">
-                          {getPaymentMethodLabel(pm.method)}
-                        </span>
-                        <span className="text-sm text-muted-foreground">
-                          ({pm.count}x)
-                        </span>
+                        <Icon className="text-muted-foreground h-4 w-4" />
+                        <span className="font-medium">{getPaymentMethodLabel(pm.method)}</span>
+                        <span className="text-muted-foreground text-sm">({pm.count}x)</span>
                       </div>
                       <span className="font-medium">{formatPrice(pm.totalCents)}</span>
                     </div>
@@ -347,30 +335,22 @@ Erstellt am: ${formatDate(new Date().toISOString())}
         <Card>
           <CardHeader>
             <CardTitle>MwSt-Übersicht</CardTitle>
-            <CardDescription>
-              Mehrwertsteuer-Berechnung (Schweiz)
-            </CardDescription>
+            <CardDescription>Mehrwertsteuer-Berechnung (Schweiz)</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableCell className="font-medium">Bruttoumsatz</TableCell>
-                  <TableCell className="text-right">
-                    {formatPrice(vatSummary.grossCents)}
-                  </TableCell>
+                  <TableCell className="text-right">{formatPrice(vatSummary.grossCents)}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">
-                    MwSt-Satz
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {vatSummary.vatRate}%
-                  </TableCell>
+                  <TableCell className="font-medium">MwSt-Satz</TableCell>
+                  <TableCell className="text-right">{vatSummary.vatRate}%</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium">MwSt-Betrag</TableCell>
-                  <TableCell className="text-right text-muted-foreground">
+                  <TableCell className="text-muted-foreground text-right">
                     {formatPrice(vatSummary.vatCents)}
                   </TableCell>
                 </TableRow>
@@ -388,11 +368,10 @@ Erstellt am: ${formatDate(new Date().toISOString())}
               </TableBody>
             </Table>
 
-            <div className="mt-4 rounded-lg bg-muted p-4">
-              <p className="text-sm text-muted-foreground">
-                Die MwSt wird nach dem Schweizer Normalsatz von {vatSummary.vatRate}%
-                berechnet. Für den offiziellen MwSt-Ausweis verwenden Sie bitte
-                den MwSt-Export.
+            <div className="bg-muted mt-4 rounded-lg p-4">
+              <p className="text-muted-foreground text-sm">
+                Die MwSt wird nach dem Schweizer Normalsatz von {vatSummary.vatRate}% berechnet. Für
+                den offiziellen MwSt-Ausweis verwenden Sie bitte den MwSt-Export.
               </p>
             </div>
           </CardContent>
@@ -403,9 +382,7 @@ Erstellt am: ${formatDate(new Date().toISOString())}
       <Card>
         <CardHeader>
           <CardTitle>Tagesumsätze</CardTitle>
-          <CardDescription>
-            Detaillierte Aufstellung nach Tag
-          </CardDescription>
+          <CardDescription>Detaillierte Aufstellung nach Tag</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="max-h-96 overflow-auto">
@@ -426,14 +403,10 @@ Erstellt am: ${formatDate(new Date().toISOString())}
                   .reverse()
                   .map((day) => (
                     <TableRow key={day.date}>
-                      <TableCell className="font-medium">
-                        {formatDate(day.date)}
-                      </TableCell>
+                      <TableCell className="font-medium">{formatDate(day.date)}</TableCell>
                       <TableCell className="text-right">{day.orderCount}</TableCell>
                       <TableCell className="text-right">{day.appointmentCount}</TableCell>
-                      <TableCell className="text-right">
-                        {formatPrice(day.orderRevenue)}
-                      </TableCell>
+                      <TableCell className="text-right">{formatPrice(day.orderRevenue)}</TableCell>
                       <TableCell className="text-right">
                         {formatPrice(day.appointmentRevenue)}
                       </TableCell>

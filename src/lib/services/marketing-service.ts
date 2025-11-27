@@ -12,12 +12,7 @@ import { getLoyaltyService } from './loyalty-service';
 // TYPES
 // ============================================
 
-export type CampaignType =
-  | 'birthday'
-  | 'reengagement'
-  | 'welcome'
-  | 'post_visit'
-  | 'newsletter';
+export type CampaignType = 'birthday' | 'reengagement' | 'welcome' | 'post_visit' | 'newsletter';
 
 export interface MarketingCampaign {
   id: string;
@@ -165,14 +160,16 @@ export class MarketingService {
     // Get customers with birthday today who have marketing consent
     const { data: customers, error } = await this.supabase
       .from('customers')
-      .select(`
+      .select(
+        `
         id,
         email,
         phone,
         first_name,
         last_name,
         birthday
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .not('birthday', 'is', null)
       .like('birthday', `%-${month}-${day}`);
@@ -238,14 +235,16 @@ export class MarketingService {
     // Get customers with no appointments after cutoff date
     const { data: customers, error } = await this.supabase
       .from('customers')
-      .select(`
+      .select(
+        `
         id,
         email,
         phone,
         first_name,
         last_name,
         created_at
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .lt('updated_at', cutoffDate.toISOString());
 
@@ -261,11 +260,7 @@ export class MarketingService {
       const consent = await this.checkMarketingConsent(customer.id);
 
       // Skip if already sent recently (within 30 days)
-      const alreadySent = await this.checkCampaignSentRecently(
-        customer.id,
-        'reengagement',
-        30
-      );
+      const alreadySent = await this.checkCampaignSentRecently(customer.id, 'reengagement', 30);
       if (alreadySent) {
         continue;
       }
@@ -347,7 +342,8 @@ export class MarketingService {
     // Get appointments from yesterday
     const { data: appointments, error } = await this.supabase
       .from('appointments')
-      .select(`
+      .select(
+        `
         id,
         customer:customers(
           id,
@@ -356,7 +352,8 @@ export class MarketingService {
           first_name,
           last_name
         )
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .eq('status', 'completed')
       .gte('ends_at', dayBefore.toISOString())
@@ -407,10 +404,7 @@ export class MarketingService {
     clickRate: number;
     conversionRate: number;
   }> {
-    let query = this.supabase
-      .from('marketing_logs')
-      .select('*')
-      .eq('salon_id', salonId);
+    let query = this.supabase.from('marketing_logs').select('*').eq('salon_id', salonId);
 
     if (campaignType) {
       query = query.eq('campaign_type', campaignType);
@@ -534,10 +528,7 @@ export class MarketingService {
     });
   }
 
-  private async sendBirthdayEmail(customer: {
-    email: string;
-    first_name: string;
-  }): Promise<void> {
+  private async sendBirthdayEmail(customer: { email: string; first_name: string }): Promise<void> {
     // TODO: Integrate with email service (Resend)
     logger.info('Birthday email would be sent', { email: customer.email });
   }
@@ -563,10 +554,7 @@ export class MarketingService {
     logger.info('Reengagement email would be sent', { email: customer.email });
   }
 
-  private async sendWelcomeEmail(customer: {
-    email: string;
-    first_name: string;
-  }): Promise<void> {
+  private async sendWelcomeEmail(customer: { email: string; first_name: string }): Promise<void> {
     // TODO: Integrate with email service (Resend)
     logger.info('Welcome email would be sent', { email: customer.email });
   }

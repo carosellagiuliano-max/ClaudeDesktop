@@ -112,21 +112,19 @@ export default async function OrderDetailPage({ params }: PageProps) {
       </div>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold mb-1">Bestellung {order.orderNumber}</h1>
-          <p className="text-muted-foreground">
-            Bestellt am {formatDateTime(order.createdAt)}
-          </p>
+          <h1 className="mb-1 text-2xl font-bold">Bestellung {order.orderNumber}</h1>
+          <p className="text-muted-foreground">Bestellt am {formatDateTime(order.createdAt)}</p>
         </div>
         <Badge variant={getStatusBadgeVariant(order.status)} className="w-fit">
           {getStatusText(order.status)}
         </Badge>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Order Items */}
           <Card>
             <CardHeader>
@@ -138,16 +136,13 @@ export default async function OrderDetailPage({ params }: PageProps) {
             <CardContent>
               <div className="space-y-4">
                 {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-start gap-4 py-4 border-b last:border-0"
-                  >
+                  <div key={item.id} className="flex items-start gap-4 border-b py-4 last:border-0">
                     {/* Icon/Image */}
-                    <div className="h-16 w-16 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                    <div className="bg-muted flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg">
                       {item.itemType === 'voucher' ? (
-                        <Gift className="h-8 w-8 text-primary" />
+                        <Gift className="text-primary h-8 w-8" />
                       ) : (
-                        <Package className="h-8 w-8 text-muted-foreground" />
+                        <Package className="text-muted-foreground h-8 w-8" />
                       )}
                     </div>
 
@@ -155,16 +150,16 @@ export default async function OrderDetailPage({ params }: PageProps) {
                     <div className="flex-1">
                       <h4 className="font-medium">{item.itemName}</h4>
                       {item.itemDescription && (
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-muted-foreground line-clamp-2 text-sm">
                           {item.itemDescription}
                         </p>
                       )}
                       {item.itemType === 'voucher' && item.recipientEmail && (
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-muted-foreground mt-1 text-sm">
                           Empfänger: {item.recipientName || item.recipientEmail}
                         </p>
                       )}
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <p className="text-muted-foreground mt-1 text-sm">
                         Menge: {item.quantity} × {formatPrice(item.unitPriceCents)}
                       </p>
                     </div>
@@ -192,13 +187,13 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 {order.shippingMethod === 'pickup' ? (
                   <div>
                     <p className="font-medium">Abholung im Salon</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Bitte holen Sie Ihre Bestellung zu unseren Öffnungszeiten ab.
                     </p>
                   </div>
                 ) : order.shippingAddress ? (
                   <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <MapPin className="text-muted-foreground mt-0.5 h-5 w-5 flex-shrink-0" />
                     <div>
                       <p className="font-medium">{order.shippingAddress.name}</p>
                       <p className="text-muted-foreground">
@@ -219,17 +214,15 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 ) : null}
 
                 {order.trackingNumber && (
-                  <div className="mt-4 pt-4 border-t">
-                    <p className="text-sm text-muted-foreground mb-1">
-                      Sendungsnummer
-                    </p>
+                  <div className="mt-4 border-t pt-4">
+                    <p className="text-muted-foreground mb-1 text-sm">Sendungsnummer</p>
                     <p className="font-mono font-medium">{order.trackingNumber}</p>
                     {/* Add tracking link if available */}
                   </div>
                 )}
 
                 {order.shippedAt && (
-                  <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground mt-4 flex items-center gap-2 text-sm">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Versendet am {formatDate(order.shippedAt)}
                   </div>
@@ -352,12 +345,12 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 <span>{formatPrice(order.totalCents)}</span>
               </div>
 
-              <p className="text-xs text-muted-foreground text-right">
+              <p className="text-muted-foreground text-right text-xs">
                 inkl. {formatPrice(order.taxCents)} MwSt.
               </p>
 
               {order.refundedAmountCents > 0 && (
-                <div className="flex justify-between text-sm text-destructive pt-2 border-t">
+                <div className="text-destructive flex justify-between border-t pt-2 text-sm">
                   <span>Erstattet</span>
                   <span>-{formatPrice(order.refundedAmountCents)}</span>
                 </div>
@@ -375,16 +368,15 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 variant={
                   order.paymentStatus === 'succeeded'
                     ? 'default'
-                    : order.paymentStatus === 'failed' ||
-                      order.paymentStatus === 'refunded'
-                    ? 'destructive'
-                    : 'outline'
+                    : order.paymentStatus === 'failed' || order.paymentStatus === 'refunded'
+                      ? 'destructive'
+                      : 'outline'
                 }
               >
                 {getPaymentStatusText(order.paymentStatus)}
               </Badge>
               {order.paidAt && (
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-muted-foreground mt-2 text-sm">
                   Bezahlt am {formatDate(order.paidAt)}
                 </p>
               )}
@@ -394,9 +386,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
           {/* Help */}
           <Card>
             <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground mb-3">
-                Fragen zu Ihrer Bestellung?
-              </p>
+              <p className="text-muted-foreground mb-3 text-sm">Fragen zu Ihrer Bestellung?</p>
               <Button variant="outline" className="w-full" asChild>
                 <Link href="/kontakt">
                   Kontakt aufnehmen
@@ -433,7 +423,7 @@ function TimelineItem({
   return (
     <div className="flex items-start gap-3">
       <div
-        className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
           isActive
             ? variant === 'destructive'
               ? 'bg-destructive/10 text-destructive'
@@ -445,7 +435,7 @@ function TimelineItem({
       </div>
       <div>
         <p className="font-medium">{title}</p>
-        <p className="text-sm text-muted-foreground">{formatDateTime(date)}</p>
+        <p className="text-muted-foreground text-sm">{formatDateTime(date)}</p>
       </div>
     </div>
   );

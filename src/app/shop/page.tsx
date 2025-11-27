@@ -97,14 +97,14 @@ export default function ShopPage() {
     <div className="py-12">
       {/* Page Header */}
       <section className="container-wide mb-16">
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-2">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-primary mb-2 text-sm font-medium tracking-wider uppercase">
             Premium Produkte
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Shop</h1>
-          <p className="text-lg text-muted-foreground">
-            Entdecken Sie unsere handverlesene Auswahl an professionellen
-            Haarpflegeprodukten – dieselben, die wir im Salon verwenden.
+          <h1 className="mb-6 text-4xl font-bold md:text-5xl">Shop</h1>
+          <p className="text-muted-foreground text-lg">
+            Entdecken Sie unsere handverlesene Auswahl an professionellen Haarpflegeprodukten –
+            dieselben, die wir im Salon verwenden.
           </p>
         </div>
       </section>
@@ -115,7 +115,7 @@ export default function ShopPage() {
           {productCategories.map((category) => (
             <Link key={category.slug} href={`/shop/${category.slug}`}>
               <Card
-                className={`h-full card-hover border-border/50 ${
+                className={`card-hover border-border/50 h-full ${
                   category.highlight ? 'bg-primary/5 border-primary/20' : ''
                 }`}
               >
@@ -123,24 +123,16 @@ export default function ShopPage() {
                   <div className="flex items-start gap-4">
                     <div
                       className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-                        category.highlight
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-primary/10'
+                        category.highlight ? 'bg-primary text-primary-foreground' : 'bg-primary/10'
                       }`}
                     >
                       <category.icon
-                        className={`h-6 w-6 ${
-                          category.highlight ? '' : 'text-primary'
-                        }`}
+                        className={`h-6 w-6 ${category.highlight ? '' : 'text-primary'}`}
                       />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">
-                        {category.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {category.description}
-                      </p>
+                      <h3 className="mb-1 text-lg font-semibold">{category.name}</h3>
+                      <p className="text-muted-foreground text-sm">{category.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -152,12 +144,10 @@ export default function ShopPage() {
 
       {/* Featured Products */}
       <section className="container-wide mb-16">
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold">Beliebte Produkte</h2>
-            <p className="text-muted-foreground">
-              Unsere meistverkauften Produkte
-            </p>
+            <p className="text-muted-foreground">Unsere meistverkauften Produkte</p>
           </div>
           <Button variant="ghost" asChild>
             <Link href="/shop/alle">
@@ -169,31 +159,24 @@ export default function ShopPage() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredProducts.map((product, index) => (
-            <Card
-              key={index}
-              className="group overflow-hidden border-border/50 cursor-pointer"
-            >
+            <Card key={index} className="group border-border/50 cursor-pointer overflow-hidden">
               {/* Image */}
-              <div className="relative aspect-square bg-gradient-to-br from-muted to-muted/50">
+              <div className="from-muted to-muted/50 relative aspect-square bg-gradient-to-br">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <ShoppingBag className="h-12 w-12 text-muted-foreground/20" />
+                  <ShoppingBag className="text-muted-foreground/20 h-12 w-12" />
                 </div>
 
                 {/* Badge */}
                 {product.badge && (
                   <div className="absolute top-3 left-3">
-                    <Badge
-                      variant={
-                        product.badge === 'Sale' ? 'destructive' : 'secondary'
-                      }
-                    >
+                    <Badge variant={product.badge === 'Sale' ? 'destructive' : 'secondary'}>
                       {product.badge}
                     </Badge>
                   </div>
                 )}
 
                 {/* Quick Add overlay */}
-                <div className="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="bg-charcoal/60 absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   <Button size="sm" variant="secondary">
                     <ShoppingBag className="mr-2 h-4 w-4" />
                     In den Warenkorb
@@ -203,16 +186,16 @@ export default function ShopPage() {
 
               {/* Content */}
               <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                <p className="text-muted-foreground mb-1 text-xs tracking-wider uppercase">
                   {product.brand}
                 </p>
-                <h3 className="font-semibold mb-2">{product.name}</h3>
+                <h3 className="mb-2 font-semibold">{product.name}</h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-primary">
+                  <span className="text-primary text-lg font-bold">
                     {formatPrice(product.price)}
                   </span>
                   {product.originalPrice && (
-                    <span className="text-sm text-muted-foreground line-through">
+                    <span className="text-muted-foreground text-sm line-through">
                       {formatPrice(product.originalPrice)}
                     </span>
                   )}
@@ -225,31 +208,27 @@ export default function ShopPage() {
 
       {/* Gift Voucher CTA */}
       <section className="container-wide">
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 overflow-hidden">
+        <Card className="from-primary/10 to-primary/5 border-primary/20 overflow-hidden bg-gradient-to-br">
           <CardContent className="p-8 md:p-12">
-            <div className="grid gap-8 md:grid-cols-2 items-center">
+            <div className="grid items-center gap-8 md:grid-cols-2">
               <div>
                 <Badge className="mb-4">Geschenkidee</Badge>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Geschenkgutscheine
-                </h2>
+                <h2 className="mb-4 text-2xl font-bold md:text-3xl">Geschenkgutscheine</h2>
                 <p className="text-muted-foreground mb-6">
-                  Verschenken Sie Wellness für die Haare! Unsere Gutscheine sind
-                  in beliebiger Höhe erhältlich und können für alle Leistungen
-                  und Produkte eingelöst werden.
+                  Verschenken Sie Wellness für die Haare! Unsere Gutscheine sind in beliebiger Höhe
+                  erhältlich und können für alle Leistungen und Produkte eingelöst werden.
                 </p>
-                <ul className="space-y-2 text-sm text-muted-foreground mb-6">
+                <ul className="text-muted-foreground mb-6 space-y-2 text-sm">
                   <li className="flex items-center gap-2">
-                    <Gift className="h-4 w-4 text-primary" />
+                    <Gift className="text-primary h-4 w-4" />
                     Wert frei wählbar (ab CHF 25)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Gift className="h-4 w-4 text-primary" />
+                    <Gift className="text-primary h-4 w-4" />
                     Digital oder als Geschenkkarte
                   </li>
                   <li className="flex items-center gap-2">
-                    <Gift className="h-4 w-4 text-primary" />
-                    2 Jahre gültig
+                    <Gift className="text-primary h-4 w-4" />2 Jahre gültig
                   </li>
                 </ul>
                 <Button asChild>
@@ -261,8 +240,8 @@ export default function ShopPage() {
               </div>
 
               {/* Image Placeholder */}
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center">
-                <Gift className="h-20 w-20 text-primary/30" />
+              <div className="from-primary/20 to-primary/10 relative flex aspect-[4/3] items-center justify-center rounded-xl bg-gradient-to-br">
+                <Gift className="text-primary/30 h-20 w-20" />
               </div>
             </div>
           </CardContent>
@@ -274,29 +253,23 @@ export default function ShopPage() {
         <div className="grid gap-6 md:grid-cols-3">
           <Card className="border-border/50">
             <CardContent className="p-6 text-center">
-              <Package className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold mb-1">Versandkostenfrei</h3>
-              <p className="text-sm text-muted-foreground">
-                Ab CHF 50 Bestellwert
-              </p>
+              <Package className="text-primary mx-auto mb-3 h-8 w-8" />
+              <h3 className="mb-1 font-semibold">Versandkostenfrei</h3>
+              <p className="text-muted-foreground text-sm">Ab CHF 50 Bestellwert</p>
             </CardContent>
           </Card>
           <Card className="border-border/50">
             <CardContent className="p-6 text-center">
-              <Star className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold mb-1">Profi-Qualität</h3>
-              <p className="text-sm text-muted-foreground">
-                Dieselben Produkte wie im Salon
-              </p>
+              <Star className="text-primary mx-auto mb-3 h-8 w-8" />
+              <h3 className="mb-1 font-semibold">Profi-Qualität</h3>
+              <p className="text-muted-foreground text-sm">Dieselben Produkte wie im Salon</p>
             </CardContent>
           </Card>
           <Card className="border-border/50">
             <CardContent className="p-6 text-center">
-              <ShoppingBag className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold mb-1">Click & Collect</h3>
-              <p className="text-sm text-muted-foreground">
-                Kostenlos im Salon abholen
-              </p>
+              <ShoppingBag className="text-primary mx-auto mb-3 h-8 w-8" />
+              <h3 className="mb-1 font-semibold">Click & Collect</h3>
+              <p className="text-muted-foreground text-sm">Kostenlos im Salon abholen</p>
             </CardContent>
           </Card>
         </div>

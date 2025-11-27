@@ -194,13 +194,7 @@ export class SMSService {
     customerId?: string,
     appointmentId?: string
   ): Promise<SMSSendResult> {
-    return this.sendAppointmentSMS(
-      'appointment_confirmed',
-      phone,
-      vars,
-      customerId,
-      appointmentId
-    );
+    return this.sendAppointmentSMS('appointment_confirmed', phone, vars, customerId, appointmentId);
   }
 
   /**
@@ -227,13 +221,7 @@ export class SMSService {
     customerId?: string,
     appointmentId?: string
   ): Promise<SMSSendResult> {
-    return this.sendAppointmentSMS(
-      'appointment_cancelled',
-      phone,
-      vars,
-      customerId,
-      appointmentId
-    );
+    return this.sendAppointmentSMS('appointment_cancelled', phone, vars, customerId, appointmentId);
   }
 
   /**

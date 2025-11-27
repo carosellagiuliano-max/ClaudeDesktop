@@ -68,10 +68,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!signature) {
       log('warn', 'Webhook received without signature');
-      return NextResponse.json(
-        { error: 'Missing signature' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
     }
 
     // Verify webhook signature
@@ -81,10 +78,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'Unknown error';
       log('error', 'Webhook signature verification failed', { error: errMsg });
-      return NextResponse.json(
-        { error: 'Invalid signature' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
     eventId = event.id;
@@ -119,27 +113,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     switch (eventType) {
       case 'checkout.session.completed':
-        result = await handleCheckoutSessionCompleted(
-          event.data.object as Stripe.Checkout.Session
-        );
+        result = await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
         break;
 
       case 'checkout.session.expired':
-        result = await handleCheckoutSessionExpired(
-          event.data.object as Stripe.Checkout.Session
-        );
+        result = await handleCheckoutSessionExpired(event.data.object as Stripe.Checkout.Session);
         break;
 
       case 'payment_intent.succeeded':
-        result = await handlePaymentIntentSucceeded(
-          event.data.object as Stripe.PaymentIntent
-        );
+        result = await handlePaymentIntentSucceeded(event.data.object as Stripe.PaymentIntent);
         break;
 
       case 'payment_intent.payment_failed':
-        result = await handlePaymentIntentFailed(
-          event.data.object as Stripe.PaymentIntent
-        );
+        result = await handlePaymentIntentFailed(event.data.object as Stripe.PaymentIntent);
         break;
 
       case 'charge.refunded':
@@ -201,10 +187,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         .eq('stripe_event_id', eventId);
     }
 
-    return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
   }
 }
 
@@ -350,9 +333,10 @@ async function handlePaymentIntentSucceeded(
     const { error } = await supabaseAdmin.rpc('handle_payment_success', {
       p_order_id: orderId,
       p_stripe_payment_intent_id: paymentIntent.id,
-      p_stripe_charge_id: typeof paymentIntent.latest_charge === 'string'
-        ? paymentIntent.latest_charge
-        : paymentIntent.latest_charge?.id,
+      p_stripe_charge_id:
+        typeof paymentIntent.latest_charge === 'string'
+          ? paymentIntent.latest_charge
+          : paymentIntent.latest_charge?.id,
     });
 
     if (error) {
@@ -385,8 +369,7 @@ async function handlePaymentIntentFailed(
   }
 
   try {
-    const errorMessage =
-      paymentIntent.last_payment_error?.message || 'Zahlung fehlgeschlagen';
+    const errorMessage = paymentIntent.last_payment_error?.message || 'Zahlung fehlgeschlagen';
 
     const { error } = await supabaseAdmin
       .from('orders')
@@ -440,9 +423,7 @@ async function handlePaymentIntentFailed(
  */
 async function handleChargeRefunded(charge: Stripe.Charge): Promise<WebhookResult> {
   const paymentIntentId =
-    typeof charge.payment_intent === 'string'
-      ? charge.payment_intent
-      : charge.payment_intent?.id;
+    typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id;
 
   if (!paymentIntentId) {
     return { success: true, message: 'No payment intent to track' };
@@ -548,8 +529,7 @@ async function handleChargeRefunded(charge: Stripe.Charge): Promise<WebhookResul
  * Handle dispute created
  */
 async function handleDisputeCreated(dispute: Stripe.Dispute): Promise<WebhookResult> {
-  const chargeId =
-    typeof dispute.charge === 'string' ? dispute.charge : dispute.charge?.id;
+  const chargeId = typeof dispute.charge === 'string' ? dispute.charge : dispute.charge?.id;
 
   if (!chargeId) {
     return { success: true, message: 'No charge to track' };
@@ -616,8 +596,7 @@ async function handleDisputeCreated(dispute: Stripe.Dispute): Promise<WebhookRes
  * Handle dispute closed
  */
 async function handleDisputeClosed(dispute: Stripe.Dispute): Promise<WebhookResult> {
-  const chargeId =
-    typeof dispute.charge === 'string' ? dispute.charge : dispute.charge?.id;
+  const chargeId = typeof dispute.charge === 'string' ? dispute.charge : dispute.charge?.id;
 
   if (!chargeId) {
     return { success: true, message: 'No charge to track' };
@@ -648,10 +627,7 @@ async function handleDisputeClosed(dispute: Stripe.Dispute): Promise<WebhookResu
       updateData.status = 'cancelled';
     }
 
-    const { error } = await supabaseAdmin
-      .from('orders')
-      .update(updateData)
-      .eq('id', order.id);
+    const { error } = await supabaseAdmin.from('orders').update(updateData).eq('id', order.id);
 
     if (error) {
       return { success: false, message: error.message, orderId: order.id };
@@ -820,10 +796,9 @@ async function processVoucherItems(order: Record<string, unknown>): Promise<void
   for (const item of voucherItems) {
     try {
       // Generate voucher code
-      const { data: code, error: codeError } = await supabaseAdmin.rpc(
-        'generate_voucher_code',
-        { p_salon_id: order.salon_id }
-      );
+      const { data: code, error: codeError } = await supabaseAdmin.rpc('generate_voucher_code', {
+        p_salon_id: order.salon_id,
+      });
 
       if (codeError || !code) {
         log('error', 'Failed to generate voucher code', {
@@ -871,10 +846,7 @@ async function processVoucherItems(order: Record<string, unknown>): Promise<void
       }
 
       // Update order item with voucher ID
-      await supabaseAdmin
-        .from('order_items')
-        .update({ voucher_id: voucher.id })
-        .eq('id', item.id);
+      await supabaseAdmin.from('order_items').update({ voucher_id: voucher.id }).eq('id', item.id);
 
       // Send voucher email to recipient
       if (item.recipient_email) {

@@ -22,18 +22,18 @@ export default function CheckoutCancelledPage() {
   return (
     <div className="container max-w-2xl py-12 md:py-20">
       {/* Icon */}
-      <div className="flex justify-center mb-8">
+      <div className="mb-8 flex justify-center">
         <div className="relative">
-          <div className="absolute inset-0 bg-destructive/20 rounded-full blur-2xl" />
-          <div className="relative h-24 w-24 rounded-full bg-destructive/10 flex items-center justify-center">
-            <XCircle className="h-12 w-12 text-destructive" />
+          <div className="bg-destructive/20 absolute inset-0 rounded-full blur-2xl" />
+          <div className="bg-destructive/10 relative flex h-24 w-24 items-center justify-center rounded-full">
+            <XCircle className="text-destructive h-12 w-12" />
           </div>
         </div>
       </div>
 
       {/* Title */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-3">Zahlung abgebrochen</h1>
+      <div className="mb-8 text-center">
+        <h1 className="mb-3 text-3xl font-bold">Zahlung abgebrochen</h1>
         <p className="text-muted-foreground text-lg">
           Die Zahlung wurde abgebrochen. Keine Sorge, es wurden keine Kosten erhoben.
         </p>
@@ -42,11 +42,11 @@ export default function CheckoutCancelledPage() {
       {/* Info Card */}
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="font-semibold mb-3">Was ist passiert?</h2>
-          <p className="text-sm text-muted-foreground mb-4">
+          <h2 className="mb-3 font-semibold">Was ist passiert?</h2>
+          <p className="text-muted-foreground mb-4 text-sm">
             Die Zahlung wurde nicht abgeschlossen. Dies kann verschiedene Gründe haben:
           </p>
-          <ul className="text-sm text-muted-foreground space-y-2">
+          <ul className="text-muted-foreground space-y-2 text-sm">
             <li className="flex items-start gap-2">
               <span className="text-primary mt-0.5">•</span>
               Sie haben die Zahlung selbst abgebrochen
@@ -67,14 +67,14 @@ export default function CheckoutCancelledPage() {
       <Card className="bg-muted/50 mb-8">
         <CardContent className="p-6">
           <div className="flex gap-4">
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <ShoppingBag className="h-5 w-5 text-primary" />
+            <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+              <ShoppingBag className="text-primary h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-medium mb-1">Ihr Warenkorb ist noch verfügbar</h3>
-              <p className="text-sm text-muted-foreground">
-                Ihre ausgewählten Artikel wurden nicht gelöscht. Sie können die Bestellung
-                jederzeit erneut versuchen.
+              <h3 className="mb-1 font-medium">Ihr Warenkorb ist noch verfügbar</h3>
+              <p className="text-muted-foreground text-sm">
+                Ihre ausgewählten Artikel wurden nicht gelöscht. Sie können die Bestellung jederzeit
+                erneut versuchen.
               </p>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function CheckoutCancelledPage() {
       </Card>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <Button asChild className="flex-1">
           <Link href="/warenkorb">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -96,7 +96,7 @@ export default function CheckoutCancelledPage() {
 
       {/* Help Section */}
       <div className="mt-12 text-center">
-        <p className="text-muted-foreground text-sm mb-4">
+        <p className="text-muted-foreground mb-4 text-sm">
           Haben Sie Fragen oder benötigen Sie Hilfe?
         </p>
         <Button variant="ghost" asChild>

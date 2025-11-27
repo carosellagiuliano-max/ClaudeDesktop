@@ -127,7 +127,10 @@ function formatDate(dateString: string): string {
 }
 
 function getStatusBadge(status: string) {
-  const statusConfig: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
+  const statusConfig: Record<
+    string,
+    { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }
+  > = {
     confirmed: { variant: 'default', label: 'Bestätigt' },
     completed: { variant: 'secondary', label: 'Abgeschlossen' },
     cancelled: { variant: 'destructive', label: 'Storniert' },
@@ -313,12 +316,12 @@ export function AdminCustomerDetailView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Gesamtbesuche</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{customer.totalVisits}</div>
             {customer.lastVisitAt && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Letzter Besuch: {formatDate(customer.lastVisitAt)}
               </p>
             )}
@@ -328,12 +331,16 @@ export function AdminCustomerDetailView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Gesamtumsatz</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
+            <CreditCard className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(customer.totalSpent)}</div>
-            <p className="text-xs text-muted-foreground">
-              Ø {formatCurrency(customer.totalVisits > 0 ? customer.totalSpent / customer.totalVisits : 0)} pro Besuch
+            <p className="text-muted-foreground text-xs">
+              Ø{' '}
+              {formatCurrency(
+                customer.totalVisits > 0 ? customer.totalSpent / customer.totalVisits : 0
+              )}{' '}
+              pro Besuch
             </p>
           </CardContent>
         </Card>
@@ -341,7 +348,7 @@ export function AdminCustomerDetailView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Treuepunkte</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
+            <Star className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -361,7 +368,7 @@ export function AdminCustomerDetailView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Status</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-1">
@@ -406,8 +413,12 @@ export function AdminCustomerDetailView({
                     {customer.firstName} {customer.lastName}
                   </h3>
                   {customer.gender && (
-                    <p className="text-sm text-muted-foreground">
-                      {customer.gender === 'male' ? 'Männlich' : customer.gender === 'female' ? 'Weiblich' : 'Divers'}
+                    <p className="text-muted-foreground text-sm">
+                      {customer.gender === 'male'
+                        ? 'Männlich'
+                        : customer.gender === 'female'
+                          ? 'Weiblich'
+                          : 'Divers'}
                     </p>
                   )}
                 </div>
@@ -415,18 +426,18 @@ export function AdminCustomerDetailView({
 
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <Mail className="text-muted-foreground h-4 w-4" />
                   <span className="text-sm">{customer.email}</span>
                 </div>
                 {customer.phone && (
                   <div className="flex items-center gap-3">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <Phone className="text-muted-foreground h-4 w-4" />
                     <span className="text-sm">{customer.phone}</span>
                   </div>
                 )}
                 {customer.birthDate && (
                   <div className="flex items-center gap-3">
-                    <Gift className="h-4 w-4 text-muted-foreground" />
+                    <Gift className="text-muted-foreground h-4 w-4" />
                     <span className="text-sm">{formatDate(customer.birthDate)}</span>
                   </div>
                 )}
@@ -454,9 +465,11 @@ export function AdminCustomerDetailView({
             </CardHeader>
             <CardContent>
               {customer.notes ? (
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">{customer.notes}</p>
+                <p className="text-muted-foreground text-sm whitespace-pre-wrap">
+                  {customer.notes}
+                </p>
               ) : (
-                <p className="text-sm text-muted-foreground italic">Keine Notizen vorhanden</p>
+                <p className="text-muted-foreground text-sm italic">Keine Notizen vorhanden</p>
               )}
             </CardContent>
           </Card>
@@ -489,7 +502,9 @@ export function AdminCustomerDetailView({
                 </CardHeader>
                 <CardContent>
                   {appointments.length === 0 ? (
-                    <p className="text-center py-8 text-muted-foreground">Keine Termine vorhanden</p>
+                    <p className="text-muted-foreground py-8 text-center">
+                      Keine Termine vorhanden
+                    </p>
                   ) : (
                     <Table>
                       <TableHeader>
@@ -531,7 +546,9 @@ export function AdminCustomerDetailView({
                 </CardHeader>
                 <CardContent>
                   {orders.length === 0 ? (
-                    <p className="text-center py-8 text-muted-foreground">Keine Bestellungen vorhanden</p>
+                    <p className="text-muted-foreground py-8 text-center">
+                      Keine Bestellungen vorhanden
+                    </p>
                   ) : (
                     <Table>
                       <TableHeader>
@@ -548,7 +565,7 @@ export function AdminCustomerDetailView({
                         {orders.map((order) => (
                           <TableRow
                             key={order.id}
-                            className="cursor-pointer hover:bg-muted/50"
+                            className="hover:bg-muted/50 cursor-pointer"
                             onClick={() => router.push(`/admin/bestellungen/${order.id}`)}
                           >
                             <TableCell className="font-mono">{order.orderNumber}</TableCell>
@@ -585,7 +602,7 @@ export function AdminCustomerDetailView({
                 </CardHeader>
                 <CardContent>
                   {loyaltyTransactions.length === 0 ? (
-                    <p className="text-center py-8 text-muted-foreground">
+                    <p className="text-muted-foreground py-8 text-center">
                       Keine Transaktionen vorhanden
                     </p>
                   ) : (
@@ -603,7 +620,9 @@ export function AdminCustomerDetailView({
                           <TableRow key={transaction.id}>
                             <TableCell>{formatDate(transaction.date)}</TableCell>
                             <TableCell>
-                              <Badge variant="outline">{getTransactionTypeLabel(transaction.type)}</Badge>
+                              <Badge variant="outline">
+                                {getTransactionTypeLabel(transaction.type)}
+                              </Badge>
                             </TableCell>
                             <TableCell>{transaction.description}</TableCell>
                             <TableCell
@@ -730,9 +749,7 @@ export function AdminCustomerDetailView({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Treuepunkte anpassen</DialogTitle>
-            <DialogDescription>
-              Aktueller Stand: {customer.loyaltyPoints} Punkte
-            </DialogDescription>
+            <DialogDescription>Aktueller Stand: {customer.loyaltyPoints} Punkte</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
@@ -742,7 +759,10 @@ export function AdminCustomerDetailView({
                 type="number"
                 value={pointsAdjustment.points}
                 onChange={(e) =>
-                  setPointsAdjustment({ ...pointsAdjustment, points: parseInt(e.target.value) || 0 })
+                  setPointsAdjustment({
+                    ...pointsAdjustment,
+                    points: parseInt(e.target.value) || 0,
+                  })
                 }
               />
             </div>

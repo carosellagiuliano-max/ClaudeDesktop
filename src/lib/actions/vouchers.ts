@@ -143,18 +143,20 @@ export async function redeemVoucher(
       return { data: null, error: 'Fehler beim Einlösen des Gutscheins' };
     }
 
-    // Record the redemption transaction
-    await supabase.from('voucher_transactions').insert({
-      voucher_id: input.voucherId,
-      amount_cents: input.amountCents,
-      transaction_type: 'redemption',
-      reference_type: input.referenceType,
-      reference_id: input.referenceId,
-      customer_id: input.customerId,
-    }).catch(() => {
-      // Transaction logging failed but redemption succeeded
-      console.warn('Failed to log voucher transaction');
-    });
+    // Record the redemption transaction (fire and forget)
+    supabase
+      .from('voucher_transactions')
+      .insert({
+        voucher_id: input.voucherId,
+        amount_cents: input.amountCents,
+        transaction_type: 'redemption',
+        reference_type: input.referenceType,
+        reference_id: input.referenceId,
+        customer_id: input.customerId,
+      })
+      .then(({ error }) => {
+        if (error) console.warn('Failed to log voucher transaction:', error);
+      });
 
     revalidatePath('/admin/vouchers');
 
@@ -210,9 +212,7 @@ export async function getVoucherByCode(
 /**
  * Get voucher by ID
  */
-export async function getVoucher(
-  voucherId: string
-): Promise<ActionResult<Voucher>> {
+export async function getVoucher(voucherId: string): Promise<ActionResult<Voucher>> {
   try {
     const supabase = await createServerClient();
 
@@ -284,17 +284,14 @@ export async function getCustomerVouchers(
 /**
  * Create a new voucher (admin only)
  */
-export async function createVoucher(
-  input: CreateVoucherInput
-): Promise<ActionResult<Voucher>> {
+export async function createVoucher(input: CreateVoucherInput): Promise<ActionResult<Voucher>> {
   try {
     const supabase = await createServerClient();
 
     // Generate unique code using database function
-    const { data: code, error: codeError } = await supabase.rpc(
-      'generate_voucher_code',
-      { p_salon_id: input.salonId }
-    );
+    const { data: code, error: codeError } = await supabase.rpc('generate_voucher_code', {
+      p_salon_id: input.salonId,
+    });
 
     if (codeError || !code) {
       return { data: null, error: 'Fehler beim Generieren des Gutscheincodes' };
@@ -350,9 +347,7 @@ export async function createVoucher(
 /**
  * Deactivate a voucher
  */
-export async function deactivateVoucher(
-  voucherId: string
-): Promise<ActionResult<Voucher>> {
+export async function deactivateVoucher(voucherId: string): Promise<ActionResult<Voucher>> {
   try {
     const supabase = await createServerClient();
 

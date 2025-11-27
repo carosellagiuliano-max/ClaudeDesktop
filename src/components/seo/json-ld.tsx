@@ -53,10 +53,7 @@ export function LocalBusinessJsonLd({ salon, openingHours }: LocalBusinessProps)
       '@type': 'City',
       name: 'St. Gallen',
     },
-    sameAs: [
-      'https://instagram.com/schnittwerk.sg',
-      'https://facebook.com/schnittwerk',
-    ],
+    sameAs: ['https://instagram.com/schnittwerk.sg', 'https://facebook.com/schnittwerk'],
   };
 
   return (
@@ -174,9 +171,7 @@ export function ProductJsonLd({
       '@type': 'Offer',
       price: (priceCents / 100).toFixed(2),
       priceCurrency: 'CHF',
-      availability: inStock
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
+      availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
     },
   };
 
@@ -193,14 +188,6 @@ export function ProductJsonLd({
 // ============================================
 
 function getDayOfWeekSchema(dayOfWeek: number): string {
-  const days = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   return days[dayOfWeek] || 'Monday';
 }

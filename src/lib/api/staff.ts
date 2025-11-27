@@ -1,11 +1,5 @@
 import { BaseService, ServiceResult, ServiceListResult } from './base';
-import type {
-  Staff,
-  ScheduleOverride,
-  Service,
-  InsertTables,
-  Database,
-} from '../db/types';
+import type { Staff, ScheduleOverride, Service, InsertTables, Database } from '../db/types';
 
 // ============================================
 // TYPES
@@ -68,10 +62,7 @@ class StaffServiceClass extends BaseService<'staff'> {
   ): Promise<ServiceListResult<Staff>> {
     const { activeOnly = true, bookableOnly = false } = options || {};
 
-    let query = this.client
-      .from('staff')
-      .select('*', { count: 'exact' })
-      .eq('salon_id', salonId);
+    let query = this.client.from('staff').select('*', { count: 'exact' }).eq('salon_id', salonId);
 
     if (activeOnly) {
       query = query.eq('is_active', true);
@@ -101,12 +92,14 @@ class StaffServiceClass extends BaseService<'staff'> {
   async findWithServices(staffId: string): Promise<ServiceResult<StaffWithServices>> {
     const { data, error } = await this.client
       .from('staff')
-      .select(`
+      .select(
+        `
         *,
         staff_service_skills (
           service:services (*)
         )
-      `)
+      `
+      )
       .eq('id', staffId)
       .single();
 
@@ -131,9 +124,12 @@ class StaffServiceClass extends BaseService<'staff'> {
   async findForService(serviceId: string, salonId: string): Promise<ServiceListResult<Staff>> {
     const { data, error, count } = await this.client
       .from('staff_service_skills')
-      .select(`
+      .select(
+        `
         staff (*)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .eq('service_id', serviceId);
 
     if (error) {
@@ -149,24 +145,35 @@ class StaffServiceClass extends BaseService<'staff'> {
 
   // Get staff default schedule
   getDefaultSchedule(staff: Staff): StaffSchedule[] {
-    const defaultSchedule = staff.default_schedule as Record<string, { start: string; end: string; isWorking: boolean }> | null;
+    const defaultSchedule = staff.default_schedule as Record<
+      string,
+      { start: string; end: string; isWorking: boolean }
+    > | null;
 
     if (!defaultSchedule) {
       // Return default 9-18 schedule Monday-Friday
       return [
         { dayOfWeek: 0, startTime: '09:00', endTime: '18:00', isWorking: false }, // Sunday
-        { dayOfWeek: 1, startTime: '09:00', endTime: '18:00', isWorking: true },  // Monday
-        { dayOfWeek: 2, startTime: '09:00', endTime: '18:00', isWorking: true },  // Tuesday
-        { dayOfWeek: 3, startTime: '09:00', endTime: '18:00', isWorking: true },  // Wednesday
-        { dayOfWeek: 4, startTime: '09:00', endTime: '18:00', isWorking: true },  // Thursday
-        { dayOfWeek: 5, startTime: '09:00', endTime: '18:00', isWorking: true },  // Friday
-        { dayOfWeek: 6, startTime: '09:00', endTime: '14:00', isWorking: true },  // Saturday
+        { dayOfWeek: 1, startTime: '09:00', endTime: '18:00', isWorking: true }, // Monday
+        { dayOfWeek: 2, startTime: '09:00', endTime: '18:00', isWorking: true }, // Tuesday
+        { dayOfWeek: 3, startTime: '09:00', endTime: '18:00', isWorking: true }, // Wednesday
+        { dayOfWeek: 4, startTime: '09:00', endTime: '18:00', isWorking: true }, // Thursday
+        { dayOfWeek: 5, startTime: '09:00', endTime: '18:00', isWorking: true }, // Friday
+        { dayOfWeek: 6, startTime: '09:00', endTime: '14:00', isWorking: true }, // Saturday
       ];
     }
 
     const schedule: StaffSchedule[] = [];
     for (let day = 0; day < 7; day++) {
-      const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][day];
+      const dayName = [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+      ][day];
       const daySchedule = defaultSchedule[dayName];
 
       schedule.push({
@@ -181,14 +188,19 @@ class StaffServiceClass extends BaseService<'staff'> {
   }
 
   // Update staff schedule
-  async updateSchedule(
-    staffId: string,
-    schedule: StaffSchedule[]
-  ): Promise<ServiceResult<Staff>> {
+  async updateSchedule(staffId: string, schedule: StaffSchedule[]): Promise<ServiceResult<Staff>> {
     const scheduleJson: Record<string, { start: string; end: string; isWorking: boolean }> = {};
 
     for (const day of schedule) {
-      const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][day.dayOfWeek];
+      const dayName = [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+      ][day.dayOfWeek];
       scheduleJson[dayName] = {
         start: day.startTime,
         end: day.endTime,
@@ -200,10 +212,7 @@ class StaffServiceClass extends BaseService<'staff'> {
   }
 
   // Get availability for a date
-  async getAvailability(
-    staffId: string,
-    date: Date
-  ): Promise<StaffAvailability> {
+  async getAvailability(staffId: string, date: Date): Promise<StaffAvailability> {
     const { data: staff } = await this.findById(staffId);
 
     if (!staff) {
@@ -343,12 +352,10 @@ class StaffServiceClass extends BaseService<'staff'> {
 
   // Assign service skill to staff
   async assignService(staffId: string, serviceId: string): Promise<ServiceResult<boolean>> {
-    const { error } = await this.client
-      .from('staff_service_skills')
-      .insert({
-        staff_id: staffId,
-        service_id: serviceId,
-      });
+    const { error } = await this.client.from('staff_service_skills').insert({
+      staff_id: staffId,
+      service_id: serviceId,
+    });
 
     if (error) {
       return { data: null, error: this.handleError(error) };

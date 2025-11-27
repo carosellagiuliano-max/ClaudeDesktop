@@ -30,11 +30,7 @@ interface StaffMemberRow {
   salon_id: string;
 }
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   // ========== MOCK MODE ==========
   if (isMockMode()) {
     const mockUser = await getMockUser();
@@ -50,9 +46,9 @@ export default async function AdminLayout({
     }
 
     return (
-      <div className="flex h-screen bg-background">
+      <div className="bg-background flex h-screen">
         {/* Mock Mode Banner */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 text-amber-950 text-center text-xs py-1 font-medium">
+        <div className="fixed top-0 right-0 left-0 z-50 bg-amber-500 py-1 text-center text-xs font-medium text-amber-950">
           DEMO-MODUS - Keine echte Datenbank verbunden
         </div>
 
@@ -66,7 +62,7 @@ export default async function AdminLayout({
         />
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden pt-6">
+        <div className="flex flex-1 flex-col overflow-hidden pt-6">
           {/* Header */}
           <AdminHeader
             user={{
@@ -98,11 +94,11 @@ export default async function AdminLayout({
   }
 
   // Check admin role
-  const { data: staffMember } = await supabase
+  const { data: staffMember } = (await supabase
     .from('staff')
     .select('id, role, display_name, salon_id')
     .eq('user_id', user.id)
-    .single() as { data: StaffMemberRow | null };
+    .single()) as { data: StaffMemberRow | null };
 
   if (!staffMember) {
     redirect('/admin/login?error=unauthorized');
@@ -114,7 +110,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="bg-background flex h-screen">
       {/* Sidebar */}
       <AdminSidebar
         user={{
@@ -125,7 +121,7 @@ export default async function AdminLayout({
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
         <AdminHeader
           user={{

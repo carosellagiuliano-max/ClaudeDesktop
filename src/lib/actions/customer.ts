@@ -32,14 +32,13 @@ export interface CustomerAppointment {
   canCancel: boolean;
 }
 
-export async function getCustomerAppointments(
-  customerId: string
-): Promise<CustomerAppointment[]> {
+export async function getCustomerAppointments(customerId: string): Promise<CustomerAppointment[]> {
   const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('appointments')
-    .select(`
+    .select(
+      `
       id,
       start_time,
       end_time,
@@ -52,7 +51,8 @@ export async function getCustomerAppointments(
         duration_minutes,
         price_cents
       )
-    `)
+    `
+    )
     .eq('customer_id', customerId)
     .order('start_time', { ascending: false });
 
@@ -94,15 +94,14 @@ export async function getCustomerAppointments(
 // GET UPCOMING APPOINTMENTS
 // ============================================
 
-export async function getUpcomingAppointments(
-  customerId: string
-): Promise<CustomerAppointment[]> {
+export async function getUpcomingAppointments(customerId: string): Promise<CustomerAppointment[]> {
   const supabase = createServerClient();
   const now = new Date().toISOString();
 
   const { data, error } = await supabase
     .from('appointments')
-    .select(`
+    .select(
+      `
       id,
       start_time,
       end_time,
@@ -115,7 +114,8 @@ export async function getUpcomingAppointments(
         duration_minutes,
         price_cents
       )
-    `)
+    `
+    )
     .eq('customer_id', customerId)
     .gte('start_time', now)
     .in('status', ['reserved', 'confirmed'])
@@ -173,7 +173,8 @@ export async function cancelAppointment(
     // Get appointment with full details for email
     const { data: appointment, error: fetchError } = await supabase
       .from('appointments')
-      .select(`
+      .select(
+        `
         id,
         start_time,
         status,
@@ -184,7 +185,8 @@ export async function cancelAppointment(
         salon_id,
         staff:staff_id (display_name),
         appointment_services (service_name)
-      `)
+      `
+      )
       .eq('id', appointmentId)
       .single();
 
@@ -279,16 +281,10 @@ export interface CustomerProfile {
   createdAt: Date;
 }
 
-export async function getCustomerProfile(
-  userId: string
-): Promise<CustomerProfile | null> {
+export async function getCustomerProfile(userId: string): Promise<CustomerProfile | null> {
   const supabase = createServerClient();
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
-    .single();
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
   if (error || !data) {
     console.error('Error fetching profile:', error);

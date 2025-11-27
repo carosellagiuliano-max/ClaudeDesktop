@@ -52,15 +52,17 @@ class ProductCategoryServiceClass extends BaseService<'product_categories'> {
   }
 
   // Get category with products
-  async findWithProducts(categoryId: string): Promise<
-    ServiceResult<ProductCategory & { products: Product[] }>
-  > {
+  async findWithProducts(
+    categoryId: string
+  ): Promise<ServiceResult<ProductCategory & { products: Product[] }>> {
     const { data, error } = await this.client
       .from('product_categories')
-      .select(`
+      .select(
+        `
         *,
         products (*)
-      `)
+      `
+      )
       .eq('id', categoryId)
       .single();
 
@@ -92,8 +94,13 @@ class ProductServiceClass extends BaseService<'products'> {
       pageSize?: number;
     }
   ): Promise<ServiceListResult<ProductWithCategory>> {
-    const { categoryId, activeOnly = true, inStockOnly = false, page = 1, pageSize = 20 } =
-      options || {};
+    const {
+      categoryId,
+      activeOnly = true,
+      inStockOnly = false,
+      page = 1,
+      pageSize = 20,
+    } = options || {};
 
     let query = this.client
       .from('products')
@@ -135,11 +142,13 @@ class ProductServiceClass extends BaseService<'products'> {
   async findWithVariants(productId: string): Promise<ServiceResult<ProductWithVariants>> {
     const { data, error } = await this.client
       .from('products')
-      .select(`
+      .select(
+        `
         *,
         category:product_categories (*),
         product_variants (*)
-      `)
+      `
+      )
       .eq('id', productId)
       .single();
 
@@ -151,15 +160,17 @@ class ProductServiceClass extends BaseService<'products'> {
   }
 
   // Get products grouped by category
-  async findGroupedByCategory(salonId: string): Promise<
-    ServiceResult<Array<ProductCategory & { products: Product[] }>>
-  > {
+  async findGroupedByCategory(
+    salonId: string
+  ): Promise<ServiceResult<Array<ProductCategory & { products: Product[] }>>> {
     const { data, error } = await this.client
       .from('product_categories')
-      .select(`
+      .select(
+        `
         *,
         products (*)
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .eq('is_active', true)
       .order('sort_order', { ascending: true });
@@ -198,10 +209,7 @@ class ProductServiceClass extends BaseService<'products'> {
   }
 
   // Search products
-  async search(
-    salonId: string,
-    query: string
-  ): Promise<ServiceListResult<ProductWithCategory>> {
+  async search(salonId: string, query: string): Promise<ServiceListResult<ProductWithCategory>> {
     const { data, error, count } = await this.client
       .from('products')
       .select(
@@ -374,7 +382,10 @@ class VoucherServiceClass extends BaseService<'vouchers'> {
   }
 
   // Get voucher by code
-  async findByCode(code: string, salonId: string): Promise<ServiceResult<Database['public']['Tables']['vouchers']['Row']>> {
+  async findByCode(
+    code: string,
+    salonId: string
+  ): Promise<ServiceResult<Database['public']['Tables']['vouchers']['Row']>> {
     const { data, error } = await this.client
       .from('vouchers')
       .select('*')

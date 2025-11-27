@@ -17,20 +17,11 @@ interface StaffSelectionProps {
 }
 
 export function StaffSelection({ staff }: StaffSelectionProps) {
-  const {
-    state,
-    selectStaff,
-    setNoPreference,
-    goBack,
-    goNext,
-    canProceed,
-  } = useBooking();
+  const { state, selectStaff, setNoPreference, goBack, goNext, canProceed } = useBooking();
 
   // Filter staff that can perform all selected services
   const qualifiedStaff = staff.filter((s) =>
-    state.selectedServices.every((service) =>
-      s.serviceIds.includes(service.id)
-    )
+    state.selectedServices.every((service) => s.serviceIds.includes(service.id))
   );
 
   const handleStaffSelect = (staffMember: BookableStaff | null) => {
@@ -54,9 +45,7 @@ export function StaffSelection({ staff }: StaffSelectionProps) {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold mb-2">
-          Bei wem möchten Sie den Termin?
-        </h2>
+        <h2 className="mb-2 text-2xl font-bold">Bei wem möchten Sie den Termin?</h2>
         <p className="text-muted-foreground">
           Wählen Sie Ihren bevorzugten Stylisten oder lassen Sie sich überraschen.
         </p>
@@ -67,7 +56,7 @@ export function StaffSelection({ staff }: StaffSelectionProps) {
         {/* No Preference Option */}
         <Card
           className={cn(
-            'cursor-pointer transition-all border-2',
+            'cursor-pointer border-2 transition-all',
             isSelected(null)
               ? 'border-primary bg-primary/5'
               : 'border-border/50 hover:border-primary/50'
@@ -76,19 +65,17 @@ export function StaffSelection({ staff }: StaffSelectionProps) {
         >
           <CardContent className="p-6 text-center">
             <div className="relative mx-auto mb-4">
-              <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mx-auto">
-                <User className="h-10 w-10 text-muted-foreground" />
+              <div className="bg-muted mx-auto flex h-20 w-20 items-center justify-center rounded-full">
+                <User className="text-muted-foreground h-10 w-10" />
               </div>
               {isSelected(null) && (
-                <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                <div className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full">
                   <Check className="h-4 w-4" />
                 </div>
               )}
             </div>
             <h3 className="font-semibold">Keine Präferenz</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Ersten verfügbaren Termin
-            </p>
+            <p className="text-muted-foreground mt-1 text-sm">Ersten verfügbaren Termin</p>
           </CardContent>
         </Card>
 
@@ -97,7 +84,7 @@ export function StaffSelection({ staff }: StaffSelectionProps) {
           <Card
             key={staffMember.id}
             className={cn(
-              'cursor-pointer transition-all border-2',
+              'cursor-pointer border-2 transition-all',
               isSelected(staffMember.id)
                 ? 'border-primary bg-primary/5'
                 : 'border-border/50 hover:border-primary/50'
@@ -110,15 +97,15 @@ export function StaffSelection({ staff }: StaffSelectionProps) {
                   <img
                     src={staffMember.imageUrl}
                     alt={staffMember.name}
-                    className="h-20 w-20 rounded-full object-cover mx-auto"
+                    className="mx-auto h-20 w-20 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mx-auto">
-                    <User className="h-10 w-10 text-muted-foreground" />
+                  <div className="bg-muted mx-auto flex h-20 w-20 items-center justify-center rounded-full">
+                    <User className="text-muted-foreground h-10 w-10" />
                   </div>
                 )}
                 {isSelected(staffMember.id) && (
-                  <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                  <div className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full">
                     <Check className="h-4 w-4" />
                   </div>
                 )}
@@ -133,16 +120,16 @@ export function StaffSelection({ staff }: StaffSelectionProps) {
       {qualifiedStaff.length === 0 && (
         <Card className="border-destructive/50 bg-destructive/5">
           <CardContent className="p-6 text-center">
-            <p className="text-sm text-destructive">
-              Leider ist für die gewählten Leistungen kein Mitarbeiter verfügbar.
-              Bitte passen Sie Ihre Auswahl an.
+            <p className="text-destructive text-sm">
+              Leider ist für die gewählten Leistungen kein Mitarbeiter verfügbar. Bitte passen Sie
+              Ihre Auswahl an.
             </p>
           </CardContent>
         </Card>
       )}
 
       {/* Navigation */}
-      <div className="flex justify-between pt-4 border-t">
+      <div className="flex justify-between border-t pt-4">
         <Button variant="outline" onClick={goBack}>
           Zurück
         </Button>

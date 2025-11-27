@@ -225,9 +225,7 @@ function getEmailLayout(content: string, salonName: string = 'SCHNITTWERK'): str
 // ORDER CONFIRMATION
 // ============================================
 
-export async function sendOrderConfirmationEmail(
-  data: OrderEmailData
-): Promise<SendResult> {
+export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<SendResult> {
   const { order, salonName = 'SCHNITTWERK' } = data;
 
   const itemsHtml = order.items
@@ -437,15 +435,8 @@ export async function sendOrderCancelledEmail(
 // ============================================
 
 export async function sendVoucherEmail(data: VoucherEmailData): Promise<SendResult> {
-  const {
-    voucherCode,
-    amount,
-    recipientName,
-    senderName,
-    personalMessage,
-    expiresAt,
-    salonName,
-  } = data;
+  const { voucherCode, amount, recipientName, senderName, personalMessage, expiresAt, salonName } =
+    data;
 
   // This email is sent to the recipient
   const content = `
@@ -513,15 +504,8 @@ export async function sendVoucherToRecipient(
 }
 
 function generateVoucherContent(data: VoucherEmailData): string {
-  const {
-    voucherCode,
-    amount,
-    recipientName,
-    senderName,
-    personalMessage,
-    expiresAt,
-    salonName,
-  } = data;
+  const { voucherCode, amount, recipientName, senderName, personalMessage, expiresAt, salonName } =
+    data;
 
   return `
     <h2>Sie haben einen Gutschein erhalten!</h2>

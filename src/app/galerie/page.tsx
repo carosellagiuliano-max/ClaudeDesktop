@@ -107,14 +107,14 @@ export default function GaleriePage() {
     <div className="py-12">
       {/* Page Header */}
       <section className="container-wide mb-16">
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-2">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-primary mb-2 text-sm font-medium tracking-wider uppercase">
             Unsere Arbeiten
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Galerie</h1>
-          <p className="text-lg text-muted-foreground">
-            Lassen Sie sich von unseren Kreationen inspirieren. Jedes Bild
-            erzählt eine Geschichte von Stil und Handwerkskunst.
+          <h1 className="mb-6 text-4xl font-bold md:text-5xl">Galerie</h1>
+          <p className="text-muted-foreground text-lg">
+            Lassen Sie sich von unseren Kreationen inspirieren. Jedes Bild erzählt eine Geschichte
+            von Stil und Handwerkskunst.
           </p>
         </div>
       </section>
@@ -125,26 +125,23 @@ export default function GaleriePage() {
           <div key={category.slug} id={category.slug}>
             {/* Category Header */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
+              <h2 className="mb-2 text-2xl font-bold">{category.name}</h2>
             </div>
 
             {/* Images Grid */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {category.images.map((image, index) => (
-                <Card
-                  key={index}
-                  className="group overflow-hidden border-border/50 cursor-pointer"
-                >
-                  <CardContent className="p-0 relative aspect-[3/4]">
+                <Card key={index} className="group border-border/50 cursor-pointer overflow-hidden">
+                  <CardContent className="relative aspect-[3/4] p-0">
                     {/* Placeholder - TODO: Replace with actual images */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                      <Camera className="h-12 w-12 text-muted-foreground/30" />
+                    <div className="from-muted to-muted/50 absolute inset-0 flex items-center justify-center bg-gradient-to-br">
+                      <Camera className="text-muted-foreground/30 h-12 w-12" />
                     </div>
 
                     {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <div className="bg-charcoal/60 absolute inset-0 flex items-end p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       <div className="text-white">
-                        <p className="text-xs uppercase tracking-wider text-primary mb-1">
+                        <p className="text-primary mb-1 text-xs tracking-wider uppercase">
                           {image.category}
                         </p>
                         <p className="text-sm font-medium">{image.alt}</p>
@@ -162,18 +159,16 @@ export default function GaleriePage() {
       <section className="container-wide mt-16 text-center">
         <Card className="bg-muted/30 border-border/50">
           <CardContent className="p-8">
-            <h2 className="text-2xl font-bold mb-4">
-              Mehr auf Instagram
-            </h2>
-            <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-              Folgen Sie uns auf Instagram für tägliche Inspiration und
-              einen Blick hinter die Kulissen von SCHNITTWERK.
+            <h2 className="mb-4 text-2xl font-bold">Mehr auf Instagram</h2>
+            <p className="text-muted-foreground mx-auto mb-6 max-w-xl">
+              Folgen Sie uns auf Instagram für tägliche Inspiration und einen Blick hinter die
+              Kulissen von SCHNITTWERK.
             </p>
             <a
               href="https://instagram.com/schnittwerk"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+              className="text-primary inline-flex items-center gap-2 font-medium hover:underline"
             >
               @schnittwerk auf Instagram →
             </a>

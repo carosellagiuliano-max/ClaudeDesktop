@@ -36,13 +36,11 @@ export interface AuthorizationResult {
 /**
  * Creates a Supabase client for server-side use
  */
-export function createServerSupabaseClient(
-  cookies: {
-    get: (name: string) => string | undefined;
-    set: (name: string, value: string, options: CookieOptions) => void;
-    remove: (name: string, options: CookieOptions) => void;
-  }
-) {
+export function createServerSupabaseClient(cookies: {
+  get: (name: string) => string | undefined;
+  set: (name: string, value: string, options: CookieOptions) => void;
+  remove: (name: string, options: CookieOptions) => void;
+}) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -72,7 +70,10 @@ export async function validateSession(
   client: ReturnType<typeof createServerSupabaseClient>
 ): Promise<AuthResult> {
   try {
-    const { data: { session }, error: sessionError } = await client.auth.getSession();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await client.auth.getSession();
 
     if (sessionError || !session) {
       return {
@@ -104,11 +105,13 @@ export async function validateSession(
         email: session.user.email || '',
         roles: roles as UserRole[],
         salonIds,
-        profile: profile ? {
-          firstName: profile.first_name || '',
-          lastName: profile.last_name || '',
-          avatarUrl: profile.avatar_url || undefined,
-        } : undefined,
+        profile: profile
+          ? {
+              firstName: profile.first_name || '',
+              lastName: profile.last_name || '',
+              avatarUrl: profile.avatar_url || undefined,
+            }
+          : undefined,
       },
     };
   } catch (error) {
@@ -275,11 +278,7 @@ export type Permission =
   | 'reports:export';
 
 const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
-  kunde: [
-    'appointments:view',
-    'appointments:create',
-    'appointments:cancel',
-  ],
+  kunde: ['appointments:view', 'appointments:create', 'appointments:cancel'],
   mitarbeiter: [
     'appointments:view',
     'appointments:create',

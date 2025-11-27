@@ -9,12 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { BookingProvider, useBooking } from './booking-context';
 import { BookingProgress } from './booking-progress';
 import { BookingSummary } from './booking-summary';
-import {
-  ServiceSelection,
-  StaffSelection,
-  TimeSelection,
-  Confirmation,
-} from './steps';
+import { ServiceSelection, StaffSelection, TimeSelection, Confirmation } from './steps';
 import {
   computeAvailableSlots,
   type BookableService,
@@ -26,10 +21,7 @@ import {
   type BlockedTime,
   type ExistingAppointment,
 } from '@/lib/domain/booking';
-import {
-  createAppointmentReservation,
-  confirmAppointment,
-} from '@/lib/actions';
+import { createAppointmentReservation, confirmAppointment } from '@/lib/actions';
 
 // ============================================
 // BOOKING FLOW MAIN COMPONENT
@@ -112,9 +104,7 @@ function BookingFlowContent({
       setSlots(availableSlots);
     } catch (error) {
       console.error('Failed to load slots:', error);
-      setSlotsError(
-        'Termine konnten nicht geladen werden. Bitte versuchen Sie es erneut.'
-      );
+      setSlotsError('Termine konnten nicht geladen werden. Bitte versuchen Sie es erneut.');
     } finally {
       setSlotsLoading(false);
     }
@@ -186,9 +176,7 @@ function BookingFlowContent({
   const renderStep = () => {
     switch (state.currentStep) {
       case 'services':
-        return (
-          <ServiceSelection services={services} categories={categories} />
-        );
+        return <ServiceSelection services={services} categories={categories} />;
       case 'staff':
         return <StaffSelection staff={staff} />;
       case 'time':
@@ -201,16 +189,14 @@ function BookingFlowContent({
           />
         );
       case 'confirm':
-        return (
-          <Confirmation salonAddress={salonAddress} onSubmit={handleSubmit} />
-        );
+        return <Confirmation salonAddress={salonAddress} onSubmit={handleSubmit} />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="container-wide py-8">
         {/* Progress Indicator */}
         <div className="mb-8">
@@ -237,13 +223,11 @@ function BookingFlowContent({
         </div>
 
         {/* Mobile Summary (collapsible) */}
-        <div className="lg:hidden mt-8">
+        <div className="mt-8 lg:hidden">
           <Card className="border-border/50">
             <CardContent className="p-4">
               <details>
-                <summary className="font-semibold cursor-pointer">
-                  Ihre Auswahl anzeigen
-                </summary>
+                <summary className="cursor-pointer font-semibold">Ihre Auswahl anzeigen</summary>
                 <div className="mt-4">
                   <BookingSummary />
                 </div>

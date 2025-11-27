@@ -30,11 +30,13 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('orders')
-      .select(`
+      .select(
+        `
         id, order_number, created_at, status, payment_status,
         subtotal_cents, shipping_cents, tax_cents, total_cents,
         customers (first_name, last_name, email)
-      `)
+      `
+      )
       .order('created_at', { ascending: false });
 
     if (from) {
@@ -53,8 +55,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const headers = ['Bestellnummer', 'Datum', 'Kunde', 'E-Mail', 'Status', 'Zahlungsstatus', 'Zwischensumme', 'Versand', 'MwSt', 'Total'];
-    const rows = (orders || []).map(o => [
+    const headers = [
+      'Bestellnummer',
+      'Datum',
+      'Kunde',
+      'E-Mail',
+      'Status',
+      'Zahlungsstatus',
+      'Zwischensumme',
+      'Versand',
+      'MwSt',
+      'Total',
+    ];
+    const rows = (orders || []).map((o) => [
       o.order_number,
       new Date(o.created_at).toLocaleDateString('de-CH'),
       o.customers ? `${o.customers.first_name} ${o.customers.last_name}` : '',
@@ -69,7 +82,7 @@ export async function GET(request: NextRequest) {
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+      ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
 
     return new NextResponse(csv, {

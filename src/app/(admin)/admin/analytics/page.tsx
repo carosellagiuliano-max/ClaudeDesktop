@@ -92,17 +92,17 @@ async function getAnalyticsData() {
   const startDate = thirtyDaysAgo.toISOString();
 
   // Get orders for last 30 days
-  const { data: ordersData } = await supabase
+  const { data: ordersData } = (await supabase
     .from('orders')
     .select('id, total_cents, created_at, status, payment_status')
     .gte('created_at', startDate)
-    .eq('payment_status', 'succeeded') as { data: OrderRow[] | null };
+    .eq('payment_status', 'succeeded')) as { data: OrderRow[] | null };
 
   // Get appointments for last 30 days
-  const { data: appointmentsData } = await supabase
+  const { data: appointmentsData } = (await supabase
     .from('appointments')
     .select('id, start_time, status, total_price_cents')
-    .gte('start_time', startDate) as { data: AppointmentRow[] | null };
+    .gte('start_time', startDate)) as { data: AppointmentRow[] | null };
 
   // Get new customers this month
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
@@ -112,9 +112,10 @@ async function getAnalyticsData() {
     .gte('created_at', startOfMonth);
 
   // Get top products by sales
-  const { data: topProductsData } = await supabase
+  const { data: topProductsData } = (await supabase
     .from('order_items')
-    .select(`
+    .select(
+      `
       product_id,
       quantity,
       total_cents,
@@ -122,22 +123,25 @@ async function getAnalyticsData() {
         id,
         name
       )
-    `)
+    `
+    )
     .not('product_id', 'is', null)
-    .gte('created_at', startDate) as { data: OrderItemRow[] | null };
+    .gte('created_at', startDate)) as { data: OrderItemRow[] | null };
 
   // Get top services by bookings
-  const { data: topServicesData } = await supabase
+  const { data: topServicesData } = (await supabase
     .from('appointments')
-    .select(`
+    .select(
+      `
       services (
         id,
         name,
         price_cents
       )
-    `)
+    `
+    )
     .gte('start_time', startDate)
-    .in('status', ['confirmed', 'completed']) as { data: ServiceBookingRow[] | null };
+    .in('status', ['confirmed', 'completed'])) as { data: ServiceBookingRow[] | null };
 
   // Aggregate daily revenue data
   const revenueByDate = new Map<string, RevenueData>();
@@ -177,16 +181,16 @@ async function getAnalyticsData() {
     }
   });
 
-  const revenueData = Array.from(revenueByDate.values())
-    .sort((a, b) => a.date.localeCompare(b.date));
+  const revenueData = Array.from(revenueByDate.values()).sort((a, b) =>
+    a.date.localeCompare(b.date)
+  );
 
   // Calculate stats
   const totalRevenue = revenueData.reduce((sum, d) => sum + d.revenue, 0);
   const totalOrders = ordersData?.length || 0;
   const totalAppointments = appointmentsData?.length || 0;
-  const cancelledAppointments = appointmentsData?.filter(
-    (a) => a.status === 'cancelled'
-  ).length || 0;
+  const cancelledAppointments =
+    appointmentsData?.filter((a) => a.status === 'cancelled').length || 0;
 
   // Aggregate top products
   const productSales = new Map<string, TopProduct>();
@@ -239,9 +243,8 @@ async function getAnalyticsData() {
     averageOrderValue: totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0,
     newCustomers: newCustomersCount || 0,
     returningCustomers: 0, // Would need more complex query
-    cancelRate: totalAppointments > 0
-      ? Math.round((cancelledAppointments / totalAppointments) * 100)
-      : 0,
+    cancelRate:
+      totalAppointments > 0 ? Math.round((cancelledAppointments / totalAppointments) * 100) : 0,
   };
 
   return {

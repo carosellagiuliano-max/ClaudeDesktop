@@ -172,24 +172,32 @@ RETURNS TABLE (
   reason TEXT
 ) AS $$
 DECLARE
-  v_appointment appointments%ROWTYPE;
+  v_start_time TIMESTAMPTZ;
+  v_service_id UUID;
   v_service services%ROWTYPE;
   v_hours_until NUMERIC;
 BEGIN
-  SELECT * INTO v_appointment FROM appointments WHERE id = p_appointment_id;
+  -- Get appointment start_time
+  SELECT start_time INTO v_start_time FROM appointments WHERE id = p_appointment_id;
   IF NOT FOUND THEN
     RETURN QUERY SELECT false, 0, 'Appointment not found'::TEXT;
     RETURN;
   END IF;
 
-  SELECT * INTO v_service FROM services WHERE id = v_appointment.service_id;
+  -- Get service from appointment_services
+  SELECT aps.service_id INTO v_service_id
+  FROM appointment_services aps
+  WHERE aps.appointment_id = p_appointment_id
+  LIMIT 1;
+
+  SELECT * INTO v_service FROM services WHERE id = v_service_id;
 
   -- Calculate hours until appointment
-  v_hours_until := EXTRACT(EPOCH FROM (v_appointment.starts_at - NOW())) / 3600;
+  v_hours_until := EXTRACT(EPOCH FROM (v_start_time - NOW())) / 3600;
 
-  IF v_hours_until >= v_service.deposit_refundable_until THEN
+  IF v_hours_until >= COALESCE(v_service.deposit_refundable_until, 24) THEN
     RETURN QUERY SELECT true, 100, 'Full refund eligible'::TEXT;
-  ELSIF v_hours_until >= (v_service.deposit_refundable_until / 2) THEN
+  ELSIF v_hours_until >= (COALESCE(v_service.deposit_refundable_until, 24) / 2) THEN
     RETURN QUERY SELECT true, 50, 'Partial refund eligible (50%)'::TEXT;
   ELSE
     RETURN QUERY SELECT false, 0, 'Cancellation deadline passed'::TEXT;
@@ -204,18 +212,28 @@ CREATE OR REPLACE FUNCTION create_appointment_deposit(
 )
 RETURNS UUID AS $$
 DECLARE
-  v_appointment appointments%ROWTYPE;
+  v_salon_id UUID;
+  v_customer_id UUID;
+  v_service_id UUID;
   v_service services%ROWTYPE;
   v_deposit_amount INTEGER;
   v_deposit_id UUID;
 BEGIN
-  SELECT * INTO v_appointment FROM appointments WHERE id = p_appointment_id;
+  -- Get appointment details
+  SELECT salon_id, customer_id INTO v_salon_id, v_customer_id
+  FROM appointments WHERE id = p_appointment_id;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Appointment not found';
   END IF;
 
-  SELECT * INTO v_service FROM services WHERE id = v_appointment.service_id;
-  IF NOT v_service.deposit_required THEN
+  -- Get service from appointment_services
+  SELECT aps.service_id INTO v_service_id
+  FROM appointment_services aps
+  WHERE aps.appointment_id = p_appointment_id
+  LIMIT 1;
+
+  SELECT * INTO v_service FROM services WHERE id = v_service_id;
+  IF NOT FOUND OR NOT v_service.deposit_required THEN
     RETURN NULL;
   END IF;
 
@@ -225,9 +243,9 @@ BEGIN
     appointment_id, salon_id, customer_id,
     amount_cents, stripe_payment_intent_id, status
   ) VALUES (
-    p_appointment_id, v_appointment.salon_id, v_appointment.customer_id,
+    p_appointment_id, v_salon_id, v_customer_id,
     v_deposit_amount, p_stripe_payment_intent_id,
-    CASE WHEN p_stripe_payment_intent_id IS NOT NULL THEN 'pending' ELSE 'pending' END
+    'pending'
   )
   ON CONFLICT (appointment_id) DO UPDATE SET
     stripe_payment_intent_id = EXCLUDED.stripe_payment_intent_id,
@@ -345,17 +363,18 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE VIEW v_pending_deposits AS
 SELECT
   ad.*,
-  a.starts_at as appointment_starts_at,
+  a.start_time as appointment_starts_at,
   a.status as appointment_status,
   c.first_name || ' ' || c.last_name as customer_name,
   c.email as customer_email,
   c.phone as customer_phone,
   s.name as service_name,
-  EXTRACT(EPOCH FROM (a.starts_at - NOW())) / 3600 as hours_until_appointment
+  EXTRACT(EPOCH FROM (a.start_time - NOW())) / 3600 as hours_until_appointment
 FROM appointment_deposits ad
 JOIN appointments a ON ad.appointment_id = a.id
 JOIN customers c ON ad.customer_id = c.id
-JOIN services s ON a.service_id = s.id
+LEFT JOIN appointment_services aps ON aps.appointment_id = a.id
+LEFT JOIN services s ON aps.service_id = s.id
 WHERE ad.status IN ('pending', 'paid');
 
 COMMENT ON VIEW v_pending_deposits IS 'Active deposits with appointment details';
@@ -390,7 +409,7 @@ ON appointment_deposits FOR SELECT
 TO authenticated
 USING (
   customer_id IN (
-    SELECT id FROM customers WHERE user_id = auth.uid()
+    SELECT id FROM customers WHERE profile_id = auth.uid()
   )
 );
 
@@ -400,7 +419,7 @@ ON appointment_deposits FOR SELECT
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff WHERE user_id = auth.uid()
+    SELECT salon_id FROM staff WHERE profile_id = auth.uid()
   )
 );
 
@@ -410,9 +429,9 @@ ON appointment_deposits FOR ALL
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role IN ('admin', 'manager')
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name IN ('admin', 'manager')
   )
 );
 
@@ -422,9 +441,9 @@ ON deposit_policies FOR ALL
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role = 'admin'
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name = 'admin'
   )
 );
 

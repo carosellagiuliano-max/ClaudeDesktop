@@ -76,6 +76,46 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at);
 COMMENT ON TABLE audit_logs IS 'Audit trail for critical actions';
 
 -- ============================================
+-- LEGAL DOCUMENTS TABLE (Terms, Privacy Policy, etc.)
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS legal_documents (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  salon_id UUID REFERENCES salons(id) ON DELETE CASCADE,
+
+  -- Document info
+  type TEXT NOT NULL, -- 'terms', 'privacy', 'cancellation', 'booking'
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+
+  -- Status
+  is_active BOOLEAN DEFAULT true,
+  published_at TIMESTAMPTZ,
+
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+
+  CONSTRAINT unique_legal_doc_type_version UNIQUE (salon_id, type, version)
+);
+
+CREATE INDEX IF NOT EXISTS idx_legal_documents_salon ON legal_documents(salon_id);
+CREATE INDEX IF NOT EXISTS idx_legal_documents_type ON legal_documents(type);
+
+ALTER TABLE legal_documents ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public can view active legal documents"
+ON legal_documents FOR SELECT
+USING (is_active = true);
+
+CREATE POLICY "Service role access legal_documents"
+ON legal_documents FOR ALL TO service_role
+USING (true) WITH CHECK (true);
+
+COMMENT ON TABLE legal_documents IS 'Legal documents like Terms & Conditions, Privacy Policy';
+
+-- ============================================
 -- LEGAL DOCUMENT ACCEPTANCE (for booking/checkout)
 -- ============================================
 

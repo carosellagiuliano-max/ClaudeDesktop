@@ -53,7 +53,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       <div className="space-y-2">
         <Label htmlFor="email">E-Mail-Adresse</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="email"
             name="email"
@@ -70,15 +70,12 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="password">Passwort</Label>
-          <Link
-            href="/konto/passwort-vergessen"
-            className="text-sm text-primary hover:underline"
-          >
+          <Link href="/konto/passwort-vergessen" className="text-primary text-sm hover:underline">
             Passwort vergessen?
           </Link>
         </div>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="password"
             name="password"
@@ -103,7 +100,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         )}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         Noch kein Konto?{' '}
         <Link href="/konto/registrieren" className="text-primary hover:underline">
           Jetzt registrieren

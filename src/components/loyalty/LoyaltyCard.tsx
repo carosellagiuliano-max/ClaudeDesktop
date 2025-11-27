@@ -12,7 +12,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Gift, TrendingUp, Star, Crown } from 'lucide-react';
-import { getLoyaltyService, type CustomerLoyalty, type LoyaltyTier } from '@/lib/services/loyalty-service';
+import {
+  getLoyaltyService,
+  type CustomerLoyalty,
+  type LoyaltyTier,
+} from '@/lib/services/loyalty-service';
 import { formatChf } from '@/lib/utils';
 
 interface LoyaltyCardProps {
@@ -118,19 +122,19 @@ export function LoyaltyCard({ customerId, onRedeemClick }: LoyaltyCardProps) {
       <CardContent className="space-y-6">
         {/* Points Balance */}
         <div className="text-center">
-          <div className="text-4xl font-bold text-primary">
+          <div className="text-primary text-4xl font-bold">
             {loyalty.pointsBalance.toLocaleString('de-CH')}
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             Punkte (Wert: {formatChf(loyalty.pointsValueChf * 100)})
           </div>
         </div>
 
         {/* Tier Benefits */}
         {loyalty.currentTier && (
-          <div className="bg-muted/50 rounded-lg p-3 space-y-1">
+          <div className="bg-muted/50 space-y-1 rounded-lg p-3">
             <div className="text-sm font-medium">Ihre Vorteile:</div>
-            <ul className="text-sm text-muted-foreground space-y-1">
+            <ul className="text-muted-foreground space-y-1 text-sm">
               <li className="flex items-center gap-2">
                 <TrendingUp className="h-3 w-3" />
                 {loyalty.currentTier.pointsMultiplier}x Punkte pro CHF
@@ -167,7 +171,7 @@ export function LoyaltyCard({ customerId, onRedeemClick }: LoyaltyCardProps) {
         {/* Redeem Button */}
         {loyalty.pointsBalance >= 100 && onRedeemClick && (
           <Button onClick={onRedeemClick} className="w-full">
-            <Gift className="h-4 w-4 mr-2" />
+            <Gift className="mr-2 h-4 w-4" />
             Punkte einlösen
           </Button>
         )}

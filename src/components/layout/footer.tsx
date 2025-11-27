@@ -1,12 +1,5 @@
 import Link from 'next/link';
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Instagram,
-  Facebook,
-} from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
@@ -69,16 +62,12 @@ export function Footer() {
           {/* Brand & Description */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block">
-              <h2 className="text-2xl font-bold text-gradient-gold">
-                {salonInfo.name}
-              </h2>
+              <h2 className="text-gradient-gold text-2xl font-bold">{salonInfo.name}</h2>
             </Link>
-            <p className="mt-2 text-sm text-muted-foreground italic">
-              {salonInfo.tagline}
-            </p>
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              Ihr Premium-Friseursalon in St. Gallen. Wir kreieren individuelle
-              Looks mit Leidenschaft und Expertise.
+            <p className="text-muted-foreground mt-2 text-sm italic">{salonInfo.tagline}</p>
+            <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
+              Ihr Premium-Friseursalon in St. Gallen. Wir kreieren individuelle Looks mit
+              Leidenschaft und Expertise.
             </p>
 
             {/* Social Links */}
@@ -118,7 +107,7 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h3 className="text-foreground text-sm font-semibold tracking-wider uppercase">
               Kontakt
             </h3>
             <ul className="mt-4 space-y-4">
@@ -129,9 +118,9 @@ export function Footer() {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-foreground flex items-start gap-3 text-sm transition-colors"
                 >
-                  <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+                  <MapPin className="text-primary mt-0.5 h-4 w-4 shrink-0" />
                   <span>
                     {salonInfo.address.street}
                     <br />
@@ -142,18 +131,18 @@ export function Footer() {
               <li>
                 <a
                   href={`tel:${salonInfo.phone.replace(/\s/g, '')}`}
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-foreground flex items-center gap-3 text-sm transition-colors"
                 >
-                  <Phone className="h-4 w-4 shrink-0 text-primary" />
+                  <Phone className="text-primary h-4 w-4 shrink-0" />
                   {salonInfo.phone}
                 </a>
               </li>
               <li>
                 <a
                   href={`mailto:${salonInfo.email}`}
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-foreground flex items-center gap-3 text-sm transition-colors"
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-primary" />
+                  <Mail className="text-primary h-4 w-4 shrink-0" />
                   {salonInfo.email}
                 </a>
               </li>
@@ -162,23 +151,14 @@ export function Footer() {
 
           {/* Opening Hours */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h3 className="text-foreground text-sm font-semibold tracking-wider uppercase">
               Öffnungszeiten
             </h3>
             <ul className="mt-4 space-y-2">
               {openingHours.map((item) => (
-                <li
-                  key={item.day}
-                  className="flex justify-between text-sm text-muted-foreground"
-                >
+                <li key={item.day} className="text-muted-foreground flex justify-between text-sm">
                   <span>{item.day}</span>
-                  <span
-                    className={
-                      item.hours === 'Geschlossen'
-                        ? 'text-muted-foreground/60'
-                        : ''
-                    }
-                  >
+                  <span className={item.hours === 'Geschlossen' ? 'text-muted-foreground/60' : ''}>
                     {item.hours}
                   </span>
                 </li>
@@ -188,7 +168,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h3 className="text-foreground text-sm font-semibold tracking-wider uppercase">
               Quick Links
             </h3>
             <ul className="mt-4 space-y-2">
@@ -196,7 +176,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary text-sm transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -213,11 +193,11 @@ export function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t bg-muted/30">
+      <div className="bg-muted/30 border-t">
         <div className="container-wide py-6">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             {/* Copyright */}
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               © {currentYear} {salonInfo.name}. Alle Rechte vorbehalten.
             </p>
 
@@ -227,7 +207,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-foreground text-xs transition-colors"
                 >
                   {link.label}
                 </Link>

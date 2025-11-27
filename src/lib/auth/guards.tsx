@@ -36,8 +36,8 @@ interface SalonGuardProps extends GuardProps {
 
 function LoadingSpinner() {
   return (
-    <div className="flex items-center justify-center min-h-[200px]">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    <div className="flex min-h-[200px] items-center justify-center">
+      <div className="border-primary h-8 w-8 animate-spin rounded-full border-b-2"></div>
     </div>
   );
 }
@@ -159,12 +159,7 @@ export function PermissionGuard({
 // Requires user to have access to specific salon
 // ============================================
 
-export function SalonGuard({
-  children,
-  fallback,
-  onUnauthorized,
-  salonId,
-}: SalonGuardProps) {
+export function SalonGuard({ children, fallback, onUnauthorized, salonId }: SalonGuardProps) {
   const { isAuthenticated, isLoading, hasRole, getUserSalons } = useAuth();
 
   const isAuthorized = React.useMemo(() => {
@@ -201,11 +196,7 @@ export function SalonGuard({
 
 export function AdminGuard({ children, fallback, onUnauthorized }: GuardProps) {
   return (
-    <RoleGuard
-      roles={['admin', 'hq']}
-      fallback={fallback}
-      onUnauthorized={onUnauthorized}
-    >
+    <RoleGuard roles={['admin', 'hq']} fallback={fallback} onUnauthorized={onUnauthorized}>
       {children}
     </RoleGuard>
   );
@@ -252,11 +243,7 @@ export function ManagerGuard({ children, fallback, onUnauthorized }: GuardProps)
 
 export function CustomerGuard({ children, fallback, onUnauthorized }: GuardProps) {
   return (
-    <RoleGuard
-      roles={['kunde']}
-      fallback={fallback}
-      onUnauthorized={onUnauthorized}
-    >
+    <RoleGuard roles={['kunde']} fallback={fallback} onUnauthorized={onUnauthorized}>
       {children}
     </RoleGuard>
   );
@@ -289,10 +276,7 @@ export function usePermission(permission: Permission): boolean {
 /**
  * Hook to check if user has multiple permissions
  */
-export function usePermissions(
-  permissions: Permission[],
-  requireAll: boolean = false
-): boolean {
+export function usePermissions(permissions: Permission[], requireAll: boolean = false): boolean {
   const { user, roles, isAuthenticated } = useAuth();
 
   return React.useMemo(() => {
@@ -349,12 +333,7 @@ interface ShowForRolesProps {
   fallback?: React.ReactNode;
 }
 
-export function ShowForRoles({
-  roles,
-  requireAll = false,
-  children,
-  fallback,
-}: ShowForRolesProps) {
+export function ShowForRoles({ roles, requireAll = false, children, fallback }: ShowForRolesProps) {
   const { hasRole } = useAuth();
 
   const isAuthorized = React.useMemo(() => {
@@ -364,7 +343,11 @@ export function ShowForRoles({
     return roles.some((role) => hasRole(role));
   }, [roles, requireAll, hasRole]);
 
-  return <ShowIf condition={isAuthorized} fallback={fallback}>{children}</ShowIf>;
+  return (
+    <ShowIf condition={isAuthorized} fallback={fallback}>
+      {children}
+    </ShowIf>
+  );
 }
 
 interface ShowWithPermissionProps {
@@ -373,12 +356,12 @@ interface ShowWithPermissionProps {
   fallback?: React.ReactNode;
 }
 
-export function ShowWithPermission({
-  permission,
-  children,
-  fallback,
-}: ShowWithPermissionProps) {
+export function ShowWithPermission({ permission, children, fallback }: ShowWithPermissionProps) {
   const hasPermissionValue = usePermission(permission);
 
-  return <ShowIf condition={hasPermissionValue} fallback={fallback}>{children}</ShowIf>;
+  return (
+    <ShowIf condition={hasPermissionValue} fallback={fallback}>
+      {children}
+    </ShowIf>
+  );
 }

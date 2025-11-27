@@ -30,13 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -130,7 +124,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 lg:px-6">
+    <header className="bg-background sticky top-0 z-40 flex h-16 items-center gap-4 border-b px-4 lg:px-6">
       {/* Mobile Menu Button */}
       <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
         <SheetTrigger asChild>
@@ -142,7 +136,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         <SheetContent side="left" className="w-72 p-0">
           <SheetHeader className="border-b px-4 py-3">
             <SheetTitle className="flex items-center gap-2">
-              <Scissors className="h-5 w-5 text-primary" />
+              <Scissors className="text-primary h-5 w-5" />
               SCHNITTWERK Admin
             </SheetTitle>
           </SheetHeader>
@@ -156,7 +150,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
+                    'flex items-center gap-3 rounded-md px-3 py-2 transition-colors',
                     active
                       ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -168,23 +162,21 @@ export function AdminHeader({ user }: AdminHeaderProps) {
               );
             })}
           </nav>
-          <div className="absolute bottom-0 left-0 right-0 border-t p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <span className="text-sm font-medium">
-                  {user.name.charAt(0).toUpperCase()}
-                </span>
+          <div className="absolute right-0 bottom-0 left-0 border-t p-4">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-primary/10 text-primary flex h-9 w-9 items-center justify-center rounded-full">
+                <span className="text-sm font-medium">{user.name.charAt(0).toUpperCase()}</span>
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium">{user.name}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {roleLabels[user.role] || user.role}
                 </p>
               </div>
             </div>
             <form action="/api/auth/signout" method="POST">
               <Button variant="outline" className="w-full" type="submit">
-                <LogOut className="h-4 w-4 mr-2" />
+                <LogOut className="mr-2 h-4 w-4" />
                 Abmelden
               </Button>
             </form>
@@ -200,12 +192,8 @@ export function AdminHeader({ user }: AdminHeaderProps) {
       {/* Search (Desktop) */}
       <div className="hidden md:flex md:w-64 lg:w-80">
         <div className="relative w-full">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Suchen..."
-            className="w-full pl-8 bg-muted/50"
-          />
+          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
+          <Input type="search" placeholder="Suchen..." className="bg-muted/50 w-full pl-8" />
         </div>
       </div>
 
@@ -218,12 +206,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         </Button>
 
         {/* View Website */}
-        <Button
-          variant="ghost"
-          size="icon"
-          asChild
-          className="hidden sm:flex"
-        >
+        <Button variant="ghost" size="icon" asChild className="hidden sm:flex">
           <Link href="/" target="_blank" rel="noopener noreferrer">
             <ExternalLink className="h-5 w-5" />
             <span className="sr-only">Website öffnen</span>
@@ -238,7 +221,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
               {notificationCount > 0 && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                  className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center p-0 text-xs"
                 >
                   {notificationCount}
                 </Badge>
@@ -253,35 +236,29 @@ export function AdminHeader({ user }: AdminHeaderProps) {
               {/* Notification Items */}
               <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
                 <span className="font-medium">Neuer Termin</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-muted-foreground text-xs">
                   Max Mustermann hat einen Termin für morgen gebucht.
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  Vor 5 Minuten
-                </span>
+                <span className="text-muted-foreground text-xs">Vor 5 Minuten</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
                 <span className="font-medium">Neue Bestellung</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-muted-foreground text-xs">
                   Bestellung #1234 wurde aufgegeben (CHF 89.00)
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  Vor 15 Minuten
-                </span>
+                <span className="text-muted-foreground text-xs">Vor 15 Minuten</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
                 <span className="font-medium">Termin storniert</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-muted-foreground text-xs">
                   Anna Schmidt hat ihren Termin für heute storniert.
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  Vor 30 Minuten
-                </span>
+                <span className="text-muted-foreground text-xs">Vor 30 Minuten</span>
               </DropdownMenuItem>
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="justify-center">
-              <Link href="/admin/benachrichtigungen" className="text-sm text-primary">
+              <Link href="/admin/benachrichtigungen" className="text-primary text-sm">
                 Alle anzeigen
               </Link>
             </DropdownMenuItem>
@@ -292,10 +269,8 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <span className="text-sm font-medium">
-                  {user.name.charAt(0).toUpperCase()}
-                </span>
+              <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full">
+                <span className="text-sm font-medium">{user.name.charAt(0).toUpperCase()}</span>
               </div>
             </Button>
           </DropdownMenuTrigger>
@@ -303,8 +278,8 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium">{user.name}</p>
-                <p className="text-xs text-muted-foreground">{user.email}</p>
-                <Badge variant="secondary" className="w-fit mt-1">
+                <p className="text-muted-foreground text-xs">{user.email}</p>
+                <Badge variant="secondary" className="mt-1 w-fit">
                   {roleLabels[user.role] || user.role}
                 </Badge>
               </div>
@@ -312,20 +287,20 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/admin/profil">
-                <User className="h-4 w-4 mr-2" />
+                <User className="mr-2 h-4 w-4" />
                 Profil
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/admin/einstellungen">
-                <Settings className="h-4 w-4 mr-2" />
+                <Settings className="mr-2 h-4 w-4" />
                 Einstellungen
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/" target="_blank">
-                <ExternalLink className="h-4 w-4 mr-2" />
+                <ExternalLink className="mr-2 h-4 w-4" />
                 Website öffnen
               </Link>
             </DropdownMenuItem>
@@ -333,7 +308,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             <form action="/api/auth/signout" method="POST">
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full cursor-pointer">
-                  <LogOut className="h-4 w-4 mr-2" />
+                  <LogOut className="mr-2 h-4 w-4" />
                   Abmelden
                 </button>
               </DropdownMenuItem>

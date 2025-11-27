@@ -152,40 +152,43 @@ export function useListQuery<T>(
   const queryFnRef = useRef(queryFn);
   queryFnRef.current = queryFn;
 
-  const fetchData = useCallback(async (pageNum: number = 1, append: boolean = false) => {
-    setIsLoading(true);
-    setError(null);
+  const fetchData = useCallback(
+    async (pageNum: number = 1, append: boolean = false) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const result = await queryFnRef.current(pageNum);
+      try {
+        const result = await queryFnRef.current(pageNum);
 
-      if (!mountedRef.current) return;
+        if (!mountedRef.current) return;
 
-      if (result.error) {
-        setError(result.error);
-        if (!append) setData([]);
-        onError?.(result.error);
-      } else {
-        const newData = append ? [...data, ...result.data] : result.data;
-        setData(newData);
-        setCount(result.count);
-        setError(null);
-        onSuccess?.(newData);
+        if (result.error) {
+          setError(result.error);
+          if (!append) setData([]);
+          onError?.(result.error);
+        } else {
+          const newData = append ? [...data, ...result.data] : result.data;
+          setData(newData);
+          setCount(result.count);
+          setError(null);
+          onSuccess?.(newData);
+        }
+      } catch (err) {
+        if (!mountedRef.current) return;
+        const serviceError: ServiceError = {
+          code: 'FETCH_ERROR',
+          message: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
+        };
+        setError(serviceError);
+        onError?.(serviceError);
+      } finally {
+        if (mountedRef.current) {
+          setIsLoading(false);
+        }
       }
-    } catch (err) {
-      if (!mountedRef.current) return;
-      const serviceError: ServiceError = {
-        code: 'FETCH_ERROR',
-        message: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
-      };
-      setError(serviceError);
-      onError?.(serviceError);
-    } finally {
-      if (mountedRef.current) {
-        setIsLoading(false);
-      }
-    }
-  }, [data, onSuccess, onError]);
+    },
+    [data, onSuccess, onError]
+  );
 
   useEffect(() => {
     mountedRef.current = true;
@@ -257,51 +260,57 @@ export function useMutation<TData, TVariables = void>(
     setIsLoading(false);
   }, []);
 
-  const mutateAsync = useCallback(async (variables: TVariables): Promise<TData> => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const result = await mutationFnRef.current(variables);
-
-      if (result.error) {
-        setError(result.error);
-        setData(null);
-        onError?.(result.error, variables);
-        onSettled?.(null, result.error, variables);
-        throw new Error(result.error.message);
-      }
-
-      setData(result.data);
+  const mutateAsync = useCallback(
+    async (variables: TVariables): Promise<TData> => {
+      setIsLoading(true);
       setError(null);
-      if (result.data) {
-        onSuccess?.(result.data, variables);
-        onSettled?.(result.data, null, variables);
-      }
-      return result.data as TData;
-    } catch (err) {
-      if (!error) {
-        const serviceError: ServiceError = {
-          code: 'MUTATION_ERROR',
-          message: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
-        };
-        setError(serviceError);
-        onError?.(serviceError, variables);
-        onSettled?.(null, serviceError, variables);
-      }
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onSuccess, onError, onSettled, error]);
 
-  const mutate = useCallback(async (variables: TVariables): Promise<TData | null> => {
-    try {
-      return await mutateAsync(variables);
-    } catch {
-      return null;
-    }
-  }, [mutateAsync]);
+      try {
+        const result = await mutationFnRef.current(variables);
+
+        if (result.error) {
+          setError(result.error);
+          setData(null);
+          onError?.(result.error, variables);
+          onSettled?.(null, result.error, variables);
+          throw new Error(result.error.message);
+        }
+
+        setData(result.data);
+        setError(null);
+        if (result.data) {
+          onSuccess?.(result.data, variables);
+          onSettled?.(result.data, null, variables);
+        }
+        return result.data as TData;
+      } catch (err) {
+        if (!error) {
+          const serviceError: ServiceError = {
+            code: 'MUTATION_ERROR',
+            message: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
+          };
+          setError(serviceError);
+          onError?.(serviceError, variables);
+          onSettled?.(null, serviceError, variables);
+        }
+        throw err;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [onSuccess, onError, onSettled, error]
+  );
+
+  const mutate = useCallback(
+    async (variables: TVariables): Promise<TData | null> => {
+      try {
+        return await mutateAsync(variables);
+      } catch {
+        return null;
+      }
+    },
+    [mutateAsync]
+  );
 
   return {
     mutate,
@@ -338,16 +347,22 @@ export function useOptimisticMutation<TData, TVariables = void>(
     },
   });
 
-  const mutate = useCallback(async (variables: TVariables): Promise<TData | null> => {
-    previousDataRef.current = mutation.data;
-    // Note: Caller should handle setting optimistic data in their state
-    return mutation.mutate(variables);
-  }, [mutation]);
+  const mutate = useCallback(
+    async (variables: TVariables): Promise<TData | null> => {
+      previousDataRef.current = mutation.data;
+      // Note: Caller should handle setting optimistic data in their state
+      return mutation.mutate(variables);
+    },
+    [mutation]
+  );
 
-  const mutateAsync = useCallback(async (variables: TVariables): Promise<TData> => {
-    previousDataRef.current = mutation.data;
-    return mutation.mutateAsync(variables);
-  }, [mutation]);
+  const mutateAsync = useCallback(
+    async (variables: TVariables): Promise<TData> => {
+      previousDataRef.current = mutation.data;
+      return mutation.mutateAsync(variables);
+    },
+    [mutation]
+  );
 
   return {
     ...mutation,

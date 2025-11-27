@@ -86,7 +86,10 @@ export async function registerCustomer(formData: FormData): Promise<RegisterResu
       if (authError.message.includes('already registered')) {
         return { success: false, error: 'Diese E-Mail-Adresse ist bereits registriert.' };
       }
-      return { success: false, error: 'Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.' };
+      return {
+        success: false,
+        error: 'Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.',
+      };
     }
 
     if (!authData.user) {
@@ -287,11 +290,7 @@ export async function getCurrentUser() {
   }
 
   // Get profile
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
 
   // Get roles
   const { data: roles } = await supabase

@@ -45,15 +45,15 @@ export function RegisterForm() {
 
   if (success) {
     return (
-      <div className="text-center space-y-6">
+      <div className="space-y-6 text-center">
         <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
           <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">Registrierung erfolgreich!</h2>
+          <h2 className="mb-2 text-xl font-semibold">Registrierung erfolgreich!</h2>
           <p className="text-muted-foreground">
-            Wir haben Ihnen eine E-Mail zur Bestätigung gesendet. Bitte klicken Sie auf den Link
-            in der E-Mail, um Ihr Konto zu aktivieren.
+            Wir haben Ihnen eine E-Mail zur Bestätigung gesendet. Bitte klicken Sie auf den Link in
+            der E-Mail, um Ihr Konto zu aktivieren.
           </p>
         </div>
         <Button onClick={() => router.push('/konto/login')} variant="outline">
@@ -76,7 +76,7 @@ export function RegisterForm() {
         <div className="space-y-2">
           <Label htmlFor="firstName">Vorname</Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <User className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="firstName"
               name="firstName"
@@ -93,7 +93,7 @@ export function RegisterForm() {
         <div className="space-y-2">
           <Label htmlFor="lastName">Nachname</Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <User className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="lastName"
               name="lastName"
@@ -111,7 +111,7 @@ export function RegisterForm() {
       <div className="space-y-2">
         <Label htmlFor="email">E-Mail-Adresse</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="email"
             name="email"
@@ -128,7 +128,7 @@ export function RegisterForm() {
       <div className="space-y-2">
         <Label htmlFor="phone">Telefonnummer (optional)</Label>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Phone className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="phone"
             name="phone"
@@ -144,7 +144,7 @@ export function RegisterForm() {
       <div className="space-y-2">
         <Label htmlFor="password">Passwort</Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="password"
             name="password"
@@ -157,7 +157,7 @@ export function RegisterForm() {
             autoComplete="new-password"
           />
         </div>
-        <p className="text-xs text-muted-foreground">Mindestens 8 Zeichen</p>
+        <p className="text-muted-foreground text-xs">Mindestens 8 Zeichen</p>
       </div>
 
       <div className="flex items-start space-x-3">
@@ -191,7 +191,7 @@ export function RegisterForm() {
         )}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         Bereits ein Konto?{' '}
         <Link href="/konto/login" className="text-primary hover:underline">
           Jetzt anmelden

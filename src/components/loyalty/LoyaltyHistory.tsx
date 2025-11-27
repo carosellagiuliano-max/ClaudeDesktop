@@ -90,7 +90,7 @@ export function LoyaltyHistory({ customerId, limit = 20 }: LoyaltyHistoryProps) 
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-center text-muted-foreground py-8">
+          <p className="text-muted-foreground py-8 text-center">
             Noch keine Transaktionen vorhanden.
           </p>
         </CardContent>
@@ -127,51 +127,44 @@ export function LoyaltyHistory({ customerId, limit = 20 }: LoyaltyHistoryProps) 
             {transactions.map((tx) => (
               <div
                 key={tx.id}
-                className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                className="hover:bg-muted/50 flex items-start gap-3 rounded-lg p-3 transition-colors"
               >
                 {/* Icon */}
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
                   {TRANSACTION_ICONS[tx.type] || <History className="h-4 w-4" />}
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <Badge
-                      variant={tx.points > 0 ? 'default' : 'destructive'}
-                      className="shrink-0"
-                    >
+                    <Badge variant={tx.points > 0 ? 'default' : 'destructive'} className="shrink-0">
                       {tx.points > 0 ? '+' : ''}
                       {tx.points.toLocaleString('de-CH')} Punkte
                     </Badge>
-                    <span className="text-sm text-muted-foreground truncate">
+                    <span className="text-muted-foreground truncate text-sm">
                       {TRANSACTION_LABELS[tx.type] || tx.type}
                     </span>
                   </div>
                   {tx.description && (
-                    <p className="text-sm text-muted-foreground mt-1 truncate">
-                      {tx.description}
-                    </p>
+                    <p className="text-muted-foreground mt-1 truncate text-sm">{tx.description}</p>
                   )}
-                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                  <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs">
                     <Calendar className="h-3 w-3" />
                     {formatDate(tx.createdAt)} um {formatTime(tx.createdAt)}
                   </div>
                   {tx.expiresAt && tx.points > 0 && (
-                    <div className="text-xs text-orange-600 mt-1">
+                    <div className="mt-1 text-xs text-orange-600">
                       Gültig bis {formatDate(tx.expiresAt)}
                     </div>
                   )}
                 </div>
 
                 {/* Balance */}
-                <div className="text-right text-sm shrink-0">
+                <div className="shrink-0 text-right text-sm">
                   <div className="text-muted-foreground">
                     {tx.balanceBefore.toLocaleString('de-CH')}
                   </div>
-                  <div className="font-medium">
-                    {tx.balanceAfter.toLocaleString('de-CH')}
-                  </div>
+                  <div className="font-medium">{tx.balanceAfter.toLocaleString('de-CH')}</div>
                 </div>
               </div>
             ))}

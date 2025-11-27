@@ -75,17 +75,38 @@ const defaultTemplates = [
   {
     code: 'appointment_confirmation',
     name: 'Terminbestätigung',
-    variables: ['customer_name', 'appointment_date', 'appointment_time', 'service_name', 'staff_name', 'salon_name', 'salon_address'],
+    variables: [
+      'customer_name',
+      'appointment_date',
+      'appointment_time',
+      'service_name',
+      'staff_name',
+      'salon_name',
+      'salon_address',
+    ],
   },
   {
     code: 'appointment_reminder',
     name: 'Terminerinnerung',
-    variables: ['customer_name', 'appointment_date', 'appointment_time', 'service_name', 'staff_name', 'salon_name'],
+    variables: [
+      'customer_name',
+      'appointment_date',
+      'appointment_time',
+      'service_name',
+      'staff_name',
+      'salon_name',
+    ],
   },
   {
     code: 'appointment_cancelled',
     name: 'Terminabsage',
-    variables: ['customer_name', 'appointment_date', 'appointment_time', 'cancellation_reason', 'salon_name'],
+    variables: [
+      'customer_name',
+      'appointment_date',
+      'appointment_time',
+      'cancellation_reason',
+      'salon_name',
+    ],
   },
   {
     code: 'order_confirmation',
@@ -100,7 +121,15 @@ const defaultTemplates = [
   {
     code: 'voucher_received',
     name: 'Gutschein erhalten',
-    variables: ['recipient_name', 'sender_name', 'voucher_code', 'voucher_amount', 'personal_message', 'expiry_date', 'salon_name'],
+    variables: [
+      'recipient_name',
+      'sender_name',
+      'voucher_code',
+      'voucher_amount',
+      'personal_message',
+      'expiry_date',
+      'salon_name',
+    ],
   },
   {
     code: 'welcome',
@@ -122,17 +151,19 @@ async function getNotificationData() {
   const supabase = await createServerClient();
 
   // Get templates
-  const { data: templatesData } = await supabase
+  const { data: templatesData } = (await supabase
     .from('notification_templates')
     .select('*')
-    .order('code', { ascending: true }) as { data: TemplateRow[] | null };
+    .order('code', { ascending: true })) as { data: TemplateRow[] | null };
 
   // Get recent notification logs
-  const { data: logsData } = await supabase
+  const { data: logsData } = (await supabase
     .from('notifications')
-    .select('id, template_code, channel, recipient_email, subject, status, sent_at, created_at, error_message')
+    .select(
+      'id, template_code, channel, recipient_email, subject, status, sent_at, created_at, error_message'
+    )
     .order('created_at', { ascending: false })
-    .limit(50) as { data: NotificationLogRow[] | null };
+    .limit(50)) as { data: NotificationLogRow[] | null };
 
   // Transform templates
   const templates: NotificationTemplate[] = (templatesData || []).map((t) => ({

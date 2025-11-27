@@ -94,31 +94,31 @@ async function getFinanceData(period: 'month' | 'quarter' | 'year' = 'month') {
   const periodEnd = now.toISOString();
 
   // Get orders with payment info
-  const { data: ordersData } = await supabase
+  const { data: ordersData } = (await supabase
     .from('orders')
     .select('id, total_cents, tax_cents, payment_method, payment_status, created_at')
     .gte('created_at', periodStart)
-    .lte('created_at', periodEnd) as { data: FinanceOrderRow[] | null };
+    .lte('created_at', periodEnd)) as { data: FinanceOrderRow[] | null };
 
   // Get completed appointments
-  const { data: appointmentsData } = await supabase
+  const { data: appointmentsData } = (await supabase
     .from('appointments')
     .select('id, total_price_cents, status, start_time')
     .gte('start_time', periodStart)
     .lte('start_time', periodEnd)
-    .eq('status', 'completed') as { data: FinanceAppointmentRow[] | null };
+    .eq('status', 'completed')) as { data: FinanceAppointmentRow[] | null };
 
   // Get refunds
-  const { data: refundsData } = await supabase
+  const { data: refundsData } = (await supabase
     .from('refunds')
     .select('amount_cents, created_at')
     .gte('created_at', periodStart)
     .lte('created_at', periodEnd)
-    .eq('status', 'succeeded') as { data: RefundRow[] | null };
+    .eq('status', 'succeeded')) as { data: RefundRow[] | null };
 
   // Calculate payment method breakdown
   const paymentMethodMap = new Map<string, PaymentMethodStats>();
-  const paidOrders = (ordersData || []).filter(o => o.payment_status === 'succeeded');
+  const paidOrders = (ordersData || []).filter((o) => o.payment_status === 'succeeded');
 
   paidOrders.forEach((order) => {
     const method = order.payment_method || 'unknown';
@@ -155,15 +155,16 @@ async function getFinanceData(period: 'month' | 'quarter' | 'year' = 'month') {
     }
   }
 
-  const paymentMethods = Array.from(paymentMethodMap.values())
-    .sort((a, b) => b.totalCents - a.totalCents);
+  const paymentMethods = Array.from(paymentMethodMap.values()).sort(
+    (a, b) => b.totalCents - a.totalCents
+  );
 
   // Calculate VAT summary (8.1% Swiss VAT)
   const vatRate = 0.081;
   const orderGross = paidOrders.reduce((sum, o) => sum + (o.total_cents || 0), 0);
   const orderTax = paidOrders.reduce((sum, o) => sum + (o.tax_cents || 0), 0);
   const totalGross = orderGross + appointmentRevenue;
-  const totalTax = orderTax + Math.round(appointmentRevenue * vatRate / (1 + vatRate));
+  const totalTax = orderTax + Math.round((appointmentRevenue * vatRate) / (1 + vatRate));
 
   const vatSummary: VatSummary = {
     grossCents: totalGross,
@@ -213,14 +214,12 @@ async function getFinanceData(period: 'month' | 'quarter' | 'year' = 'month') {
     }
   });
 
-  const dailySales = Array.from(dailySalesMap.values())
-    .sort((a, b) => a.date.localeCompare(b.date));
+  const dailySales = Array.from(dailySalesMap.values()).sort((a, b) =>
+    a.date.localeCompare(b.date)
+  );
 
   // Calculate totals
-  const totalRefunds = (refundsData || []).reduce(
-    (sum, r) => sum + (r.amount_cents || 0),
-    0
-  );
+  const totalRefunds = (refundsData || []).reduce((sum, r) => sum + (r.amount_cents || 0), 0);
 
   const stats: FinanceStats = {
     periodStart,

@@ -134,12 +134,12 @@ CREATE POLICY "Staff can view their own blocks"
   ON staff_blocks FOR SELECT
   TO authenticated
   USING (
-    staff_id IN (SELECT id FROM staff WHERE user_id = auth.uid())
+    staff_id IN (SELECT id FROM staff WHERE profile_id = auth.uid())
     OR EXISTS (
-      SELECT 1 FROM staff
-      WHERE user_id = auth.uid()
-      AND salon_id = staff_blocks.salon_id
-      AND role IN ('admin', 'manager', 'hq')
+      SELECT 1 FROM user_roles ur
+      WHERE ur.profile_id = auth.uid()
+      AND ur.salon_id = staff_blocks.salon_id
+      AND ur.role_name IN ('admin', 'manager', 'hq')
     )
   );
 
@@ -148,10 +148,10 @@ CREATE POLICY "Managers can manage blocks"
   TO authenticated
   USING (
     EXISTS (
-      SELECT 1 FROM staff
-      WHERE user_id = auth.uid()
-      AND salon_id = staff_blocks.salon_id
-      AND role IN ('admin', 'manager', 'hq')
+      SELECT 1 FROM user_roles ur
+      WHERE ur.profile_id = auth.uid()
+      AND ur.salon_id = staff_blocks.salon_id
+      AND ur.role_name IN ('admin', 'manager', 'hq')
     )
   );
 
@@ -166,11 +166,11 @@ CREATE POLICY "Managers can manage skills"
   TO authenticated
   USING (
     EXISTS (
-      SELECT 1 FROM staff s1
-      JOIN staff s2 ON s1.salon_id = s2.salon_id
-      WHERE s1.user_id = auth.uid()
-      AND s1.role IN ('admin', 'manager', 'hq')
-      AND s2.id = staff_skills.staff_id
+      SELECT 1 FROM staff s
+      JOIN user_roles ur ON ur.salon_id = s.salon_id
+      WHERE ur.profile_id = auth.uid()
+      AND ur.role_name IN ('admin', 'manager', 'hq')
+      AND s.id = staff_skills.staff_id
     )
   );
 
@@ -185,11 +185,11 @@ CREATE POLICY "Managers can manage working hours"
   TO authenticated
   USING (
     EXISTS (
-      SELECT 1 FROM staff s1
-      JOIN staff s2 ON s1.salon_id = s2.salon_id
-      WHERE s1.user_id = auth.uid()
-      AND s1.role IN ('admin', 'manager', 'hq')
-      AND s2.id = staff_working_hours.staff_id
+      SELECT 1 FROM staff s
+      JOIN user_roles ur ON ur.salon_id = s.salon_id
+      WHERE ur.profile_id = auth.uid()
+      AND ur.role_name IN ('admin', 'manager', 'hq')
+      AND s.id = staff_working_hours.staff_id
     )
   );
 
@@ -198,12 +198,12 @@ CREATE POLICY "Staff can view their own absences"
   ON staff_absences FOR SELECT
   TO authenticated
   USING (
-    staff_id IN (SELECT id FROM staff WHERE user_id = auth.uid())
+    staff_id IN (SELECT id FROM staff WHERE profile_id = auth.uid())
     OR EXISTS (
-      SELECT 1 FROM staff
-      WHERE user_id = auth.uid()
-      AND salon_id = staff_absences.salon_id
-      AND role IN ('admin', 'manager', 'hq')
+      SELECT 1 FROM user_roles ur
+      WHERE ur.profile_id = auth.uid()
+      AND ur.salon_id = staff_absences.salon_id
+      AND ur.role_name IN ('admin', 'manager', 'hq')
     )
   );
 
@@ -211,7 +211,7 @@ CREATE POLICY "Staff can request absences"
   ON staff_absences FOR INSERT
   TO authenticated
   WITH CHECK (
-    staff_id IN (SELECT id FROM staff WHERE user_id = auth.uid())
+    staff_id IN (SELECT id FROM staff WHERE profile_id = auth.uid())
   );
 
 CREATE POLICY "Managers can manage absences"
@@ -219,9 +219,9 @@ CREATE POLICY "Managers can manage absences"
   TO authenticated
   USING (
     EXISTS (
-      SELECT 1 FROM staff
-      WHERE user_id = auth.uid()
-      AND salon_id = staff_absences.salon_id
-      AND role IN ('admin', 'manager', 'hq')
+      SELECT 1 FROM user_roles ur
+      WHERE ur.profile_id = auth.uid()
+      AND ur.salon_id = staff_absences.salon_id
+      AND ur.role_name IN ('admin', 'manager', 'hq')
     )
   );

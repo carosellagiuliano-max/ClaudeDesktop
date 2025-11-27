@@ -45,7 +45,8 @@ export const getStaffMembers = unstable_cache(
 
     const { data, error } = await supabase
       .from('staff')
-      .select(`
+      .select(
+        `
         id,
         display_name,
         job_title,
@@ -54,7 +55,8 @@ export const getStaffMembers = unstable_cache(
         is_bookable,
         sort_order,
         specialties
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .eq('is_active', true)
       .order('sort_order', { ascending: true });
@@ -102,12 +104,14 @@ export const getStaffWorkingHours = unstable_cache(
 
     const { data, error } = await supabase
       .from('staff_working_hours')
-      .select(`
+      .select(
+        `
         staff_id,
         day_of_week,
         start_time,
         end_time
-      `)
+      `
+      )
       .eq('salon_id', salonId);
 
     if (error || !data) {
@@ -139,12 +143,14 @@ export async function getStaffAbsences(
 
   const { data, error } = await supabase
     .from('staff_absences')
-    .select(`
+    .select(
+      `
       staff_id,
       start_date,
       end_date,
       reason
-    `)
+    `
+    )
     .eq('salon_id', salonId)
     .or(`start_date.lte.${endDate},end_date.gte.${startDate}`);
 
@@ -171,10 +177,12 @@ export const getStaffSkills = unstable_cache(
 
     const { data, error } = await supabase
       .from('staff_service_skills')
-      .select(`
+      .select(
+        `
         staff_id,
         service_id
-      `)
+      `
+      )
       .eq('salon_id', salonId);
 
     if (error || !data) {

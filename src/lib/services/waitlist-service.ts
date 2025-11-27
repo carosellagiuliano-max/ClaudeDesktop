@@ -256,10 +256,7 @@ export class WaitlistService {
    * Get waitlist statistics for a salon
    */
   async getStats(salonId: string, date?: string): Promise<WaitlistStats> {
-    let query = this.supabase
-      .from('v_waitlist_stats')
-      .select('*')
-      .eq('salon_id', salonId);
+    let query = this.supabase.from('v_waitlist_stats').select('*').eq('salon_id', salonId);
 
     if (date) {
       query = query.eq('requested_date', date);
@@ -289,9 +286,7 @@ export class WaitlistService {
     );
 
     const totalCompleted = stats.bookedCount + stats.expiredCount;
-    const conversionRate = totalCompleted > 0
-      ? (stats.bookedCount / totalCompleted) * 100
-      : 0;
+    const conversionRate = totalCompleted > 0 ? (stats.bookedCount / totalCompleted) * 100 : 0;
 
     return {
       ...stats,
@@ -372,16 +367,21 @@ export class WaitlistService {
 
     // Send SMS if configured and phone available
     if (isSMSConfigured() && entry.customer_phone) {
-      await sendSMS(entry.customer_phone, 'waitlist_available', {
-        customerName: 'Kunde',
-        serviceName,
-        date: formattedDate,
-        time,
-        bookingLink,
-        expiresAt,
-      }, {
-        customerId: entry.customer_id,
-      });
+      await sendSMS(
+        entry.customer_phone,
+        'waitlist_available',
+        {
+          customerName: 'Kunde',
+          serviceName,
+          date: formattedDate,
+          time,
+          bookingLink,
+          expiresAt,
+        },
+        {
+          customerId: entry.customer_id,
+        }
+      );
     }
 
     // TODO: Also send email notification

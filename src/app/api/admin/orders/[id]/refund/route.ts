@@ -10,10 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 // POST - Process Refund
 // ============================================
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: orderId } = await params;
     const supabase = await createServerClient();
@@ -45,10 +42,7 @@ export async function POST(
     const { amountCents, reason } = body;
 
     if (!amountCents || amountCents <= 0) {
-      return NextResponse.json(
-        { error: 'Ungültiger Erstattungsbetrag' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Ungültiger Erstattungsbetrag' }, { status: 400 });
     }
 
     // Get order
@@ -59,18 +53,12 @@ export async function POST(
       .single();
 
     if (orderError || !order) {
-      return NextResponse.json(
-        { error: 'Bestellung nicht gefunden' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Bestellung nicht gefunden' }, { status: 404 });
     }
 
     // Check if already refunded
     if (order.payment_status === 'refunded') {
-      return NextResponse.json(
-        { error: 'Bestellung wurde bereits erstattet' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Bestellung wurde bereits erstattet' }, { status: 400 });
     }
 
     // Check if payment was successful
@@ -91,10 +79,7 @@ export async function POST(
 
     // Get payment intent
     if (!order.payment_intent_id) {
-      return NextResponse.json(
-        { error: 'Keine Zahlungs-ID gefunden' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Keine Zahlungs-ID gefunden' }, { status: 400 });
     }
 
     // Process refund via Stripe
@@ -112,10 +97,7 @@ export async function POST(
       });
     } catch (stripeError) {
       console.error('Stripe refund error:', stripeError);
-      return NextResponse.json(
-        { error: 'Stripe-Erstattung fehlgeschlagen' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Stripe-Erstattung fehlgeschlagen' }, { status: 500 });
     }
 
     // Determine new payment status
@@ -149,31 +131,33 @@ export async function POST(
     });
 
     // Log in payment_events if table exists
-    await supabase.from('payment_events').insert({
-      payment_intent_id: order.payment_intent_id,
-      event_type: 'refund.created',
-      status: refund.status,
-      amount_cents: amountCents,
-      metadata: {
-        refund_id: refund.id,
-        order_id: orderId,
-        reason,
-      },
-    }).catch(() => {
-      // Table might not exist
-    });
+    await supabase
+      .from('payment_events')
+      .insert({
+        payment_intent_id: order.payment_intent_id,
+        event_type: 'refund.created',
+        status: refund.status,
+        amount_cents: amountCents,
+        metadata: {
+          refund_id: refund.id,
+          order_id: orderId,
+          reason,
+        },
+      })
+      .then(({ error }) => {
+        if (error) console.warn('Payment event logging failed:', error);
+      });
 
     return NextResponse.json({
       success: true,
       refundId: refund.id,
       amountRefunded: amountCents,
-      message: isFullRefund ? 'Vollständige Erstattung durchgeführt' : 'Teilerstattung durchgeführt',
+      message: isFullRefund
+        ? 'Vollständige Erstattung durchgeführt'
+        : 'Teilerstattung durchgeführt',
     });
   } catch (error) {
     console.error('Refund error:', error);
-    return NextResponse.json(
-      { error: 'Interner Serverfehler' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Interner Serverfehler' }, { status: 500 });
   }
 }

@@ -1,14 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Instagram,
-  Facebook,
-  Calendar,
-} from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getSalon, getOpeningHours } from '@/lib/actions';
@@ -39,10 +31,7 @@ function formatOpeningTime(time: string | null): string {
 // ============================================
 
 export default async function KontaktPage() {
-  const [salon, openingHours] = await Promise.all([
-    getSalon(),
-    getOpeningHours(),
-  ]);
+  const [salon, openingHours] = await Promise.all([getSalon(), getOpeningHours()]);
 
   const googleMapsUrl = salon
     ? `https://maps.google.com/?q=${encodeURIComponent(
@@ -54,14 +43,14 @@ export default async function KontaktPage() {
     <div className="py-12">
       {/* Page Header */}
       <section className="container-wide mb-16">
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-2">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-primary mb-2 text-sm font-medium tracking-wider uppercase">
             Wir sind für Sie da
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Kontakt</h1>
-          <p className="text-lg text-muted-foreground">
-            Haben Sie Fragen oder möchten Sie einen Termin vereinbaren? Wir
-            freuen uns, von Ihnen zu hören.
+          <h1 className="mb-6 text-4xl font-bold md:text-5xl">Kontakt</h1>
+          <p className="text-muted-foreground text-lg">
+            Haben Sie Fragen oder möchten Sie einen Termin vereinbaren? Wir freuen uns, von Ihnen zu
+            hören.
           </p>
         </div>
       </section>
@@ -75,12 +64,12 @@ export default async function KontaktPage() {
             <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <MapPin className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
+                    <MapPin className="text-primary h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Adresse</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="mb-1 font-semibold">Adresse</h3>
+                    <p className="text-muted-foreground text-sm">
                       {salon?.address}
                       <br />
                       {salon?.zipCode} {salon?.city}
@@ -89,7 +78,7 @@ export default async function KontaktPage() {
                       href={googleMapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline mt-2 inline-block"
+                      className="text-primary mt-2 inline-block text-sm hover:underline"
                     >
                       Route anzeigen →
                     </a>
@@ -102,15 +91,15 @@ export default async function KontaktPage() {
             <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <Phone className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
+                    <Phone className="text-primary h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Telefon</h3>
+                    <h3 className="mb-1 font-semibold">Telefon</h3>
                     {salon?.phone && (
                       <a
                         href={`tel:${salon.phone.replace(/\s/g, '')}`}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                       >
                         {salon.phone}
                       </a>
@@ -124,15 +113,15 @@ export default async function KontaktPage() {
             <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <Mail className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
+                    <Mail className="text-primary h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">E-Mail</h3>
+                    <h3 className="mb-1 font-semibold">E-Mail</h3>
                     {salon?.email && (
                       <a
                         href={`mailto:${salon.email}`}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                       >
                         {salon.email}
                       </a>
@@ -145,7 +134,7 @@ export default async function KontaktPage() {
             {/* Social Media */}
             <Card className="border-border/50">
               <CardContent className="p-6">
-                <h3 className="font-semibold mb-3">Social Media</h3>
+                <h3 className="mb-3 font-semibold">Social Media</h3>
                 <div className="flex gap-2">
                   <Button variant="outline" size="icon" asChild>
                     <a
@@ -173,7 +162,7 @@ export default async function KontaktPage() {
           </div>
 
           {/* Contact Form */}
-          <Card className="lg:col-span-2 border-border/50">
+          <Card className="border-border/50 lg:col-span-2">
             <CardHeader>
               <CardTitle>Nachricht senden</CardTitle>
             </CardHeader>
@@ -191,9 +180,9 @@ export default async function KontaktPage() {
             <div className="grid gap-8 md:grid-cols-2">
               {/* Hours */}
               <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                    <Clock className="h-5 w-5 text-primary" />
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                    <Clock className="text-primary h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-bold">Öffnungszeiten</h2>
                 </div>
@@ -201,14 +190,12 @@ export default async function KontaktPage() {
                   {openingHours.map((item) => (
                     <li
                       key={item.dayOfWeek}
-                      className="flex justify-between py-2 border-b border-border/50 last:border-0"
+                      className="border-border/50 flex justify-between border-b py-2 last:border-0"
                     >
                       <span className="font-medium">{item.dayName}</span>
                       <span
                         className={
-                          !item.isOpen
-                            ? 'text-muted-foreground/60'
-                            : 'text-muted-foreground'
+                          !item.isOpen ? 'text-muted-foreground/60' : 'text-muted-foreground'
                         }
                       >
                         {item.isOpen
@@ -221,7 +208,7 @@ export default async function KontaktPage() {
               </div>
 
               {/* Map Placeholder */}
-              <div className="relative aspect-video md:aspect-auto bg-muted rounded-xl overflow-hidden min-h-[300px]">
+              <div className="bg-muted relative aspect-video min-h-[300px] overflow-hidden rounded-xl md:aspect-auto">
                 <iframe
                   src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(
                     salon ? `${salon.address}, ${salon.zipCode} ${salon.city}` : 'St. Gallen'
@@ -242,10 +229,8 @@ export default async function KontaktPage() {
 
       {/* CTA */}
       <section className="container-wide mt-16 text-center">
-        <h2 className="text-2xl font-bold mb-4">
-          Lieber direkt buchen?
-        </h2>
-        <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+        <h2 className="mb-4 text-2xl font-bold">Lieber direkt buchen?</h2>
+        <p className="text-muted-foreground mx-auto mb-8 max-w-xl">
           Sparen Sie sich das Warten – buchen Sie Ihren Wunschtermin bequem online.
         </p>
         <Button size="lg" className="btn-glow" asChild>

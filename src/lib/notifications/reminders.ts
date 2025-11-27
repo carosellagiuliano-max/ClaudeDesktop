@@ -162,7 +162,8 @@ export class ReminderService {
   ): Promise<AppointmentWithDetails[]> {
     const { data, error } = await this.supabase
       .from('appointments')
-      .select(`
+      .select(
+        `
         id,
         starts_at,
         status,
@@ -185,7 +186,8 @@ export class ReminderService {
           address,
           city
         )
-      `)
+      `
+      )
       .gte('starts_at', windowStart.toISOString())
       .lt('starts_at', windowEnd.toISOString())
       .in('status', ['confirmed', 'pending'])

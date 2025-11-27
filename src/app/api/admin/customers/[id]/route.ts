@@ -5,10 +5,7 @@ import { createServerClient } from '@/lib/supabase/server';
 // GET - Fetch Customer Details
 // ============================================
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const supabase = await createServerClient();
@@ -36,11 +33,13 @@ export async function GET(
     // Get customer
     const { data: customer, error } = await supabase
       .from('customers')
-      .select(`
+      .select(
+        `
         *,
         profiles (email, phone, avatar_url),
         loyalty_accounts (points_balance, tier)
-      `)
+      `
+      )
       .eq('id', id)
       .single();
 
@@ -59,10 +58,7 @@ export async function GET(
 // PUT - Update Customer
 // ============================================
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const supabase = await createServerClient();
@@ -84,10 +80,7 @@ export async function PUT(
       .single();
 
     if (!staffMember || !['admin', 'manager', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung für diese Aktion' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Keine Berechtigung für diese Aktion' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -107,10 +100,7 @@ export async function PUT(
     if (tags !== undefined) updateData.tags = tags;
 
     // Update customer
-    const { error } = await supabase
-      .from('customers')
-      .update(updateData)
-      .eq('id', id);
+    const { error } = await supabase.from('customers').update(updateData).eq('id', id);
 
     if (error) {
       console.error('Customer update error:', error);
@@ -128,18 +118,16 @@ export async function PUT(
 
       if (customer?.profile_id) {
         // Upsert consent record
-        await supabase
-          .from('consents')
-          .upsert(
-            {
-              profile_id: customer.profile_id,
-              consent_type: 'marketing',
-              consented: marketingConsent,
-              consented_at: marketingConsent ? new Date().toISOString() : null,
-              revoked_at: !marketingConsent ? new Date().toISOString() : null,
-            },
-            { onConflict: 'profile_id,consent_type' }
-          );
+        await supabase.from('consents').upsert(
+          {
+            profile_id: customer.profile_id,
+            consent_type: 'marketing',
+            consented: marketingConsent,
+            consented_at: marketingConsent ? new Date().toISOString() : null,
+            revoked_at: !marketingConsent ? new Date().toISOString() : null,
+          },
+          { onConflict: 'profile_id,consent_type' }
+        );
       }
     }
 
@@ -179,10 +167,7 @@ export async function DELETE(
       .single();
 
     if (!staffMember || !['admin', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Nur Admins können Kunden löschen' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Nur Admins können Kunden löschen' }, { status: 403 });
     }
 
     // Soft delete by setting deleted_at

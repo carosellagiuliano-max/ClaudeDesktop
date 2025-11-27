@@ -88,9 +88,10 @@ async function getInventoryData() {
   const supabase = await createServerClient();
 
   // Get products with inventory data
-  const { data: productsData } = await supabase
+  const { data: productsData } = (await supabase
     .from('products')
-    .select(`
+    .select(
+      `
       id,
       name,
       sku,
@@ -103,14 +104,16 @@ async function getInventoryData() {
       product_categories (
         name
       )
-    `)
+    `
+    )
     .eq('is_active', true)
-    .order('stock_quantity', { ascending: true }) as { data: ProductDbRow[] | null };
+    .order('stock_quantity', { ascending: true })) as { data: ProductDbRow[] | null };
 
   // Get recent stock movements
-  const { data: movementsData } = await supabase
+  const { data: movementsData } = (await supabase
     .from('stock_movements')
-    .select(`
+    .select(
+      `
       id,
       product_id,
       movement_type,
@@ -125,9 +128,10 @@ async function getInventoryData() {
       profiles (
         display_name
       )
-    `)
+    `
+    )
     .order('created_at', { ascending: false })
-    .limit(50) as { data: StockMovementDbRow[] | null };
+    .limit(50)) as { data: StockMovementDbRow[] | null };
 
   // Get low stock products count (threshold of 5)
   const { count: lowStockCount } = await supabase
@@ -201,11 +205,5 @@ async function getInventoryData() {
 export default async function InventoryPage() {
   const { products, movements, stats } = await getInventoryData();
 
-  return (
-    <AdminInventoryView
-      products={products}
-      movements={movements}
-      stats={stats}
-    />
-  );
+  return <AdminInventoryView products={products} movements={movements} stats={stats} />;
 }

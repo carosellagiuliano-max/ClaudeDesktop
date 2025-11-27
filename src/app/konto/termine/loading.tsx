@@ -12,7 +12,7 @@ export default function TermineLoading() {
 
       {/* Tabs */}
       <div className="space-y-6">
-        <div className="grid w-full grid-cols-2 gap-1 rounded-lg bg-muted p-1">
+        <div className="bg-muted grid w-full grid-cols-2 gap-1 rounded-lg p-1">
           <Skeleton className="h-8" />
           <Skeleton className="h-8" />
         </div>
@@ -22,9 +22,9 @@ export default function TermineLoading() {
           {[1, 2, 3].map((i) => (
             <Card key={i} className="border-border/50">
               <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                   {/* Date Badge Skeleton */}
-                  <Skeleton className="h-20 w-20 rounded-lg flex-shrink-0" />
+                  <Skeleton className="h-20 w-20 flex-shrink-0 rounded-lg" />
 
                   {/* Content Skeleton */}
                   <div className="flex-1 space-y-3">

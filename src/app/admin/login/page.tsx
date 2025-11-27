@@ -47,38 +47,36 @@ export default async function AdminLoginPage({
   const message = params.message;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 p-4">
+    <div className="from-background to-muted/30 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b p-4">
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 mb-8">
-        <Scissors className="h-8 w-8 text-primary" />
+      <Link href="/" className="mb-8 flex items-center gap-2">
+        <Scissors className="text-primary h-8 w-8" />
         <span className="text-2xl font-bold">SCHNITTWERK</span>
       </Link>
 
       {/* Login Card */}
       <div className="w-full max-w-sm">
-        <div className="bg-card rounded-lg border shadow-lg p-6">
-          <div className="text-center mb-6">
+        <div className="bg-card rounded-lg border p-6 shadow-lg">
+          <div className="mb-6 text-center">
             <h1 className="text-xl font-semibold">Admin-Bereich</h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-sm">
               Melden Sie sich an, um fortzufahren
             </p>
           </div>
 
           {/* Error Messages */}
           {error === 'unauthorized' && (
-            <div className="mb-4 p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+            <div className="bg-destructive/10 text-destructive mb-4 rounded-md p-3 text-sm">
               Sie haben keine Berechtigung für den Admin-Bereich.
             </div>
           )}
           {error === 'invalid_credentials' && (
-            <div className="mb-4 p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+            <div className="bg-destructive/10 text-destructive mb-4 rounded-md p-3 text-sm">
               E-Mail oder Passwort ist ungültig.
             </div>
           )}
           {message && (
-            <div className="mb-4 p-3 rounded-md bg-primary/10 text-primary text-sm">
-              {message}
-            </div>
+            <div className="bg-primary/10 text-primary mb-4 rounded-md p-3 text-sm">{message}</div>
           )}
 
           {/* Login Form */}
@@ -86,7 +84,7 @@ export default async function AdminLoginPage({
         </div>
 
         {/* Back to Website */}
-        <p className="text-center mt-6 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-6 text-center text-sm">
           <Link href="/" className="hover:text-foreground transition-colors">
             Zurück zur Website
           </Link>

@@ -22,12 +22,7 @@ export {
 } from './templates';
 
 // SMS Service
-export {
-  SMSService,
-  getSMSService,
-  isSMSConfigured,
-  sendSMS,
-} from './sms';
+export { SMSService, getSMSService, isSMSConfigured, sendSMS } from './sms';
 
 // Reminder Service
 export {
@@ -38,9 +33,4 @@ export {
 } from './reminders';
 
 // Push Service
-export {
-  PushService,
-  getPushService,
-  isPushConfigured,
-  getVapidPublicKey,
-} from './push';
+export { PushService, getPushService, isPushConfigured, getVapidPublicKey } from './push';

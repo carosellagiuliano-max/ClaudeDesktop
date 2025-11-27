@@ -206,20 +206,18 @@ export function AdminOrderList({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">
-            {total} Bestellungen insgesamt
-          </p>
+          <p className="text-muted-foreground text-sm">{total} Bestellungen insgesamt</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Suchen..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 w-48"
+                className="w-48 pl-8"
               />
             </div>
             <Button type="submit" variant="secondary">
@@ -260,12 +258,10 @@ export function AdminOrderList({
             <TableBody>
               {orders.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
+                  <TableCell colSpan={8} className="py-8 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <ShoppingBag className="h-8 w-8 text-muted-foreground" />
-                      <p className="text-muted-foreground">
-                        Keine Bestellungen gefunden
-                      </p>
+                      <ShoppingBag className="text-muted-foreground h-8 w-8" />
+                      <p className="text-muted-foreground">Keine Bestellungen gefunden</p>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -275,9 +271,7 @@ export function AdminOrderList({
                     label: order.status,
                     variant: 'secondary' as const,
                   };
-                  const paymentStatus = paymentStatusConfig[
-                    order.payment_status
-                  ] || {
+                  const paymentStatus = paymentStatusConfig[order.payment_status] || {
                     label: order.payment_status,
                     variant: 'secondary' as const,
                   };
@@ -287,7 +281,7 @@ export function AdminOrderList({
                       <TableCell>
                         <button
                           onClick={() => handleViewOrder(order)}
-                          className="font-medium hover:text-primary transition-colors"
+                          className="hover:text-primary font-medium transition-colors"
                         >
                           #{order.order_number}
                         </button>
@@ -299,7 +293,7 @@ export function AdminOrderList({
                           )}
                           <a
                             href={`mailto:${order.customer_email}`}
-                            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+                            className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs"
                           >
                             <Mail className="h-3 w-3" />
                             {order.customer_email}
@@ -307,9 +301,7 @@ export function AdminOrderList({
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={orderStatus.variant}>
-                          {orderStatus.label}
-                        </Badge>
+                        <Badge variant={orderStatus.variant}>{orderStatus.label}</Badge>
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-col gap-1">
@@ -317,28 +309,26 @@ export function AdminOrderList({
                             {paymentStatus.label}
                           </Badge>
                           {order.payment_method && (
-                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <span className="text-muted-foreground flex items-center gap-1 text-xs">
                               {order.payment_method === 'pay_at_venue' ? (
                                 <Store className="h-3 w-3" />
                               ) : (
                                 <CreditCard className="h-3 w-3" />
                               )}
-                              {paymentMethodLabels[order.payment_method] ||
-                                order.payment_method}
+                              {paymentMethodLabels[order.payment_method] || order.payment_method}
                             </span>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
                         {order.shipping_method && (
-                          <span className="text-sm flex items-center gap-1">
+                          <span className="flex items-center gap-1 text-sm">
                             {order.shipping_method === 'pickup' ? (
                               <Package className="h-3 w-3" />
                             ) : (
                               <Truck className="h-3 w-3" />
                             )}
-                            {shippingMethodLabels[order.shipping_method] ||
-                              order.shipping_method}
+                            {shippingMethodLabels[order.shipping_method] || order.shipping_method}
                           </span>
                         )}
                       </TableCell>
@@ -356,19 +346,17 @@ export function AdminOrderList({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewOrder(order)}
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
+                            <DropdownMenuItem onClick={() => handleViewOrder(order)}>
+                              <Eye className="mr-2 h-4 w-4" />
                               Details anzeigen
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                              <Package className="h-4 w-4 mr-2" />
+                              <Package className="mr-2 h-4 w-4" />
                               Als versendet markieren
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <Truck className="h-4 w-4 mr-2" />
+                              <Truck className="mr-2 h-4 w-4" />
                               Sendungsverfolgung hinzufügen
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -386,7 +374,7 @@ export function AdminOrderList({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Seite {page} von {totalPages}
           </p>
           <div className="flex items-center gap-2">

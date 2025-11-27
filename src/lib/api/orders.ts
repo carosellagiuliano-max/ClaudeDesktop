@@ -68,11 +68,13 @@ class OrderServiceClass extends BaseService<'orders'> {
   async findWithItems(orderId: string): Promise<ServiceResult<OrderWithItems>> {
     const { data, error } = await this.client
       .from('orders')
-      .select(`
+      .select(
+        `
         *,
         order_items (*),
         customer:customers (id, first_name, last_name, email)
-      `)
+      `
+      )
       .eq('id', orderId)
       .single();
 
@@ -95,8 +97,7 @@ class OrderServiceClass extends BaseService<'orders'> {
       pageSize?: number;
     }
   ): Promise<ServiceListResult<OrderWithItems>> {
-    const { startDate, endDate, status, customerId, page = 1, pageSize = 20 } =
-      options || {};
+    const { startDate, endDate, status, customerId, page = 1, pageSize = 20 } = options || {};
 
     let query = this.client
       .from('orders')
@@ -272,9 +273,7 @@ class OrderServiceClass extends BaseService<'orders'> {
       sort_order: index,
     }));
 
-    const { error: itemsError } = await this.client
-      .from('order_items')
-      .insert(orderItems);
+    const { error: itemsError } = await this.client.from('order_items').insert(orderItems);
 
     if (itemsError) {
       // Rollback order if items fail
@@ -437,10 +436,12 @@ class OrderServiceClass extends BaseService<'orders'> {
   }> {
     const { data: orders } = await this.client
       .from('orders')
-      .select(`
+      .select(
+        `
         total_cents,
         order_items (item_type, quantity)
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .in('status', ['paid', 'completed'])
       .gte('created_at', startDate.toISOString())

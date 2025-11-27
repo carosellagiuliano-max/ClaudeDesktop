@@ -296,8 +296,8 @@ export function AdminExportView() {
             <Card key={option.id} className="hover:border-primary/50 transition-colors">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Icon className="h-6 w-6 text-primary" />
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Icon className="text-primary h-6 w-6" />
                   </div>
                 </div>
                 <CardTitle className="text-lg">{option.name}</CardTitle>
@@ -358,7 +358,7 @@ export function AdminExportView() {
                 accept=".csv"
                 onChange={(e) => setImportFile(e.target.files?.[0] || null)}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Die erste Zeile muss die Spaltenüberschriften enthalten
               </p>
             </div>
@@ -396,10 +396,7 @@ export function AdminExportView() {
             <Button variant="outline" onClick={() => setIsImportDialogOpen(false)}>
               Abbrechen
             </Button>
-            <Button
-              onClick={handleImport}
-              disabled={isImporting || !importFile || !importType}
-            >
+            <Button onClick={handleImport} disabled={isImporting || !importFile || !importType}>
               {isImporting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

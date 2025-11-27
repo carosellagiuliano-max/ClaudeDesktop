@@ -24,16 +24,13 @@ export type PaymentMethod =
   | 'stripe_card'
   | 'stripe_twint'
   | 'cash'
+  | 'card'
+  | 'invoice'
   | 'terminal'
   | 'voucher'
   | 'manual_adjustment';
 
-export type PaymentStatus =
-  | 'pending'
-  | 'succeeded'
-  | 'failed'
-  | 'refunded'
-  | 'partially_refunded';
+export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'refunded' | 'partially_refunded';
 
 export type RoleName = 'admin' | 'manager' | 'mitarbeiter' | 'kunde' | 'hq';
 
@@ -214,17 +211,24 @@ export type Database = {
           id: string;
           salon_id: string;
           profile_id: string;
+          user_id?: string; // Alias for profile_id (API compatibility)
           first_name: string;
           last_name: string;
+          email?: string | null; // From profiles join
+          phone?: string | null; // From profiles join
           birthday: string | null;
+          birth_date?: string | null; // Alias for birthday
+          gender?: string | null;
           preferred_contact: string;
           notes: string | null;
           hair_notes: string | null;
+          tags?: string[] | null;
           accepts_marketing: boolean;
           is_active: boolean;
           created_at: string;
           updated_at: string;
           last_visit_at: string | null;
+          deleted_at?: string | null;
         };
         Insert: {
           id?: string;
@@ -249,14 +253,48 @@ export type Database = {
           first_name?: string;
           last_name?: string;
           birthday?: string | null;
+          birth_date?: string | null;
+          gender?: string | null;
           preferred_contact?: string;
           notes?: string | null;
           hair_notes?: string | null;
+          tags?: string[] | null;
           accepts_marketing?: boolean;
           is_active?: boolean;
           created_at?: string;
           updated_at?: string;
           last_visit_at?: string | null;
+          deleted_at?: string | null;
+        };
+      };
+
+      consents: {
+        Row: {
+          id: string;
+          profile_id: string;
+          consent_type: string;
+          consented: boolean;
+          consented_at: string | null;
+          revoked_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          consent_type: string;
+          consented: boolean;
+          consented_at?: string | null;
+          revoked_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          profile_id?: string;
+          consent_type?: string;
+          consented?: boolean;
+          consented_at?: string | null;
+          revoked_at?: string | null;
+          created_at?: string;
         };
       };
 
@@ -265,6 +303,7 @@ export type Database = {
           id: string;
           salon_id: string;
           profile_id: string;
+          user_id?: string; // Alias for profile_id (API compatibility)
           display_name: string;
           job_title: string | null;
           bio: string | null;
@@ -278,6 +317,7 @@ export type Database = {
           is_active: boolean;
           created_at: string;
           updated_at: string;
+          role?: RoleName | null; // From user_roles join (API compatibility)
         };
         Insert: {
           id?: string;
@@ -1111,6 +1151,207 @@ export type Database = {
           updated_at?: string;
         };
       };
+
+      // ----------------------------------------
+      // NOTIFICATIONS
+      // ----------------------------------------
+      notification_templates: {
+        Row: {
+          id: string;
+          salon_id: string | null;
+          code: string;
+          name: string;
+          channel: NotificationChannel;
+          subject: string | null;
+          body_html: string | null;
+          body_text: string | null;
+          sms_body: string | null;
+          available_variables: string[];
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          salon_id?: string | null;
+          code: string;
+          name: string;
+          channel: NotificationChannel;
+          subject?: string | null;
+          body_html?: string | null;
+          body_text?: string | null;
+          sms_body?: string | null;
+          available_variables?: string[];
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          salon_id?: string | null;
+          code?: string;
+          name?: string;
+          channel?: NotificationChannel;
+          subject?: string | null;
+          body_html?: string | null;
+          body_text?: string | null;
+          sms_body?: string | null;
+          available_variables?: string[];
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+
+      notifications: {
+        Row: {
+          id: string;
+          salon_id: string;
+          template_id: string | null;
+          template_code: string | null;
+          channel: NotificationChannel;
+          recipient_email: string | null;
+          recipient_phone: string | null;
+          subject: string | null;
+          body_html: string | null;
+          body_text: string | null;
+          status: string;
+          sent_at: string | null;
+          error_message: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          salon_id: string;
+          template_id?: string | null;
+          template_code?: string | null;
+          channel: NotificationChannel;
+          recipient_email?: string | null;
+          recipient_phone?: string | null;
+          subject?: string | null;
+          body_html?: string | null;
+          body_text?: string | null;
+          status?: string;
+          sent_at?: string | null;
+          error_message?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          salon_id?: string;
+          template_id?: string | null;
+          template_code?: string | null;
+          channel?: NotificationChannel;
+          recipient_email?: string | null;
+          recipient_phone?: string | null;
+          subject?: string | null;
+          body_html?: string | null;
+          body_text?: string | null;
+          status?: string;
+          sent_at?: string | null;
+          error_message?: string | null;
+          created_at?: string;
+        };
+      };
+
+      // ----------------------------------------
+      // ORDER & PAYMENT EVENTS
+      // ----------------------------------------
+      order_events: {
+        Row: {
+          id: string;
+          order_id: string;
+          event_type: string;
+          description: string | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          order_id: string;
+          event_type: string;
+          description?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          order_id?: string;
+          event_type?: string;
+          description?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+      };
+
+      payment_events: {
+        Row: {
+          id: string;
+          payment_intent_id: string | null;
+          payment_id: string | null;
+          order_id: string | null;
+          event_type: string;
+          status: string;
+          amount_cents: number | null;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          payment_intent_id?: string | null;
+          payment_id?: string | null;
+          order_id?: string | null;
+          event_type: string;
+          status?: string;
+          amount_cents?: number | null;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          payment_intent_id?: string | null;
+          payment_id?: string | null;
+          order_id?: string | null;
+          event_type?: string;
+          status?: string;
+          amount_cents?: number | null;
+          metadata?: Json;
+          created_at?: string;
+        };
+      };
+
+      // ----------------------------------------
+      // LOYALTY
+      // ----------------------------------------
+      loyalty_accounts: {
+        Row: {
+          id: string;
+          customer_id: string;
+          points_balance: number;
+          tier: string;
+          lifetime_points: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          customer_id: string;
+          points_balance?: number;
+          tier?: string;
+          lifetime_points?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          customer_id?: string;
+          points_balance?: number;
+          tier?: string;
+          lifetime_points?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
     };
 
     Views: {
@@ -1260,3 +1501,62 @@ export type Payment = Tables<'payments'>;
 export type Voucher = Tables<'vouchers'>;
 export type Setting = Tables<'settings'>;
 export type OpeningHours = Tables<'opening_hours'>;
+
+// ============================================
+// ADDITIONAL TYPE ALIASES FOR API COMPATIBILITY
+// ============================================
+
+// Refund type for payments API
+export interface Refund {
+  id: string;
+  payment_id: string;
+  order_id: string;
+  salon_id: string;
+  amount_cents: number;
+  currency: string;
+  reason: string;
+  status: 'pending' | 'completed' | 'failed';
+  stripe_refund_id: string | null;
+  refunded_by: string;
+  processed_at: string;
+  created_at: string;
+}
+
+// Product variant type
+export interface ProductVariant {
+  id: string;
+  product_id: string;
+  name: string;
+  sku: string | null;
+  price_cents: number;
+  compare_at_price_cents: number | null;
+  stock_quantity: number;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Stock movement type
+export interface StockMovement {
+  id: string;
+  product_id: string;
+  variant_id: string | null;
+  quantity_change: number;
+  reason: StockMovementType;
+  notes: string | null;
+  order_id: string | null;
+  created_at: string;
+}
+
+// Schedule override type for staff
+export interface ScheduleOverride {
+  id: string;
+  staff_id: string;
+  date: string;
+  is_available: boolean;
+  start_time: string | null;
+  end_time: string | null;
+  reason: string | null;
+  created_at: string;
+}

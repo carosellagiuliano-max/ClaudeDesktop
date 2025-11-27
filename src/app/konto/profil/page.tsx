@@ -69,7 +69,7 @@ export default async function ProfilPage() {
           <Separator />
           <div className="flex justify-between py-2">
             <span className="text-muted-foreground">Konto-ID</span>
-            <span className="text-xs font-mono text-muted-foreground">
+            <span className="text-muted-foreground font-mono text-xs">
               {profile.id.slice(0, 8)}...
             </span>
           </div>
@@ -83,13 +83,15 @@ export default async function ProfilPage() {
             <Lock className="h-5 w-5" />
             Sicherheit
           </CardTitle>
-          <CardDescription>Verwalten Sie Ihr Passwort und Ihre Sicherheitseinstellungen.</CardDescription>
+          <CardDescription>
+            Verwalten Sie Ihr Passwort und Ihre Sicherheitseinstellungen.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Passwort</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Ändern Sie Ihr Passwort regelmässig für mehr Sicherheit.
               </p>
             </div>
@@ -104,15 +106,13 @@ export default async function ProfilPage() {
       <Card className="border-destructive/50">
         <CardHeader>
           <CardTitle className="text-destructive">Gefahrenzone</CardTitle>
-          <CardDescription>
-            Irreversible und destruktive Aktionen für Ihr Konto.
-          </CardDescription>
+          <CardDescription>Irreversible und destruktive Aktionen für Ihr Konto.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Konto löschen</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Alle Ihre Daten werden unwiderruflich gelöscht.
               </p>
             </div>
@@ -120,7 +120,7 @@ export default async function ProfilPage() {
               Konto löschen
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 text-xs">
             Bitte kontaktieren Sie uns, um Ihr Konto zu löschen.
           </p>
         </CardContent>

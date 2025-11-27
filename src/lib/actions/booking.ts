@@ -71,10 +71,12 @@ export const getBookingPageData = unstable_cache(
       // Services (bookable online)
       supabase
         .from('services')
-        .select(`
+        .select(
+          `
           id, name, description, duration_minutes, price_cents,
           category_id, is_active
-        `)
+        `
+        )
         .eq('salon_id', salonId)
         .eq('is_bookable_online', true)
         .eq('is_active', true)
@@ -90,10 +92,7 @@ export const getBookingPageData = unstable_cache(
         .order('sort_order'),
 
       // Staff skills
-      supabase
-        .from('staff_service_skills')
-        .select('staff_id, service_id')
-        .eq('salon_id', salonId),
+      supabase.from('staff_service_skills').select('staff_id, service_id').eq('salon_id', salonId),
 
       // Opening hours
       supabase
@@ -109,11 +108,7 @@ export const getBookingPageData = unstable_cache(
         .eq('salon_id', salonId),
 
       // Booking rules
-      supabase
-        .from('booking_rules')
-        .select('*')
-        .eq('salon_id', salonId)
-        .single(),
+      supabase.from('booking_rules').select('*').eq('salon_id', salonId).single(),
     ]);
 
     // Build staff skills map
@@ -169,9 +164,7 @@ export const getBookingPageData = unstable_cache(
           bufferBetweenMinutes: bookingRules.buffer_between_minutes || 0,
           allowMultipleServices: true,
           requireDeposit: bookingRules.require_deposit || false,
-          depositAmountCents: bookingRules.deposit_percent
-            ? undefined
-            : undefined,
+          depositAmountCents: bookingRules.deposit_percent ? undefined : undefined,
           cancellationDeadlineHours: bookingRules.cancellation_cutoff_hours || 24,
         }
       : {
@@ -327,12 +320,15 @@ export async function createAppointmentReservation(
       }
 
       // Create idempotency key entry
-      await supabase.from('idempotency_keys').upsert({
-        key: idempotencyKey,
-        operation: 'create_reservation',
-        entity_type: 'appointment',
-        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      }, { onConflict: 'key' });
+      await supabase.from('idempotency_keys').upsert(
+        {
+          key: idempotencyKey,
+          operation: 'create_reservation',
+          entity_type: 'appointment',
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        },
+        { onConflict: 'key' }
+      );
     }
 
     // Calculate end time based on services
@@ -367,7 +363,8 @@ export async function createAppointmentReservation(
     if (existingAppointments && existingAppointments.length > 0) {
       const result: CreateReservationResult = {
         success: false,
-        error: 'Dieser Termin ist leider nicht mehr verfügbar. Bitte wählen Sie einen anderen Zeitpunkt.',
+        error:
+          'Dieser Termin ist leider nicht mehr verfügbar. Bitte wählen Sie einen anderen Zeitpunkt.',
         errorCode: 'SLOT_ALREADY_TAKEN',
       };
       return result;
@@ -411,7 +408,11 @@ export async function createAppointmentReservation(
         return result;
       }
       console.error('Error creating appointment:', appointmentError);
-      return { success: false, error: 'Fehler beim Erstellen des Termins.', errorCode: 'SERVER_ERROR' };
+      return {
+        success: false,
+        error: 'Fehler beim Erstellen des Termins.',
+        errorCode: 'SERVER_ERROR',
+      };
     }
 
     // Create appointment_services entries
@@ -432,7 +433,11 @@ export async function createAppointmentReservation(
       console.error('Error creating appointment services:', servicesError);
       // Rollback appointment
       await supabase.from('appointments').delete().eq('id', appointment.id);
-      return { success: false, error: 'Fehler beim Erstellen des Termins.', errorCode: 'SERVER_ERROR' };
+      return {
+        success: false,
+        error: 'Fehler beim Erstellen des Termins.',
+        errorCode: 'SERVER_ERROR',
+      };
     }
 
     const result: CreateReservationResult = { success: true, appointmentId: appointment.id };
@@ -448,7 +453,11 @@ export async function createAppointmentReservation(
     return result;
   } catch (error) {
     console.error('Reservation error:', error);
-    return { success: false, error: 'Ein unerwarteter Fehler ist aufgetreten.', errorCode: 'SERVER_ERROR' };
+    return {
+      success: false,
+      error: 'Ein unerwarteter Fehler ist aufgetreten.',
+      errorCode: 'SERVER_ERROR',
+    };
   }
 }
 
@@ -475,7 +484,8 @@ export async function confirmAppointment(
   // Get appointment with staff, services, and customer info
   const { data: appointment, error } = await supabase
     .from('appointments')
-    .select(`
+    .select(
+      `
       id,
       start_time,
       end_time,
@@ -491,7 +501,8 @@ export async function confirmAppointment(
         duration_minutes,
         price_cents
       )
-    `)
+    `
+    )
     .eq('id', appointmentId)
     .single();
 
@@ -534,12 +545,11 @@ export async function confirmAppointment(
       accepted_at: new Date().toISOString(),
     }));
 
-    await supabase
-      .from('legal_document_acceptances')
-      .insert(acceptances)
-      .catch((err) => {
-        console.warn('Failed to record legal acceptances:', err);
-      });
+    try {
+      await supabase.from('legal_document_acceptances').insert(acceptances);
+    } catch (err) {
+      console.warn('Failed to record legal acceptances:', err);
+    }
   }
 
   // Get salon info for email
@@ -617,14 +627,16 @@ export async function markAppointmentNoShow(
     // Get appointment
     const { data: appointment, error: fetchError } = await supabase
       .from('appointments')
-      .select(`
+      .select(
+        `
         id,
         status,
         total_cents,
         salon_id,
         booking_number,
         customer_email
-      `)
+      `
+      )
       .eq('id', appointmentId)
       .single();
 
@@ -634,7 +646,10 @@ export async function markAppointmentNoShow(
 
     // Only confirmed appointments can be marked as no-show
     if (appointment.status !== 'confirmed') {
-      return { success: false, error: 'Nur bestätigte Termine können als No-Show markiert werden.' };
+      return {
+        success: false,
+        error: 'Nur bestätigte Termine können als No-Show markiert werden.',
+      };
     }
 
     // Calculate no-show fee if not provided
@@ -650,9 +665,7 @@ export async function markAppointmentNoShow(
       if (salon?.no_show_fee_flat_cents) {
         noShowFeeCents = salon.no_show_fee_flat_cents;
       } else if (salon?.no_show_fee_percent) {
-        noShowFeeCents = Math.round(
-          (appointment.total_cents * salon.no_show_fee_percent) / 100
-        );
+        noShowFeeCents = Math.round((appointment.total_cents * salon.no_show_fee_percent) / 100);
       } else {
         noShowFeeCents = 0;
       }
@@ -673,20 +686,25 @@ export async function markAppointmentNoShow(
       return { success: false, error: 'Fehler beim Markieren als No-Show.' };
     }
 
-    // Create audit log
-    await supabase.from('audit_logs').insert({
-      action: 'mark_no_show',
-      entity_type: 'appointment',
-      entity_id: appointmentId,
-      actor_id: options?.actorId || null,
-      actor_type: options?.actorId ? 'user' : 'system',
-      details: {
-        booking_number: appointment.booking_number,
-        no_show_fee_cents: noShowFeeCents,
-        reason: options?.reason,
-        timestamp: new Date().toISOString(),
-      },
-    }).catch((e) => console.warn('Audit log failed:', e));
+    // Create audit log (fire and forget)
+    supabase
+      .from('audit_logs')
+      .insert({
+        action: 'mark_no_show',
+        entity_type: 'appointment',
+        entity_id: appointmentId,
+        actor_id: options?.actorId || null,
+        actor_type: options?.actorId ? 'user' : 'system',
+        details: {
+          booking_number: appointment.booking_number,
+          no_show_fee_cents: noShowFeeCents,
+          reason: options?.reason,
+          timestamp: new Date().toISOString(),
+        },
+      })
+      .then(({ error }) => {
+        if (error) console.warn('Audit log failed:', error);
+      });
 
     return { success: true, noShowFeeCents };
   } catch (error) {
@@ -726,7 +744,10 @@ export async function markAppointmentCompleted(
     }
 
     if (appointment.status !== 'confirmed') {
-      return { success: false, error: 'Nur bestätigte Termine können als abgeschlossen markiert werden.' };
+      return {
+        success: false,
+        error: 'Nur bestätigte Termine können als abgeschlossen markiert werden.',
+      };
     }
 
     const updateData: Record<string, any> = {

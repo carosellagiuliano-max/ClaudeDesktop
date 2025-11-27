@@ -17,11 +17,7 @@ const RESERVATION_CONFIG = {
 /**
  * Generate a unique slot key
  */
-export function generateSlotKey(
-  staffId: string,
-  startsAt: Date,
-  endsAt: Date
-): string {
+export function generateSlotKey(staffId: string, startsAt: Date, endsAt: Date): string {
   return `${staffId}:${startsAt.toISOString()}:${endsAt.toISOString()}`;
 }
 
@@ -67,10 +63,7 @@ export function hasConflictingReservation(
   currentSessionId: string
 ): boolean {
   return existingReservations.some(
-    (r) =>
-      r.slotKey === slotKey &&
-      r.sessionId !== currentSessionId &&
-      isReservationValid(r)
+    (r) => r.slotKey === slotKey && r.sessionId !== currentSessionId && isReservationValid(r)
   );
 }
 
@@ -106,13 +99,9 @@ export function validateReservation(
 /**
  * Calculate remaining time on a reservation in seconds
  */
-export function getRemainingReservationTime(
-  reservation: SlotReservation
-): number {
+export function getRemainingReservationTime(reservation: SlotReservation): number {
   const now = new Date();
-  const remaining = Math.floor(
-    (reservation.expiresAt.getTime() - now.getTime()) / 1000
-  );
+  const remaining = Math.floor((reservation.expiresAt.getTime() - now.getTime()) / 1000);
   return Math.max(0, remaining);
 }
 

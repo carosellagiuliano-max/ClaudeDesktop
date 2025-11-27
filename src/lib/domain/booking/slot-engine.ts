@@ -79,11 +79,7 @@ export async function computeAvailableSlots(
   const totalDuration = calculateTotalDuration(services, bookingRules);
 
   // Filter staff by skills (can perform all selected services)
-  const qualifiedStaff = filterStaffBySkills(
-    staff,
-    input.serviceIds,
-    input.preferredStaffId
-  );
+  const qualifiedStaff = filterStaffBySkills(staff, input.serviceIds, input.preferredStaffId);
 
   const slots: AvailableSlot[] = [];
   const now = new Date();
@@ -187,19 +183,10 @@ export function groupSlotsByDate(slots: AvailableSlot[]): SlotsByDate[] {
 /**
  * Calculate total duration from services
  */
-function calculateTotalDuration(
-  services: BookableService[],
-  rules: BookingRules
-): number {
-  const serviceDuration = services.reduce(
-    (sum, s) => sum + s.durationMinutes,
-    0
-  );
+function calculateTotalDuration(services: BookableService[], rules: BookingRules): number {
+  const serviceDuration = services.reduce((sum, s) => sum + s.durationMinutes, 0);
   // Add buffer between services if multiple
-  const bufferTime =
-    services.length > 1
-      ? (services.length - 1) * rules.bufferBetweenMinutes
-      : 0;
+  const bufferTime = services.length > 1 ? (services.length - 1) * rules.bufferBetweenMinutes : 0;
   return serviceDuration + bufferTime;
 }
 
@@ -212,18 +199,14 @@ function filterStaffBySkills(
   preferredStaffId?: string
 ): BookableStaff[] {
   let qualified = staff.filter(
-    (s) =>
-      s.isBookable && serviceIds.every((sid) => s.serviceIds.includes(sid))
+    (s) => s.isBookable && serviceIds.every((sid) => s.serviceIds.includes(sid))
   );
 
   // If preferred staff is specified and qualified, put them first
   if (preferredStaffId) {
     const preferred = qualified.find((s) => s.id === preferredStaffId);
     if (preferred) {
-      qualified = [
-        preferred,
-        ...qualified.filter((s) => s.id !== preferredStaffId),
-      ];
+      qualified = [preferred, ...qualified.filter((s) => s.id !== preferredStaffId)];
     }
   }
 
@@ -233,11 +216,7 @@ function filterStaffBySkills(
 /**
  * Check if a date is within the booking window
  */
-function isWithinBookingWindow(
-  day: Date,
-  now: Date,
-  rules: BookingRules
-): boolean {
+function isWithinBookingWindow(day: Date, now: Date, rules: BookingRules): boolean {
   const minDate = addMinutes(now, rules.leadTimeMinutes);
   const maxDate = addDays(startOfDay(now), rules.horizonDays);
 
@@ -325,11 +304,7 @@ function computeAvailableIntervals(params: IntervalParams): TimeInterval[] {
   intervals = subtractIntervals(intervals, blocked);
 
   // Subtract existing appointments (with buffer)
-  const appointments = getAppointmentsForDay(
-    existingAppointments,
-    staff.id,
-    day
-  ).map((apt) => ({
+  const appointments = getAppointmentsForDay(existingAppointments, staff.id, day).map((apt) => ({
     start: addMinutes(apt.startsAt, -bufferMinutes),
     end: addMinutes(apt.endsAt, bufferMinutes),
   }));
@@ -340,18 +315,14 @@ function computeAvailableIntervals(params: IntervalParams): TimeInterval[] {
     const minStartTime = addMinutes(now, leadTimeMinutes);
     intervals = intervals
       .map((interval) => ({
-        start: isAfter(minStartTime, interval.start)
-          ? minStartTime
-          : interval.start,
+        start: isAfter(minStartTime, interval.start) ? minStartTime : interval.start,
         end: interval.end,
       }))
       .filter((interval) => isBefore(interval.start, interval.end));
   }
 
   // Filter intervals that are too short
-  return intervals.filter(
-    (i) => differenceInMinutes(i.end, i.start) >= totalDuration
-  );
+  return intervals.filter((i) => differenceInMinutes(i.end, i.start) >= totalDuration);
 }
 
 /**
@@ -371,28 +342,19 @@ function getStaffHoursForDay(
   day: Date
 ): StaffWorkingHours | undefined {
   const dayOfWeek = getDay(day);
-  return workingHours.find(
-    (wh) => wh.staffId === staffId && wh.dayOfWeek === dayOfWeek
-  );
+  return workingHours.find((wh) => wh.staffId === staffId && wh.dayOfWeek === dayOfWeek);
 }
 
 /**
  * Get absences for a staff member on a day
  */
-function getAbsencesForDay(
-  absences: StaffAbsence[],
-  staffId: string,
-  day: Date
-): TimeInterval[] {
+function getAbsencesForDay(absences: StaffAbsence[], staffId: string, day: Date): TimeInterval[] {
   const dayStart = startOfDay(day);
   const dayEnd = endOfDay(day);
 
   return absences
     .filter(
-      (a) =>
-        a.staffId === staffId &&
-        isBefore(a.startsAt, dayEnd) &&
-        isAfter(a.endsAt, dayStart)
+      (a) => a.staffId === staffId && isBefore(a.startsAt, dayEnd) && isAfter(a.endsAt, dayStart)
     )
     .map((a) => ({
       start: isAfter(a.startsAt, dayStart) ? a.startsAt : dayStart,
@@ -413,10 +375,7 @@ function getBlockedTimesForDay(
 
   return blockedTimes
     .filter(
-      (b) =>
-        b.staffId === staffId &&
-        isBefore(b.startsAt, dayEnd) &&
-        isAfter(b.endsAt, dayStart)
+      (b) => b.staffId === staffId && isBefore(b.startsAt, dayEnd) && isAfter(b.endsAt, dayStart)
     )
     .map((b) => ({
       start: isAfter(b.startsAt, dayStart) ? b.startsAt : dayStart,
@@ -447,20 +406,13 @@ function getAppointmentsForDay(
 /**
  * Intersect two sets of intervals
  */
-function intersectIntervals(
-  a: TimeInterval[],
-  b: TimeInterval[]
-): TimeInterval[] {
+function intersectIntervals(a: TimeInterval[], b: TimeInterval[]): TimeInterval[] {
   const result: TimeInterval[] = [];
 
   for (const intervalA of a) {
     for (const intervalB of b) {
-      const start = isAfter(intervalA.start, intervalB.start)
-        ? intervalA.start
-        : intervalB.start;
-      const end = isBefore(intervalA.end, intervalB.end)
-        ? intervalA.end
-        : intervalB.end;
+      const start = isAfter(intervalA.start, intervalB.start) ? intervalA.start : intervalB.start;
+      const end = isBefore(intervalA.end, intervalB.end) ? intervalA.end : intervalB.end;
 
       if (isBefore(start, end)) {
         result.push({ start, end });
@@ -474,10 +426,7 @@ function intersectIntervals(
 /**
  * Subtract intervals from a set of intervals
  */
-function subtractIntervals(
-  intervals: TimeInterval[],
-  toSubtract: TimeInterval[]
-): TimeInterval[] {
+function subtractIntervals(intervals: TimeInterval[], toSubtract: TimeInterval[]): TimeInterval[] {
   let result = [...intervals];
 
   for (const sub of toSubtract) {
@@ -485,10 +434,7 @@ function subtractIntervals(
 
     for (const interval of result) {
       // No overlap
-      if (
-        !isBefore(interval.start, sub.end) ||
-        !isAfter(interval.end, sub.start)
-      ) {
+      if (!isBefore(interval.start, sub.end) || !isAfter(interval.end, sub.start)) {
         newResult.push(interval);
         continue;
       }
@@ -528,10 +474,7 @@ function generateSlotsFromInterval(
     current = addMinutes(current, granularity - remainder);
   }
 
-  while (
-    !isAfter(addMinutes(current, duration), interval.end) &&
-    isBefore(current, interval.end)
-  ) {
+  while (!isAfter(addMinutes(current, duration), interval.end) && isBefore(current, interval.end)) {
     slots.push({ start: new Date(current) });
     current = addMinutes(current, granularity);
   }

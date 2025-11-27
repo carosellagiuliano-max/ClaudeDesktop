@@ -139,20 +139,18 @@ export function AdminCustomerList({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">
-            {total} Kunden insgesamt
-          </p>
+          <p className="text-muted-foreground text-sm">{total} Kunden insgesamt</p>
         </div>
         <div className="flex items-center gap-2">
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Suchen..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 w-64"
+                className="w-64 pl-8"
               />
             </div>
             <Button type="submit" variant="secondary">
@@ -160,7 +158,7 @@ export function AdminCustomerList({
             </Button>
           </form>
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Neuer Kunde
           </Button>
         </div>
@@ -184,9 +182,9 @@ export function AdminCustomerList({
             <TableBody>
               {customers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8">
+                  <TableCell colSpan={7} className="py-8 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <User className="h-8 w-8 text-muted-foreground" />
+                      <User className="text-muted-foreground h-8 w-8" />
                       <p className="text-muted-foreground">Keine Kunden gefunden</p>
                     </div>
                   </TableCell>
@@ -197,7 +195,7 @@ export function AdminCustomerList({
                     <TableCell>
                       <button
                         onClick={() => handleViewCustomer(customer)}
-                        className="font-medium hover:text-primary transition-colors text-left"
+                        className="hover:text-primary text-left font-medium transition-colors"
                       >
                         {customer.first_name} {customer.last_name}
                       </button>
@@ -205,7 +203,7 @@ export function AdminCustomerList({
                     <TableCell>
                       <a
                         href={`mailto:${customer.email}`}
-                        className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                        className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                       >
                         <Mail className="h-3 w-3" />
                         {customer.email}
@@ -215,7 +213,7 @@ export function AdminCustomerList({
                       {customer.phone ? (
                         <a
                           href={`tel:${customer.phone}`}
-                          className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                          className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                         >
                           <Phone className="h-3 w-3" />
                           {customer.phone}
@@ -225,9 +223,7 @@ export function AdminCustomerList({
                       )}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="secondary">
-                        {customer.appointments?.[0]?.count || 0}
-                      </Badge>
+                      <Badge variant="secondary">{customer.appointments?.[0]?.count || 0}</Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {formatDate(customer.created_at)}
@@ -245,18 +241,16 @@ export function AdminCustomerList({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => handleViewCustomer(customer)}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
+                          <DropdownMenuItem onClick={() => handleViewCustomer(customer)}>
+                            <Eye className="mr-2 h-4 w-4" />
                             Anzeigen
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
+                            <Edit className="mr-2 h-4 w-4" />
                             Bearbeiten
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Calendar className="h-4 w-4 mr-2" />
+                            <Calendar className="mr-2 h-4 w-4" />
                             Termin erstellen
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
@@ -264,7 +258,7 @@ export function AdminCustomerList({
                             onClick={() => handleDeleteClick(customer)}
                             className="text-destructive"
                           >
-                            <Trash2 className="h-4 w-4 mr-2" />
+                            <Trash2 className="mr-2 h-4 w-4" />
                             Löschen
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -281,7 +275,7 @@ export function AdminCustomerList({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Seite {page} von {totalPages}
           </p>
           <div className="flex items-center gap-2">
@@ -311,16 +305,12 @@ export function AdminCustomerList({
           <DialogHeader>
             <DialogTitle>Kunde löschen</DialogTitle>
             <DialogDescription>
-              Sind Sie sicher, dass Sie {selectedCustomer?.first_name}{' '}
-              {selectedCustomer?.last_name} löschen möchten? Diese Aktion kann
-              nicht rückgängig gemacht werden.
+              Sind Sie sicher, dass Sie {selectedCustomer?.first_name} {selectedCustomer?.last_name}{' '}
+              löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialogOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
               Abbrechen
             </Button>
             <Button variant="destructive" onClick={handleDeleteConfirm}>

@@ -34,35 +34,34 @@ export default function HomePage() {
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
       {/* Background Image/Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal/95 to-charcoal/90">
+      <div className="from-charcoal via-charcoal/95 to-charcoal/90 absolute inset-0 bg-gradient-to-br">
         {/* TODO: Add actual hero image */}
         <div className="absolute inset-0 bg-[url('/images/hero-pattern.svg')] opacity-5" />
       </div>
 
       {/* Content */}
-      <div className="relative container-wide py-20 text-center">
-        <div className="mx-auto max-w-3xl animate-fade-in">
+      <div className="container-wide relative py-20 text-center">
+        <div className="animate-fade-in mx-auto max-w-3xl">
           {/* Tagline */}
-          <p className="text-gold text-sm font-medium uppercase tracking-widest mb-4">
+          <p className="text-gold mb-4 text-sm font-medium tracking-widest uppercase">
             Premium Friseursalon St. Gallen
           </p>
 
           {/* Headline */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Your Style.{' '}
-            <span className="text-gradient-gold">Your Statement.</span>
+          <h1 className="mb-6 text-4xl leading-tight font-bold text-white md:text-5xl lg:text-6xl">
+            Your Style. <span className="text-gradient-gold">Your Statement.</span>
           </h1>
 
           {/* Description */}
-          <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Willkommen bei SCHNITTWERK – wo Stil auf Handwerk trifft.
-            Erleben Sie erstklassige Haarkunst in entspannter Atmosphäre.
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl">
+            Willkommen bei SCHNITTWERK – wo Stil auf Handwerk trifft. Erleben Sie erstklassige
+            Haarkunst in entspannter Atmosphäre.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Button size="lg" className="btn-glow text-base" asChild>
               <Link href="/termin-buchen">
                 <Calendar className="mr-2 h-5 w-5" />
@@ -72,7 +71,7 @@ function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="border-white/30 text-white hover:bg-white/10 text-base"
+              className="border-white/30 text-base text-white hover:bg-white/10"
               asChild
             >
               <Link href="/leistungen">
@@ -86,8 +85,8 @@ function HeroSection() {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
-          <div className="w-1 h-2 bg-white/50 rounded-full" />
+        <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/30 p-2">
+          <div className="h-2 w-1 rounded-full bg-white/50" />
         </div>
       </div>
     </section>
@@ -135,25 +134,20 @@ function InfoCardsSection() {
       <div className="container-wide">
         <div className="grid gap-6 md:grid-cols-3">
           {infoCards.map((card) => (
-            <Card
-              key={card.title}
-              className="card-hover border-border/50 bg-card"
-            >
+            <Card key={card.title} className="card-hover border-border/50 bg-card">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                    <card.icon className="h-6 w-6 text-primary" />
+                  <div className="bg-primary/10 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
+                    <card.icon className="text-primary h-6 w-6" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground">{card.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {card.description}
-                    </p>
+                    <h3 className="text-foreground font-semibold">{card.title}</h3>
+                    <p className="text-muted-foreground mt-1 text-sm">{card.description}</p>
                     <Link
                       href={card.link.href}
                       target={card.link.external ? '_blank' : undefined}
                       rel={card.link.external ? 'noopener noreferrer' : undefined}
-                      className="mt-3 inline-flex items-center text-sm font-medium text-primary hover:underline"
+                      className="text-primary mt-3 inline-flex items-center text-sm font-medium hover:underline"
                     >
                       {card.link.label}
                       <ArrowRight className="ml-1 h-3 w-3" />
@@ -201,34 +195,25 @@ function ServicesPreviewSection() {
     <section className="section-padding bg-muted/30">
       <div className="container-wide">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-2">
+        <div className="mb-12 text-center">
+          <p className="text-primary mb-2 text-sm font-medium tracking-wider uppercase">
             Unsere Leistungen
           </p>
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Beliebte Services
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Von klassischen Haarschnitten bis zu modernen Farbtechniken –
-            entdecken Sie unser umfangreiches Angebot.
+          <h2 className="text-foreground mb-4 text-3xl font-bold">Beliebte Services</h2>
+          <p className="text-muted-foreground mx-auto max-w-2xl">
+            Von klassischen Haarschnitten bis zu modernen Farbtechniken – entdecken Sie unser
+            umfangreiches Angebot.
           </p>
         </div>
 
         {/* Services Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+        <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
-            <Card
-              key={service.name}
-              className="card-hover border-border/50 bg-card"
-            >
+            <Card key={service.name} className="card-hover border-border/50 bg-card">
               <CardContent className="p-6 text-center">
-                <h3 className="font-semibold text-foreground mb-2">
-                  {service.name}
-                </h3>
-                <p className="text-2xl font-bold text-primary mb-1">
-                  {service.price}
-                </p>
-                <p className="text-sm text-muted-foreground">{service.duration}</p>
+                <h3 className="text-foreground mb-2 font-semibold">{service.name}</h3>
+                <p className="text-primary mb-1 text-2xl font-bold">{service.price}</p>
+                <p className="text-muted-foreground text-sm">{service.duration}</p>
               </CardContent>
             </Card>
           ))}
@@ -275,13 +260,11 @@ function ReviewsSection() {
     <section className="section-padding bg-background">
       <div className="container-wide">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-2">
+        <div className="mb-12 text-center">
+          <p className="text-primary mb-2 text-sm font-medium tracking-wider uppercase">
             Kundenstimmen
           </p>
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Was unsere Kunden sagen
-          </h2>
+          <h2 className="text-foreground mb-4 text-3xl font-bold">Was unsere Kunden sagen</h2>
         </div>
 
         {/* Reviews Grid */}
@@ -290,36 +273,29 @@ function ReviewsSection() {
             <Card key={index} className="border-border/50 bg-card">
               <CardContent className="p-6">
                 {/* Stars */}
-                <div className="flex gap-1 mb-4">
+                <div className="mb-4 flex gap-1">
                   {Array.from({ length: review.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-4 w-4 fill-primary text-primary"
-                    />
+                    <Star key={i} className="fill-primary text-primary h-4 w-4" />
                   ))}
                 </div>
 
                 {/* Review Text */}
-                <p className="text-foreground/80 mb-4 italic">
-                  &ldquo;{review.text}&rdquo;
-                </p>
+                <p className="text-foreground/80 mb-4 italic">&ldquo;{review.text}&rdquo;</p>
 
                 {/* Author */}
-                <p className="text-sm font-medium text-foreground">
-                  {review.name}
-                </p>
+                <p className="text-foreground text-sm font-medium">{review.name}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Google Reviews Link */}
-        <div className="text-center mt-8">
+        <div className="mt-8 text-center">
           <Link
             href="https://g.page/schnittwerk-stgallen/review"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
           >
             Mehr Bewertungen auf Google →
           </Link>
@@ -335,14 +311,12 @@ function ReviewsSection() {
 
 function CTASection() {
   return (
-    <section className="py-20 bg-charcoal text-white">
+    <section className="bg-charcoal py-20 text-white">
       <div className="container-wide text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Bereit für Ihren neuen Look?
-        </h2>
-        <p className="text-white/70 mb-8 max-w-xl mx-auto">
-          Buchen Sie jetzt Ihren Termin online – schnell, einfach und bequem.
-          Wir freuen uns auf Sie!
+        <h2 className="mb-4 text-3xl font-bold md:text-4xl">Bereit für Ihren neuen Look?</h2>
+        <p className="mx-auto mb-8 max-w-xl text-white/70">
+          Buchen Sie jetzt Ihren Termin online – schnell, einfach und bequem. Wir freuen uns auf
+          Sie!
         </p>
         <Button size="lg" className="btn-glow" asChild>
           <Link href="/termin-buchen">

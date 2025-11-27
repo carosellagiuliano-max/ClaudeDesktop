@@ -5,12 +5,7 @@ import { Tag, X, Loader2, Truck, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCart } from '@/contexts/cart-context';
 
 // ============================================
@@ -28,13 +23,7 @@ export function CartSummary({
   showDiscountInput = false,
   showShipping = true,
 }: CartSummaryProps) {
-  const {
-    cart,
-    applyDiscountCode,
-    removeDiscountCode,
-    isDigitalOnly,
-    formatPrice,
-  } = useCart();
+  const { cart, applyDiscountCode, removeDiscountCode, isDigitalOnly, formatPrice } = useCart();
 
   const [discountCode, setDiscountCode] = useState('');
   const [isApplying, setIsApplying] = useState(false);
@@ -98,9 +87,7 @@ export function CartSummary({
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Versand</span>
             <span>
-              {shippingMethod
-                ? formatPrice(shippingMethod.priceCents)
-                : 'Wird berechnet'}
+              {shippingMethod ? formatPrice(shippingMethod.priceCents) : 'Wird berechnet'}
             </span>
           </div>
         )}
@@ -113,7 +100,7 @@ export function CartSummary({
         </div>
 
         {/* VAT Info */}
-        <p className="text-xs text-muted-foreground text-right">
+        <p className="text-muted-foreground text-right text-xs">
           inkl. {formatPrice(totals.taxCents)} MwSt.
         </p>
       </div>
@@ -140,20 +127,11 @@ export function CartSummary({
                 }
               }}
             />
-            <Button
-              onClick={handleApplyDiscount}
-              disabled={!discountCode.trim() || isApplying}
-            >
-              {isApplying ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                'Einlösen'
-              )}
+            <Button onClick={handleApplyDiscount} disabled={!discountCode.trim() || isApplying}>
+              {isApplying ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Einlösen'}
             </Button>
           </div>
-          {discountError && (
-            <p className="text-sm text-destructive">{discountError}</p>
-          )}
+          {discountError && <p className="text-destructive text-sm">{discountError}</p>}
         </div>
       )}
 
@@ -163,7 +141,7 @@ export function CartSummary({
           {discounts.map((discount) => (
             <div
               key={discount.code}
-              className="flex items-center justify-between rounded-lg bg-green-50 dark:bg-green-950 px-3 py-2"
+              className="flex items-center justify-between rounded-lg bg-green-50 px-3 py-2 dark:bg-green-950"
             >
               <div className="flex items-center gap-2">
                 <Tag className="h-4 w-4 text-green-600" />
@@ -215,7 +193,7 @@ export function CartSummary({
         {/* Shipping */}
         {showShipping && !isDigitalOnly && (
           <div className="flex justify-between">
-            <span className="flex items-center gap-1 text-muted-foreground">
+            <span className="text-muted-foreground flex items-center gap-1">
               <Truck className="h-4 w-4" />
               Versand
             </span>
@@ -235,7 +213,7 @@ export function CartSummary({
 
         {/* Digital Only Notice */}
         {isDigitalOnly && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
             <Info className="h-4 w-4" />
             <span>Digitale Produkte - kein Versand erforderlich</span>
           </div>
@@ -245,13 +223,13 @@ export function CartSummary({
       <Separator />
 
       {/* Total */}
-      <div className="flex justify-between items-baseline">
+      <div className="flex items-baseline justify-between">
         <div>
           <span className="text-lg font-semibold">Gesamtbetrag</span>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-5 w-5 ml-1">
+                <Button variant="ghost" size="icon" className="ml-1 h-5 w-5">
                   <Info className="h-3 w-3" />
                 </Button>
               </TooltipTrigger>
@@ -262,12 +240,8 @@ export function CartSummary({
           </TooltipProvider>
         </div>
         <div className="text-right">
-          <span className="text-2xl font-bold">
-            {formatPrice(totals.totalCents)}
-          </span>
-          <p className="text-xs text-muted-foreground">
-            inkl. MwSt.
-          </p>
+          <span className="text-2xl font-bold">{formatPrice(totals.totalCents)}</span>
+          <p className="text-muted-foreground text-xs">inkl. MwSt.</p>
         </div>
       </div>
     </div>

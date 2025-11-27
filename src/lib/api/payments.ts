@@ -1,11 +1,5 @@
 import { BaseService, ServiceResult, ServiceListResult } from './base';
-import type {
-  Payment,
-  Refund,
-  PaymentMethod,
-  PaymentStatus,
-  Database,
-} from '../db/types';
+import type { Payment, Refund, PaymentMethod, PaymentStatus, Database } from '../db/types';
 import { OrderService } from './orders';
 import { logger } from '../logging/logger';
 
@@ -53,10 +47,12 @@ class PaymentServiceClass extends BaseService<'payments'> {
   async findWithOrder(paymentId: string): Promise<ServiceResult<PaymentWithOrder>> {
     const { data, error } = await this.client
       .from('payments')
-      .select(`
+      .select(
+        `
         *,
         order:orders (id, order_number, total_cents)
-      `)
+      `
+      )
       .eq('id', paymentId)
       .single();
 
@@ -79,8 +75,7 @@ class PaymentServiceClass extends BaseService<'payments'> {
       pageSize?: number;
     }
   ): Promise<ServiceListResult<PaymentWithOrder>> {
-    const { startDate, endDate, status, method, page = 1, pageSize = 20 } =
-      options || {};
+    const { startDate, endDate, status, method, page = 1, pageSize = 20 } = options || {};
 
     let query = this.client
       .from('payments')
@@ -181,10 +176,7 @@ class PaymentServiceClass extends BaseService<'payments'> {
   }
 
   // Confirm payment (mark as succeeded)
-  async confirm(
-    paymentId: string,
-    processedBy?: string
-  ): Promise<ServiceResult<Payment>> {
+  async confirm(paymentId: string, processedBy?: string): Promise<ServiceResult<Payment>> {
     const result = await this.update(paymentId, {
       status: 'succeeded',
       processed_at: new Date().toISOString(),
@@ -193,11 +185,7 @@ class PaymentServiceClass extends BaseService<'payments'> {
 
     if (result.data) {
       // Update order status
-      await OrderService.markPaid(
-        result.data.order_id,
-        result.data.payment_method,
-        paymentId
-      );
+      await OrderService.markPaid(result.data.order_id, result.data.payment_method, paymentId);
 
       logger.info('Payment confirmed', {
         paymentId,
@@ -272,13 +260,7 @@ class PaymentServiceClass extends BaseService<'payments'> {
 
   // Create refund
   async createRefund(params: RefundParams): Promise<ServiceResult<Refund>> {
-    const {
-      paymentId,
-      amountCents,
-      reason,
-      refundedBy,
-      stripeRefundId,
-    } = params;
+    const { paymentId, amountCents, reason, refundedBy, stripeRefundId } = params;
 
     // Get payment
     const { data: payment } = await this.findById(paymentId);
@@ -291,10 +273,7 @@ class PaymentServiceClass extends BaseService<'payments'> {
 
     // Check if refund amount is valid
     const existingRefunds = await this.getRefundsForPayment(paymentId);
-    const totalRefunded = existingRefunds.data.reduce(
-      (sum, r) => sum + r.amount_cents,
-      0
-    );
+    const totalRefunded = existingRefunds.data.reduce((sum, r) => sum + r.amount_cents, 0);
 
     if (totalRefunded + amountCents > payment.amount_cents) {
       return {

@@ -5,10 +5,7 @@ import { createServerClient } from '@/lib/supabase/server';
 // GET - Fetch Order Details
 // ============================================
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const supabase = await createServerClient();
@@ -53,10 +50,7 @@ export async function GET(
 // PUT - Update Order
 // ============================================
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const supabase = await createServerClient();
@@ -77,10 +71,7 @@ export async function PUT(
       .single();
 
     if (!staffMember || !['admin', 'manager', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Keine Berechtigung' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -96,10 +87,7 @@ export async function PUT(
     if (notes !== undefined) updateData.notes = notes;
 
     // Update order
-    const { error } = await supabase
-      .from('orders')
-      .update(updateData)
-      .eq('id', id);
+    const { error } = await supabase.from('orders').update(updateData).eq('id', id);
 
     if (error) {
       console.error('Order update error:', error);

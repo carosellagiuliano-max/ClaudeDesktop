@@ -48,8 +48,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Build CSV
-    const headers = ['ID', 'Vorname', 'Nachname', 'E-Mail', 'Telefon', 'Geburtsdatum', 'Geschlecht', 'Erstellt', 'Tags'];
-    const rows = (customers || []).map(c => [
+    const headers = [
+      'ID',
+      'Vorname',
+      'Nachname',
+      'E-Mail',
+      'Telefon',
+      'Geburtsdatum',
+      'Geschlecht',
+      'Erstellt',
+      'Tags',
+    ];
+    const rows = (customers || []).map((c) => [
       c.id,
       c.first_name,
       c.last_name,
@@ -63,7 +73,7 @@ export async function GET(request: NextRequest) {
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+      ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
 
     return new NextResponse(csv, {

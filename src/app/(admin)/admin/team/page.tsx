@@ -61,7 +61,13 @@ async function getTeamData() {
 
   if (error) {
     console.error('Error fetching staff:', error);
-    return { staff: [], services: [], absences: [], skills: [] as StaffSkill[], workingHours: [] as WorkingHour[] };
+    return {
+      staff: [],
+      services: [],
+      absences: [],
+      skills: [] as StaffSkill[],
+      workingHours: [] as WorkingHour[],
+    };
   }
 
   // Fetch services for skills
@@ -79,14 +85,14 @@ async function getTeamData() {
     .order('start_date');
 
   // Fetch staff skills
-  const { data: skillsData } = await supabase
+  const { data: skillsData } = (await supabase
     .from('staff_skills')
-    .select('staff_id, service_id, proficiency_level') as { data: StaffSkill[] | null };
+    .select('staff_id, service_id, proficiency_level')) as { data: StaffSkill[] | null };
 
   // Fetch working hours
-  const { data: workingHoursData } = await supabase
-    .from('staff_working_hours')
-    .select('*') as { data: WorkingHour[] | null };
+  const { data: workingHoursData } = (await supabase.from('staff_working_hours').select('*')) as {
+    data: WorkingHour[] | null;
+  };
 
   return {
     staff: staffData || [],

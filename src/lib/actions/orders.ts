@@ -65,10 +65,9 @@ export async function createOrder(
     const supabase = await createServerClient();
 
     // Generate order number using database function
-    const { data: orderNumber, error: numError } = await supabase.rpc(
-      'generate_order_number',
-      { p_salon_id: input.salonId }
-    );
+    const { data: orderNumber, error: numError } = await supabase.rpc('generate_order_number', {
+      p_salon_id: input.salonId,
+    });
 
     if (numError || !orderNumber) {
       console.error('Error generating order number:', numError);
@@ -160,9 +159,7 @@ export async function createOrder(
       personal_message: item.personalMessage,
     }));
 
-    const { error: itemsError } = await supabase
-      .from('order_items')
-      .insert(orderItems);
+    const { error: itemsError } = await supabase.from('order_items').insert(orderItems);
 
     if (itemsError) {
       console.error('Error creating order items:', itemsError);
@@ -175,9 +172,7 @@ export async function createOrder(
     await supabase.from('order_status_history').insert({
       order_id: order.id,
       new_status: initialStatus,
-      notes: isPayAtVenue
-        ? 'Bestellung erstellt - Bezahlung bei Abholung'
-        : 'Bestellung erstellt',
+      notes: isPayAtVenue ? 'Bestellung erstellt - Bezahlung bei Abholung' : 'Bestellung erstellt',
     });
 
     // Transform to Order type
@@ -213,10 +208,7 @@ export async function createOrder(
       }
 
       // Update order with session ID
-      await supabase
-        .from('orders')
-        .update({ stripe_session_id: session.id })
-        .eq('id', order.id);
+      await supabase.from('orders').update({ stripe_session_id: session.id }).eq('id', order.id);
 
       return {
         order: { ...transformedOrder, stripeSessionId: session.id },
@@ -276,9 +268,7 @@ export async function getOrder(orderId: string): Promise<ActionResult<Order>> {
 /**
  * Get order by order number
  */
-export async function getOrderByNumber(
-  orderNumber: string
-): Promise<ActionResult<Order>> {
+export async function getOrderByNumber(orderNumber: string): Promise<ActionResult<Order>> {
   try {
     const supabase = await createServerClient();
 
@@ -293,10 +283,7 @@ export async function getOrderByNumber(
     }
 
     // Get order items
-    const { data: items } = await supabase
-      .from('order_items')
-      .select('*')
-      .eq('order_id', order.id);
+    const { data: items } = await supabase.from('order_items').select('*').eq('order_id', order.id);
 
     return { data: transformDbOrder(order, items || []), error: null };
   } catch (error) {
@@ -512,10 +499,7 @@ export async function updateOrderStatus(
     });
 
     // Get items
-    const { data: items } = await supabase
-      .from('order_items')
-      .select('*')
-      .eq('order_id', orderId);
+    const { data: items } = await supabase.from('order_items').select('*').eq('order_id', orderId);
 
     revalidatePath('/admin/orders');
     revalidatePath(`/konto/bestellungen/${orderId}`);
@@ -553,10 +537,7 @@ export async function addTrackingNumber(
       return { data: null, error: 'Fehler beim Hinzufügen der Sendungsnummer' };
     }
 
-    const { data: items } = await supabase
-      .from('order_items')
-      .select('*')
-      .eq('order_id', orderId);
+    const { data: items } = await supabase.from('order_items').select('*').eq('order_id', orderId);
 
     revalidatePath('/admin/orders');
 
@@ -574,10 +555,7 @@ export async function addTrackingNumber(
 /**
  * Cancel an order
  */
-export async function cancelOrder(
-  orderId: string,
-  reason: string
-): Promise<ActionResult<Order>> {
+export async function cancelOrder(orderId: string, reason: string): Promise<ActionResult<Order>> {
   try {
     const supabase = await createServerClient();
 
@@ -608,10 +586,7 @@ export async function cancelOrder(
       notes: `Storniert: ${reason}`,
     });
 
-    const { data: items } = await supabase
-      .from('order_items')
-      .select('*')
-      .eq('order_id', orderId);
+    const { data: items } = await supabase.from('order_items').select('*').eq('order_id', orderId);
 
     revalidatePath('/admin/orders');
 
@@ -648,10 +623,10 @@ export async function applyVoucherToOrder(
     }
 
     // Validate voucher using database function
-    const { data: voucherResult, error: voucherError } = await supabase.rpc(
-      'validate_voucher',
-      { p_salon_id: order.salon_id, p_code: voucherCode }
-    );
+    const { data: voucherResult, error: voucherError } = await supabase.rpc('validate_voucher', {
+      p_salon_id: order.salon_id,
+      p_code: voucherCode,
+    });
 
     if (voucherError || !voucherResult?.[0]?.is_valid) {
       return {

@@ -49,7 +49,7 @@ export function AdminLoginForm() {
         document.cookie = `mock_user=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=86400`;
 
         // Small delay to simulate network
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         router.push('/admin');
         router.refresh();
@@ -104,9 +104,7 @@ export function AdminLoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
-          {error}
-        </div>
+        <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">{error}</div>
       )}
 
       <div className="space-y-2">
@@ -140,14 +138,10 @@ export function AdminLoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
             tabIndex={-1}
           >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
       </div>
@@ -155,7 +149,7 @@ export function AdminLoginForm() {
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? (
           <>
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Anmelden...
           </>
         ) : (
@@ -165,8 +159,8 @@ export function AdminLoginForm() {
 
       {/* Mock Mode Hint */}
       {isMockMode && (
-        <div className="mt-4 p-3 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-xs">
-          <p className="font-medium mb-1">Demo-Modus aktiv</p>
+        <div className="mt-4 rounded-md border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-400">
+          <p className="mb-1 font-medium">Demo-Modus aktiv</p>
           <p>Admin: admin@schnittwerk.ch / admin123</p>
           <p>Staff: vanessa@schnittwerk.ch / staff123</p>
         </div>

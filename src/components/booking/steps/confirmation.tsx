@@ -87,7 +87,7 @@ export function Confirmation({
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold mb-2">Buchung bestätigen</h2>
+        <h2 className="mb-2 text-2xl font-bold">Buchung bestätigen</h2>
         <p className="text-muted-foreground">
           Überprüfen Sie Ihre Angaben und vervollständigen Sie die Buchung.
         </p>
@@ -104,7 +104,7 @@ export function Confirmation({
             <CardContent className="space-y-4">
               {/* Date & Time */}
               <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-primary" />
+                <Calendar className="text-primary h-5 w-5" />
                 <div>
                   <p className="font-medium">
                     {state.selectedSlot &&
@@ -112,34 +112,30 @@ export function Confirmation({
                         locale: de,
                       })}
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    {state.selectedSlot &&
-                      format(state.selectedSlot.startsAt, 'HH:mm')}{' '}
-                    -{' '}
-                    {state.selectedSlot &&
-                      format(state.selectedSlot.endsAt, 'HH:mm')}{' '}
-                    Uhr
+                  <p className="text-muted-foreground text-sm">
+                    {state.selectedSlot && format(state.selectedSlot.startsAt, 'HH:mm')} -{' '}
+                    {state.selectedSlot && format(state.selectedSlot.endsAt, 'HH:mm')} Uhr
                   </p>
                 </div>
               </div>
 
               {/* Staff */}
               <div className="flex items-center gap-3">
-                <User className="h-5 w-5 text-primary" />
+                <User className="text-primary h-5 w-5" />
                 <div>
                   <p className="font-medium">
                     {state.selectedSlot?.staffName || 'Noch nicht ausgewählt'}
                   </p>
-                  <p className="text-sm text-muted-foreground">Ihr Stylist</p>
+                  <p className="text-muted-foreground text-sm">Ihr Stylist</p>
                 </div>
               </div>
 
               {/* Location */}
               <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-primary" />
+                <MapPin className="text-primary h-5 w-5" />
                 <div>
                   <p className="font-medium">SCHNITTWERK</p>
-                  <p className="text-sm text-muted-foreground">{salonAddress}</p>
+                  <p className="text-muted-foreground text-sm">{salonAddress}</p>
                 </div>
               </div>
 
@@ -176,9 +172,7 @@ export function Confirmation({
                     id="name"
                     placeholder="Vor- und Nachname"
                     value={state.customerInfo.name}
-                    onChange={(e) =>
-                      updateCustomerInfo({ name: e.target.value })
-                    }
+                    onChange={(e) => updateCustomerInfo({ name: e.target.value })}
                     required
                   />
                 </div>
@@ -189,9 +183,7 @@ export function Confirmation({
                     type="tel"
                     placeholder="+41 79 123 45 67"
                     value={state.customerInfo.phone}
-                    onChange={(e) =>
-                      updateCustomerInfo({ phone: e.target.value })
-                    }
+                    onChange={(e) => updateCustomerInfo({ phone: e.target.value })}
                     required
                   />
                 </div>
@@ -203,9 +195,7 @@ export function Confirmation({
                   type="email"
                   placeholder="ihre@email.ch"
                   value={state.customerInfo.email}
-                  onChange={(e) =>
-                    updateCustomerInfo({ email: e.target.value })
-                  }
+                  onChange={(e) => updateCustomerInfo({ email: e.target.value })}
                   required
                 />
               </div>
@@ -216,9 +206,7 @@ export function Confirmation({
                   placeholder="z.B. spezielle Wünsche oder Hinweise..."
                   rows={3}
                   value={state.customerInfo.notes}
-                  onChange={(e) =>
-                    updateCustomerInfo({ notes: e.target.value })
-                  }
+                  onChange={(e) => updateCustomerInfo({ notes: e.target.value })}
                 />
               </div>
             </CardContent>
@@ -235,25 +223,23 @@ export function Confirmation({
             <CardContent>
               <RadioGroup
                 value={state.paymentMethod}
-                onValueChange={(v) =>
-                  setPaymentMethod(v as 'online' | 'at_venue')
-                }
+                onValueChange={(v) => setPaymentMethod(v as 'online' | 'at_venue')}
                 className="space-y-3"
               >
                 <label
                   className={cn(
-                    'flex items-start gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all',
+                    'flex cursor-pointer items-start gap-4 rounded-lg border-2 p-4 transition-all',
                     state.paymentMethod === 'at_venue'
                       ? 'border-primary bg-primary/5'
                       : 'border-border hover:border-primary/50'
                   )}
                 >
                   <RadioGroupItem value="at_venue" className="mt-1" />
-                  <div className="flex items-center gap-3 flex-1">
-                    <Wallet className="h-5 w-5 text-muted-foreground" />
+                  <div className="flex flex-1 items-center gap-3">
+                    <Wallet className="text-muted-foreground h-5 w-5" />
                     <div>
                       <p className="font-medium">Vor Ort bezahlen</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         Bar, Karte oder TWINT im Salon
                       </p>
                     </div>
@@ -262,20 +248,18 @@ export function Confirmation({
 
                 <label
                   className={cn(
-                    'flex items-start gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all',
+                    'flex cursor-pointer items-start gap-4 rounded-lg border-2 p-4 transition-all',
                     state.paymentMethod === 'online'
                       ? 'border-primary bg-primary/5'
                       : 'border-border hover:border-primary/50'
                   )}
                 >
                   <RadioGroupItem value="online" className="mt-1" />
-                  <div className="flex items-center gap-3 flex-1">
-                    <CreditCard className="h-5 w-5 text-muted-foreground" />
+                  <div className="flex flex-1 items-center gap-3">
+                    <CreditCard className="text-muted-foreground h-5 w-5" />
                     <div>
                       <p className="font-medium">Online bezahlen</p>
-                      <p className="text-sm text-muted-foreground">
-                        Kreditkarte oder TWINT
-                      </p>
+                      <p className="text-muted-foreground text-sm">Kreditkarte oder TWINT</p>
                     </div>
                   </div>
                 </label>
@@ -296,21 +280,17 @@ export function Confirmation({
                 />
                 <label
                   htmlFor="terms"
-                  className="text-sm text-muted-foreground leading-relaxed cursor-pointer"
+                  className="text-muted-foreground cursor-pointer text-sm leading-relaxed"
                 >
                   Ich akzeptiere die{' '}
                   <Link href="/agb" className="text-primary hover:underline">
                     AGB
                   </Link>{' '}
                   und{' '}
-                  <Link
-                    href="/datenschutz"
-                    className="text-primary hover:underline"
-                  >
+                  <Link href="/datenschutz" className="text-primary hover:underline">
                     Datenschutzerklärung
                   </Link>
-                  . Ich bin damit einverstanden, Terminerinnerungen per E-Mail
-                  und SMS zu erhalten.
+                  . Ich bin damit einverstanden, Terminerinnerungen per E-Mail und SMS zu erhalten.
                 </label>
               </div>
             </CardContent>
@@ -319,11 +299,10 @@ export function Confirmation({
           {/* Cancellation Policy */}
           <Card className="border-border/50 bg-muted/30">
             <CardContent className="p-6">
-              <h4 className="font-semibold mb-2">Stornierungsbedingungen</h4>
-              <p className="text-sm text-muted-foreground">
-                Kostenlose Stornierung bis 24 Stunden vor dem Termin. Bei
-                späteren Absagen oder Nichterscheinen behalten wir uns vor, eine
-                Ausfallentschädigung zu berechnen.
+              <h4 className="mb-2 font-semibold">Stornierungsbedingungen</h4>
+              <p className="text-muted-foreground text-sm">
+                Kostenlose Stornierung bis 24 Stunden vor dem Termin. Bei späteren Absagen oder
+                Nichterscheinen behalten wir uns vor, eine Ausfallentschädigung zu berechnen.
               </p>
             </CardContent>
           </Card>
@@ -339,7 +318,7 @@ export function Confirmation({
           {/* Submit Button */}
           <Button
             size="lg"
-            className="w-full btn-glow"
+            className="btn-glow w-full"
             onClick={handleSubmit}
             disabled={!canProceed || isSubmitting}
           >
@@ -359,7 +338,7 @@ export function Confirmation({
       </div>
 
       {/* Back Button */}
-      <div className="pt-4 border-t">
+      <div className="border-t pt-4">
         <Button variant="outline" onClick={goBack} disabled={isSubmitting}>
           Zurück
         </Button>

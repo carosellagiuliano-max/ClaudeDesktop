@@ -36,29 +36,24 @@ export function CartItem({ item, compact = false }: CartItemProps) {
     return (
       <div className="flex items-center gap-3 py-2">
         {/* Image */}
-        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted">
+        <div className="bg-muted relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
           {item.imageUrl ? (
-            <Image
-              src={item.imageUrl}
-              alt={item.name}
-              fill
-              className="object-cover"
-            />
+            <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
           ) : item.type === 'voucher' ? (
-            <div className="flex h-full w-full items-center justify-center bg-primary/10">
-              <Gift className="h-5 w-5 text-primary" />
+            <div className="bg-primary/10 flex h-full w-full items-center justify-center">
+              <Gift className="text-primary h-5 w-5" />
             </div>
           ) : (
             <div className="flex h-full w-full items-center justify-center">
-              <span className="text-xs text-muted-foreground">Bild</span>
+              <span className="text-muted-foreground text-xs">Bild</span>
             </div>
           )}
         </div>
 
         {/* Details */}
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{item.name}</p>
-          <p className="text-xs text-muted-foreground">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{item.name}</p>
+          <p className="text-muted-foreground text-xs">
             {item.quantity} x {formatPrice(item.unitPriceCents)}
           </p>
         </div>
@@ -70,23 +65,18 @@ export function CartItem({ item, compact = false }: CartItemProps) {
   }
 
   return (
-    <div className="flex gap-4 py-4 border-b border-border last:border-0">
+    <div className="border-border flex gap-4 border-b py-4 last:border-0">
       {/* Image */}
-      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
+      <div className="bg-muted relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
         {item.imageUrl ? (
-          <Image
-            src={item.imageUrl}
-            alt={item.name}
-            fill
-            className="object-cover"
-          />
+          <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
         ) : item.type === 'voucher' ? (
-          <div className="flex h-full w-full items-center justify-center bg-primary/10">
-            <Gift className="h-8 w-8 text-primary" />
+          <div className="bg-primary/10 flex h-full w-full items-center justify-center">
+            <Gift className="text-primary h-8 w-8" />
           </div>
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <span className="text-sm text-muted-foreground">Bild</span>
+            <span className="text-muted-foreground text-sm">Bild</span>
           </div>
         )}
       </div>
@@ -96,11 +86,9 @@ export function CartItem({ item, compact = false }: CartItemProps) {
         <div className="flex justify-between">
           <div>
             <h4 className="font-medium">{item.name}</h4>
-            {item.variant && (
-              <p className="text-sm text-muted-foreground">{item.variant}</p>
-            )}
+            {item.variant && <p className="text-muted-foreground text-sm">{item.variant}</p>}
             {item.type === 'voucher' && item.recipientEmail && (
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-xs">
                 Für: {item.recipientName || item.recipientEmail}
               </p>
             )}
@@ -109,10 +97,10 @@ export function CartItem({ item, compact = false }: CartItemProps) {
         </div>
 
         {/* Quantity Controls */}
-        <div className="flex items-center justify-between mt-auto pt-2">
+        <div className="mt-auto flex items-center justify-between pt-2">
           {item.type === 'voucher' ? (
             // Vouchers can't have quantity changed
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Wert: {formatPrice(item.unitPriceCents)}
             </p>
           ) : (
@@ -126,15 +114,8 @@ export function CartItem({ item, compact = false }: CartItemProps) {
               >
                 <Minus className="h-4 w-4" />
               </Button>
-              <span className="w-8 text-center text-sm font-medium">
-                {item.quantity}
-              </span>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                onClick={handleIncrement}
-              >
+              <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+              <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleIncrement}>
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -146,7 +127,7 @@ export function CartItem({ item, compact = false }: CartItemProps) {
             className="text-muted-foreground hover:text-destructive"
             onClick={handleRemove}
           >
-            <Trash2 className="h-4 w-4 mr-1" />
+            <Trash2 className="mr-1 h-4 w-4" />
             Entfernen
           </Button>
         </div>
