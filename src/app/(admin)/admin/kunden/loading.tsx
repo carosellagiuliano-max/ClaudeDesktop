@@ -7,7 +7,7 @@ export default function KundenLoading() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Skeleton className="h-8 w-40 mb-2" />
+          <Skeleton className="mb-2 h-8 w-40" />
           <Skeleton className="h-4 w-56" />
         </div>
         <div className="flex gap-2">
@@ -18,7 +18,7 @@ export default function KundenLoading() {
 
       {/* Search & Filter */}
       <div className="flex gap-4">
-        <Skeleton className="h-10 flex-1 max-w-sm" />
+        <Skeleton className="h-10 max-w-sm flex-1" />
         <Skeleton className="h-10 w-28" />
         <Skeleton className="h-10 w-28" />
       </div>
@@ -27,7 +27,7 @@ export default function KundenLoading() {
       <Card>
         <CardContent className="p-0">
           {/* Table Header */}
-          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_100px] gap-4 p-4 border-b bg-muted/50">
+          <div className="bg-muted/50 grid grid-cols-[1fr_1fr_1fr_1fr_100px] gap-4 border-b p-4">
             <Skeleton className="h-4 w-16" />
             <Skeleton className="h-4 w-12" />
             <Skeleton className="h-4 w-16" />
@@ -39,7 +39,7 @@ export default function KundenLoading() {
           {Array.from({ length: 10 }).map((_, i) => (
             <div
               key={i}
-              className="grid grid-cols-[1fr_1fr_1fr_1fr_100px] gap-4 p-4 border-b items-center"
+              className="grid grid-cols-[1fr_1fr_1fr_1fr_100px] items-center gap-4 border-b p-4"
             >
               <div className="flex items-center gap-3">
                 <Skeleton className="h-10 w-10 rounded-full" />
@@ -51,7 +51,7 @@ export default function KundenLoading() {
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-6 w-16" />
-              <Skeleton className="h-8 w-8 ml-auto" />
+              <Skeleton className="ml-auto h-8 w-8" />
             </div>
           ))}
         </CardContent>

@@ -124,9 +124,10 @@ async function getOrderData(orderId: string) {
   const supabase = await createServerClient();
 
   // Get order details
-  const { data: order, error } = await supabase
+  const { data: order, error } = (await supabase
     .from('orders')
-    .select(`
+    .select(
+      `
       *,
       customers (
         id,
@@ -135,18 +136,20 @@ async function getOrderData(orderId: string) {
         email,
         phone
       )
-    `)
+    `
+    )
     .eq('id', orderId)
-    .single() as { data: OrderDbRow | null; error: unknown };
+    .single()) as { data: OrderDbRow | null; error: unknown };
 
   if (error || !order) {
     return null;
   }
 
   // Get order items
-  const { data: itemsData } = await supabase
+  const { data: itemsData } = (await supabase
     .from('order_items')
-    .select(`
+    .select(
+      `
       id,
       product_id,
       product_name,
@@ -155,15 +158,16 @@ async function getOrderData(orderId: string) {
       unit_price_cents,
       total_cents,
       sku
-    `)
-    .eq('order_id', orderId) as { data: OrderItemDbRow[] | null };
+    `
+    )
+    .eq('order_id', orderId)) as { data: OrderItemDbRow[] | null };
 
   // Get order events/history
-  const { data: eventsData } = await supabase
+  const { data: eventsData } = (await supabase
     .from('order_events')
     .select('*')
     .eq('order_id', orderId)
-    .order('created_at', { ascending: false }) as { data: OrderEventDbRow[] | null };
+    .order('created_at', { ascending: false })) as { data: OrderEventDbRow[] | null };
 
   // Transform data
   const orderDetail: OrderDetail = {
@@ -181,18 +185,20 @@ async function getOrderData(orderId: string) {
     notes: order.notes,
     createdAt: order.created_at,
     updatedAt: order.updated_at,
-    customer: order.customers ? {
-      id: order.customers.id,
-      firstName: order.customers.first_name,
-      lastName: order.customers.last_name,
-      email: order.customers.email,
-      phone: order.customers.phone,
-    } : null,
+    customer: order.customers
+      ? {
+          id: order.customers.id,
+          firstName: order.customers.first_name,
+          lastName: order.customers.last_name,
+          email: order.customers.email,
+          phone: order.customers.phone,
+        }
+      : null,
     shippingAddress: order.shipping_address,
     billingAddress: order.billing_address,
   };
 
-  const items: OrderItem[] = (itemsData || []).map(item => ({
+  const items: OrderItem[] = (itemsData || []).map((item) => ({
     id: item.id,
     productId: item.product_id,
     productName: item.product_name,
@@ -203,7 +209,7 @@ async function getOrderData(orderId: string) {
     sku: item.sku,
   }));
 
-  const events: OrderEvent[] = (eventsData || []).map(event => ({
+  const events: OrderEvent[] = (eventsData || []).map((event) => ({
     id: event.id,
     eventType: event.event_type,
     description: event.description,
@@ -234,11 +240,5 @@ export default async function OrderDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return (
-    <AdminOrderDetailView
-      order={data.order}
-      items={data.items}
-      events={data.events}
-    />
-  );
+  return <AdminOrderDetailView order={data.order} items={data.items} events={data.events} />;
 }

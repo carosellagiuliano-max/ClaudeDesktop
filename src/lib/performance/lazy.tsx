@@ -4,7 +4,7 @@
  */
 
 import dynamic from 'next/dynamic';
-import { ComponentType, lazy, Suspense } from 'react';
+import { ComponentType } from 'react';
 
 // ============================================
 // LAZY COMPONENT FACTORY
@@ -35,24 +35,18 @@ export function createLazyComponent<P extends object>(
 // ============================================
 
 // Admin components (heavy, not needed on initial load)
-export const LazyAdminCalendar = createLazyComponent(
-  () => import('@/components/admin/admin-calendar-view'),
+export const LazyAdminCalendar = dynamic(
+  () => import('@/components/admin/admin-calendar-view').then((mod) => mod.AdminCalendarView),
   { ssr: false }
 );
 
-export const LazyAdminAnalytics = createLazyComponent(
-  () => import('@/components/admin/admin-analytics-view'),
+export const LazyAdminAnalytics = dynamic(
+  () => import('@/components/admin/admin-analytics-view').then((mod) => mod.AdminAnalyticsView),
   { ssr: false }
 );
 
-export const LazyAdminFinance = createLazyComponent(
-  () => import('@/components/admin/admin-finance-view'),
-  { ssr: false }
-);
-
-// Chart components (large bundle)
-export const LazyCharts = createLazyComponent(
-  () => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer as ComponentType })),
+export const LazyAdminFinance = dynamic(
+  () => import('@/components/admin/admin-finance-view').then((mod) => mod.AdminFinanceView),
   { ssr: false }
 );
 

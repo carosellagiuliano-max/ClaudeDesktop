@@ -24,11 +24,7 @@ export function Spinner({ size = 'md', className }: SpinnerProps) {
     lg: 'h-8 w-8',
   };
 
-  return (
-    <Loader2
-      className={cn('animate-spin text-primary', sizeClasses[size], className)}
-    />
-  );
+  return <Loader2 className={cn('text-primary animate-spin', sizeClasses[size], className)} />;
 }
 
 // ============================================
@@ -43,7 +39,7 @@ export function PageLoader({ message = 'Laden...' }: PageLoaderProps) {
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
       <Spinner size="lg" />
-      <p className="text-sm text-muted-foreground">{message}</p>
+      <p className="text-muted-foreground text-sm">{message}</p>
     </div>
   );
 }
@@ -61,7 +57,7 @@ export function InlineLoader({ message, className }: InlineLoaderProps) {
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <Spinner size="sm" />
-      {message && <span className="text-sm text-muted-foreground">{message}</span>}
+      {message && <span className="text-muted-foreground text-sm">{message}</span>}
     </div>
   );
 }
@@ -98,7 +94,7 @@ export function ButtonLoading({
 
 export function CardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-4">
+    <div className="bg-card rounded-lg border p-4">
       <Skeleton className="mb-4 h-40 w-full rounded-md" />
       <Skeleton className="mb-2 h-4 w-3/4" />
       <Skeleton className="mb-4 h-4 w-1/2" />
@@ -112,12 +108,12 @@ export function CardSkeleton() {
 
 export function ProductCardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card overflow-hidden">
+    <div className="bg-card overflow-hidden rounded-lg border">
       <Skeleton className="aspect-square w-full" />
       <div className="p-4">
         <Skeleton className="mb-2 h-5 w-3/4" />
         <Skeleton className="mb-3 h-4 w-1/2" />
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <Skeleton className="h-6 w-24" />
           <Skeleton className="h-9 w-9 rounded-full" />
         </div>
@@ -128,7 +124,7 @@ export function ProductCardSkeleton() {
 
 export function ListItemSkeleton() {
   return (
-    <div className="flex items-center gap-4 p-4 border-b">
+    <div className="flex items-center gap-4 border-b p-4">
       <Skeleton className="h-12 w-12 rounded-full" />
       <div className="flex-1">
         <Skeleton className="mb-2 h-4 w-1/3" />
@@ -156,7 +152,7 @@ export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; column
     <div className="rounded-lg border">
       <table className="w-full">
         <thead>
-          <tr className="border-b bg-muted/50">
+          <tr className="bg-muted/50 border-b">
             {Array.from({ length: columns }).map((_, i) => (
               <th key={i} className="p-4 text-left">
                 <Skeleton className="h-4 w-20" />
@@ -176,15 +172,15 @@ export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; column
 
 export function AppointmentCardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-4">
-      <div className="flex justify-between items-start mb-3">
+    <div className="bg-card rounded-lg border p-4">
+      <div className="mb-3 flex items-start justify-between">
         <div>
           <Skeleton className="mb-2 h-5 w-32" />
           <Skeleton className="h-4 w-24" />
         </div>
         <Skeleton className="h-6 w-20 rounded-full" />
       </div>
-      <div className="flex items-center gap-2 mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <Skeleton className="h-8 w-8 rounded-full" />
         <Skeleton className="h-4 w-28" />
       </div>
@@ -195,15 +191,15 @@ export function AppointmentCardSkeleton() {
 
 export function CustomerCardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-4">
-      <div className="flex items-center gap-4 mb-4">
+    <div className="bg-card rounded-lg border p-4">
+      <div className="mb-4 flex items-center gap-4">
         <Skeleton className="h-16 w-16 rounded-full" />
         <div className="flex-1">
           <Skeleton className="mb-2 h-5 w-32" />
           <Skeleton className="h-4 w-48" />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="mb-4 grid grid-cols-2 gap-4">
         <div>
           <Skeleton className="mb-1 h-3 w-16" />
           <Skeleton className="h-5 w-12" />
@@ -220,19 +216,19 @@ export function CustomerCardSkeleton() {
 
 export function OrderSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-4">
-      <div className="flex justify-between items-start mb-4">
+    <div className="bg-card rounded-lg border p-4">
+      <div className="mb-4 flex items-start justify-between">
         <div>
           <Skeleton className="mb-2 h-5 w-28" />
           <Skeleton className="h-4 w-32" />
         </div>
         <Skeleton className="h-6 w-24 rounded-full" />
       </div>
-      <div className="space-y-2 mb-4">
+      <div className="mb-4 space-y-2">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-3/4" />
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Skeleton className="h-6 w-24" />
         <Skeleton className="h-9 w-28" />
       </div>
@@ -242,8 +238,8 @@ export function OrderSkeleton() {
 
 export function StatsCardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-6">
-      <div className="flex items-center justify-between mb-2">
+    <div className="bg-card rounded-lg border p-6">
+      <div className="mb-2 flex items-center justify-between">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-5 w-5 rounded" />
       </div>
@@ -297,9 +293,5 @@ interface ContentLoaderProps {
 }
 
 export function ContentLoader({ className, children }: ContentLoaderProps) {
-  return (
-    <div className={cn('animate-pulse', className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn('animate-pulse', className)}>{children}</div>;
 }

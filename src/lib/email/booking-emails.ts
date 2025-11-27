@@ -258,9 +258,7 @@ export async function sendCancellationEmail(data: CancellationEmailData) {
   const dateStr = format(data.startsAt, 'EEEE, d. MMMM yyyy', { locale: de });
   const timeStr = format(data.startsAt, 'HH:mm');
 
-  const cancelledByText = data.cancelledBy === 'customer'
-    ? 'auf Ihren Wunsch'
-    : 'durch den Salon';
+  const cancelledByText = data.cancelledBy === 'customer' ? 'auf Ihren Wunsch' : 'durch den Salon';
 
   const html = `
 <!DOCTYPE html>
@@ -334,17 +332,21 @@ export async function sendCancellationEmail(data: CancellationEmailData) {
                     <span style="font-size: 18px;">✂️</span>
                   </td>
                   <td style="padding: 10px 0;">
-                    <p style="margin: 0; color: #666;">${data.services.map(s => s.name).join(', ')}</p>
+                    <p style="margin: 0; color: #666;">${data.services.map((s) => s.name).join(', ')}</p>
                   </td>
                 </tr>
               </table>
 
-              ${data.reason ? `
+              ${
+                data.reason
+                  ? `
               <div style="background-color: #f9f9f9; border-radius: 8px; padding: 15px; margin-bottom: 30px;">
                 <p style="margin: 0 0 5px; color: #666; font-size: 13px; font-weight: 600;">Grund der Stornierung</p>
                 <p style="margin: 0; color: #333; font-size: 14px;">${data.reason}</p>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
 
               <!-- New Booking CTA -->
               <div style="text-align: center; padding-top: 20px;">
@@ -394,7 +396,7 @@ STORNIERTER TERMIN
 ------------------
 Datum: ${dateStr} um ${timeStr} Uhr
 Stylist: ${data.staffName}
-Leistungen: ${data.services.map(s => s.name).join(', ')}
+Leistungen: ${data.services.map((s) => s.name).join(', ')}
 ${data.reason ? `\nGrund: ${data.reason}` : ''}
 
 Möchten Sie einen neuen Termin buchen?
@@ -501,7 +503,7 @@ export async function sendReminderEmail(data: ReminderEmailData) {
                       <span style="font-size: 18px;">✂️</span>
                     </td>
                     <td style="padding: 8px 0;">
-                      <p style="margin: 0; color: #333;">${data.services.map(s => s.name).join(', ')}</p>
+                      <p style="margin: 0; color: #333;">${data.services.map((s) => s.name).join(', ')}</p>
                     </td>
                   </tr>
                   <tr>
@@ -564,7 +566,7 @@ TERMIN
 Datum: ${dateStr}
 Uhrzeit: ${timeStr}
 Stylist: ${data.staffName}
-Leistungen: ${data.services.map(s => s.name).join(', ')}
+Leistungen: ${data.services.map((s) => s.name).join(', ')}
 Adresse: ${data.salonAddress}
 
 Buchungsnummer: ${data.bookingNumber}

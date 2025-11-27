@@ -53,10 +53,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (!staffMember || !['admin', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung für diese Aktion' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Keine Berechtigung für diese Aktion' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -77,10 +74,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (templateError || !template) {
-      return NextResponse.json(
-        { error: 'Vorlage nicht gefunden' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Vorlage nicht gefunden' }, { status: 404 });
     }
 
     // Replace variables with sample data
@@ -104,10 +98,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error || 'Fehler beim Senden' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: result.error || 'Fehler beim Senden' }, { status: 500 });
     }
 
     // Log the test notification
@@ -130,9 +121,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Test email error:', error);
-    return NextResponse.json(
-      { error: 'Interner Serverfehler' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Interner Serverfehler' }, { status: 500 });
   }
 }

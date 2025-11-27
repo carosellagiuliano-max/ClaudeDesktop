@@ -53,9 +53,7 @@ export const metadata: Metadata = {
     email: true,
     address: true,
   },
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://schnittwerk.ch'
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://schnittwerk.ch'),
   alternates: {
     canonical: '/',
     languages: {
@@ -82,8 +80,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'SCHNITTWERK | Premium Friseursalon St. Gallen',
-    description:
-      'Ihr exklusiver Friseursalon in St. Gallen. Buchen Sie jetzt Ihren Termin online.',
+    description: 'Ihr exklusiver Friseursalon in St. Gallen. Buchen Sie jetzt Ihren Termin online.',
     images: ['/og-image.jpg'],
   },
   robots: {
@@ -127,10 +124,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Fetch data for JSON-LD (cached)
-  const [salon, openingHours] = await Promise.all([
-    getSalon(),
-    getOpeningHours(),
-  ]);
+  const [salon, openingHours] = await Promise.all([getSalon(), getOpeningHours()]);
 
   return (
     <html lang="de-CH" suppressHydrationWarning>
@@ -138,9 +132,7 @@ export default async function RootLayout({
         {/* Structured Data for Local Business */}
         <LocalBusinessJsonLd salon={salon} openingHours={openingHours} />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         {/* Header */}
         <Header />
 

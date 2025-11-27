@@ -17,12 +17,8 @@ interface ServiceSelectionProps {
   categories?: { id: string; name: string }[];
 }
 
-export function ServiceSelection({
-  services,
-  categories = [],
-}: ServiceSelectionProps) {
-  const { state, toggleService, goNext, canProceed, totalDuration, totalPrice } =
-    useBooking();
+export function ServiceSelection({ services, categories = [] }: ServiceSelectionProps) {
+  const { state, toggleService, goNext, canProceed, totalDuration, totalPrice } = useBooking();
 
   const formatPrice = (cents: number) => {
     return `CHF ${(cents / 100).toFixed(0)}.-`;
@@ -48,78 +44,62 @@ export function ServiceSelection({
     {} as Record<string, BookableService[]>
   );
 
-  const isSelected = (serviceId: string) =>
-    state.selectedServices.some((s) => s.id === serviceId);
+  const isSelected = (serviceId: string) => state.selectedServices.some((s) => s.id === serviceId);
 
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold mb-2">
-          Welche Leistung möchten Sie buchen?
-        </h2>
-        <p className="text-muted-foreground">
-          Wählen Sie eine oder mehrere Leistungen aus.
-        </p>
+        <h2 className="mb-2 text-2xl font-bold">Welche Leistung möchten Sie buchen?</h2>
+        <p className="text-muted-foreground">Wählen Sie eine oder mehrere Leistungen aus.</p>
       </div>
 
       {/* Service Categories */}
       <div className="space-y-8">
-        {Object.entries(servicesByCategory).map(
-          ([categoryId, categoryServices]) => {
-            const category = categories.find((c) => c.id === categoryId);
-            return (
-              <div key={categoryId}>
-                {category && (
-                  <h3 className="text-lg font-semibold mb-4">{category.name}</h3>
-                )}
-                <div className="space-y-3">
-                  {categoryServices.map((service) => (
-                    <ServiceCard
-                      key={service.id}
-                      service={service}
-                      selected={isSelected(service.id)}
-                      onToggle={() => toggleService(service)}
-                      formatPrice={formatPrice}
-                      formatDuration={formatDuration}
-                    />
-                  ))}
-                </div>
+        {Object.entries(servicesByCategory).map(([categoryId, categoryServices]) => {
+          const category = categories.find((c) => c.id === categoryId);
+          return (
+            <div key={categoryId}>
+              {category && <h3 className="mb-4 text-lg font-semibold">{category.name}</h3>}
+              <div className="space-y-3">
+                {categoryServices.map((service) => (
+                  <ServiceCard
+                    key={service.id}
+                    service={service}
+                    selected={isSelected(service.id)}
+                    onToggle={() => toggleService(service)}
+                    formatPrice={formatPrice}
+                    formatDuration={formatDuration}
+                  />
+                ))}
               </div>
-            );
-          }
-        )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Summary & Continue */}
-      <div className="sticky bottom-0 bg-background pt-4 pb-2 border-t">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-background sticky bottom-0 border-t pt-4 pb-2">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="text-center sm:text-left">
             {state.selectedServices.length > 0 ? (
               <>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {state.selectedServices.length} Leistung
                   {state.selectedServices.length !== 1 ? 'en' : ''} ausgewählt
                 </p>
                 <p className="font-semibold">
                   {formatDuration(totalDuration)} •{' '}
-                  <span className="text-primary">
-                    {formatPrice(totalPrice)}
-                  </span>
+                  <span className="text-primary">{formatPrice(totalPrice)}</span>
                 </p>
               </>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Bitte wählen Sie mindestens eine Leistung
               </p>
             )}
           </div>
-          <Button
-            size="lg"
-            onClick={goNext}
-            disabled={!canProceed}
-            className="w-full sm:w-auto"
-          >
+          <Button size="lg" onClick={goNext} disabled={!canProceed} className="w-full sm:w-auto">
             Weiter
           </Button>
         </div>
@@ -150,10 +130,8 @@ function ServiceCard({
   return (
     <Card
       className={cn(
-        'cursor-pointer transition-all border-2',
-        selected
-          ? 'border-primary bg-primary/5'
-          : 'border-border/50 hover:border-primary/50'
+        'cursor-pointer border-2 transition-all',
+        selected ? 'border-primary bg-primary/5' : 'border-border/50 hover:border-primary/50'
       )}
       onClick={onToggle}
     >
@@ -162,7 +140,7 @@ function ServiceCard({
           {/* Checkbox */}
           <div
             className={cn(
-              'flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 mt-0.5',
+              'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded border-2',
               selected
                 ? 'bg-primary border-primary text-primary-foreground'
                 : 'border-muted-foreground/30'
@@ -172,24 +150,22 @@ function ServiceCard({
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h4 className="font-semibold">{service.name}</h4>
                 {service.description && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {service.description}
-                  </p>
+                  <p className="text-muted-foreground mt-1 text-sm">{service.description}</p>
                 )}
-                <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
+                <div className="text-muted-foreground mt-2 flex items-center gap-3 text-sm">
                   <span className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
                     ca. {formatDuration(service.durationMinutes)}
                   </span>
                 </div>
               </div>
-              <div className="text-right shrink-0">
-                <span className="text-lg font-bold text-primary">
+              <div className="shrink-0 text-right">
+                <span className="text-primary text-lg font-bold">
                   {formatPrice(service.currentPrice)}
                 </span>
               </div>

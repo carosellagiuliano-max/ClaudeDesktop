@@ -46,18 +46,18 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
   return (
     <div className="container max-w-2xl py-12 md:py-20">
       {/* Success Icon */}
-      <div className="flex justify-center mb-8">
+      <div className="mb-8 flex justify-center">
         <div className="relative">
-          <div className="absolute inset-0 bg-green-500/20 rounded-full blur-2xl" />
-          <div className="relative h-24 w-24 rounded-full bg-green-500/10 flex items-center justify-center">
+          <div className="absolute inset-0 rounded-full bg-green-500/20 blur-2xl" />
+          <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-green-500/10">
             <CheckCircle2 className="h-12 w-12 text-green-500" />
           </div>
         </div>
       </div>
 
       {/* Title */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-3">Vielen Dank für Ihre Bestellung!</h1>
+      <div className="mb-8 text-center">
+        <h1 className="mb-3 text-3xl font-bold">Vielen Dank für Ihre Bestellung!</h1>
         <p className="text-muted-foreground text-lg">
           Ihre Bestellung wurde erfolgreich aufgenommen.
         </p>
@@ -68,20 +68,20 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
         <CardContent className="p-6">
           {order ? (
             <>
-              <div className="flex items-center justify-between mb-4">
+              <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Bestellnummer</p>
-                  <p className="text-xl font-semibold font-mono">{order.orderNumber}</p>
+                  <p className="text-muted-foreground text-sm">Bestellnummer</p>
+                  <p className="font-mono text-xl font-semibold">{order.orderNumber}</p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Package className="h-6 w-6 text-primary" />
+                <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
+                  <Package className="text-primary h-6 w-6" />
                 </div>
               </div>
 
               <Separator className="my-4" />
 
               {/* Order Items */}
-              <div className="space-y-3 mb-4">
+              <div className="mb-4 space-y-3">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span>
@@ -112,20 +112,18 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
                     <span>-{formatPrice(order.voucherDiscountCents)}</span>
                   </div>
                 )}
-                <div className="flex justify-between font-semibold text-lg pt-2 border-t">
+                <div className="flex justify-between border-t pt-2 text-lg font-semibold">
                   <span>Gesamtbetrag</span>
                   <span>{formatPrice(order.totalCents)}</span>
                 </div>
-                <p className="text-xs text-muted-foreground text-right">
+                <p className="text-muted-foreground text-right text-xs">
                   inkl. {formatPrice(order.taxCents)} MwSt.
                 </p>
               </div>
             </>
           ) : (
-            <div className="text-center py-4">
-              <p className="text-muted-foreground">
-                Bestelldetails werden per E-Mail zugesendet.
-              </p>
+            <div className="py-4 text-center">
+              <p className="text-muted-foreground">Bestelldetails werden per E-Mail zugesendet.</p>
             </div>
           )}
         </CardContent>
@@ -135,17 +133,15 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
       <Card className="bg-muted/50 mb-8">
         <CardContent className="p-6">
           <div className="flex gap-4">
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Mail className="h-5 w-5 text-primary" />
+            <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+              <Mail className="text-primary h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-medium mb-1">Bestätigung per E-Mail</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="mb-1 font-medium">Bestätigung per E-Mail</h3>
+              <p className="text-muted-foreground text-sm">
                 Wir haben Ihnen eine Bestellbestätigung an{' '}
                 {order?.customerEmail ? (
-                  <span className="font-medium text-foreground">
-                    {order.customerEmail}
-                  </span>
+                  <span className="text-foreground font-medium">{order.customerEmail}</span>
                 ) : (
                   'Ihre E-Mail-Adresse'
                 )}{' '}
@@ -158,25 +154,25 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
 
       {/* Next Steps */}
       <div className="space-y-4">
-        <h2 className="font-semibold text-lg">Nächste Schritte</h2>
+        <h2 className="text-lg font-semibold">Nächste Schritte</h2>
         <div className="grid gap-4">
           {order?.shippingMethod === 'pickup' ? (
             <Card>
               <CardContent className="p-4">
-                <h3 className="font-medium mb-1">Abholung im Salon</h3>
-                <p className="text-sm text-muted-foreground">
-                  Sie können Ihre Bestellung zu unseren Öffnungszeiten im Salon abholen.
-                  Bringen Sie bitte Ihre Bestellnummer mit.
+                <h3 className="mb-1 font-medium">Abholung im Salon</h3>
+                <p className="text-muted-foreground text-sm">
+                  Sie können Ihre Bestellung zu unseren Öffnungszeiten im Salon abholen. Bringen Sie
+                  bitte Ihre Bestellnummer mit.
                 </p>
               </CardContent>
             </Card>
           ) : order?.shippingMethod && order.shippingMethod !== 'none' ? (
             <Card>
               <CardContent className="p-4">
-                <h3 className="font-medium mb-1">Versand</h3>
-                <p className="text-sm text-muted-foreground">
-                  Ihre Bestellung wird innerhalb von 1-2 Werktagen versendet.
-                  Sie erhalten eine E-Mail mit der Sendungsverfolgung.
+                <h3 className="mb-1 font-medium">Versand</h3>
+                <p className="text-muted-foreground text-sm">
+                  Ihre Bestellung wird innerhalb von 1-2 Werktagen versendet. Sie erhalten eine
+                  E-Mail mit der Sendungsverfolgung.
                 </p>
               </CardContent>
             </Card>
@@ -185,10 +181,10 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
           {order?.items.some((item) => item.itemType === 'voucher') && (
             <Card>
               <CardContent className="p-4">
-                <h3 className="font-medium mb-1">Gutschein</h3>
-                <p className="text-sm text-muted-foreground">
-                  Der Gutschein wird per E-Mail an den Empfänger gesendet.
-                  Sie können den Gutschein auch selbst ausdrucken.
+                <h3 className="mb-1 font-medium">Gutschein</h3>
+                <p className="text-muted-foreground text-sm">
+                  Der Gutschein wird per E-Mail an den Empfänger gesendet. Sie können den Gutschein
+                  auch selbst ausdrucken.
                 </p>
               </CardContent>
             </Card>
@@ -197,7 +193,7 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-4 mt-8">
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row">
         <Button asChild className="flex-1">
           <Link href="/konto/bestellungen">
             Bestellungen ansehen

@@ -38,10 +38,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (!staffMember || !['admin', 'manager', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung für diese Aktion' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Keine Berechtigung für diese Aktion' }, { status: 403 });
     }
 
     // Parse request body
@@ -49,10 +46,7 @@ export async function POST(request: NextRequest) {
     const { productId, quantity, movementType, notes, variantId } = body;
 
     if (!productId || quantity === undefined || !movementType) {
-      return NextResponse.json(
-        { error: 'Fehlende Pflichtfelder' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Fehlende Pflichtfelder' }, { status: 400 });
     }
 
     // Call the adjust_stock function
@@ -82,9 +76,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Stock adjustment error:', error);
-    return NextResponse.json(
-      { error: 'Interner Serverfehler' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Interner Serverfehler' }, { status: 500 });
   }
 }

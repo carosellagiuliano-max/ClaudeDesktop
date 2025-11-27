@@ -26,10 +26,7 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (!staffMember || !['admin', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung für diese Aktion' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Keine Berechtigung für diese Aktion' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -51,45 +48,34 @@ export async function PUT(request: NextRequest) {
 
       if (error) {
         console.error('Template update error:', error);
-        return NextResponse.json(
-          { error: error.message },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: error.message }, { status: 500 });
       }
     } else {
       // Create new template
       const { code, name, channel = 'email', availableVariables = [] } = body;
 
-      const { error } = await supabase
-        .from('notification_templates')
-        .insert({
-          salon_id: staffMember.salon_id,
-          code,
-          name,
-          channel,
-          subject,
-          body_html: bodyHtml,
-          body_text: bodyText,
-          sms_body: smsBody,
-          available_variables: availableVariables,
-          is_active: isActive ?? true,
-        });
+      const { error } = await supabase.from('notification_templates').insert({
+        salon_id: staffMember.salon_id,
+        code,
+        name,
+        channel,
+        subject,
+        body_html: bodyHtml,
+        body_text: bodyText,
+        sms_body: smsBody,
+        available_variables: availableVariables,
+        is_active: isActive ?? true,
+      });
 
       if (error) {
         console.error('Template create error:', error);
-        return NextResponse.json(
-          { error: error.message },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: error.message }, { status: 500 });
       }
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Template save error:', error);
-    return NextResponse.json(
-      { error: 'Interner Serverfehler' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Interner Serverfehler' }, { status: 500 });
   }
 }

@@ -46,7 +46,7 @@ export default function BestellungenLoading() {
                 </div>
 
                 {/* Order Footer */}
-                <div className="flex items-center justify-between pt-2 border-t">
+                <div className="flex items-center justify-between border-t pt-2">
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-5 w-20" />
                 </div>

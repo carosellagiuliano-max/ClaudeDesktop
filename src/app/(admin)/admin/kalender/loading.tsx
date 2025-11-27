@@ -32,9 +32,9 @@ export default function KalenderLoading() {
             <div />
             <div className="grid grid-cols-7 border-b">
               {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-                <div key={i} className="p-2 text-center border-r last:border-r-0">
-                  <Skeleton className="h-4 w-8 mx-auto mb-1" />
-                  <Skeleton className="h-6 w-6 mx-auto" />
+                <div key={i} className="border-r p-2 text-center last:border-r-0">
+                  <Skeleton className="mx-auto mb-1 h-4 w-8" />
+                  <Skeleton className="mx-auto h-6 w-6" />
                 </div>
               ))}
             </div>
@@ -56,14 +56,11 @@ export default function KalenderLoading() {
               {Array.from({ length: 7 }).map((_, colIndex) => (
                 <div key={colIndex} className="border-r last:border-r-0">
                   {Array.from({ length: 10 }).map((_, rowIndex) => (
-                    <div
-                      key={rowIndex}
-                      className="h-[60px] border-b border-dashed relative"
-                    >
+                    <div key={rowIndex} className="relative h-[60px] border-b border-dashed">
                       {/* Random appointment skeletons */}
                       {Math.random() > 0.7 && (
                         <Skeleton
-                          className="absolute left-1 right-1 rounded-md"
+                          className="absolute right-1 left-1 rounded-md"
                           style={{
                             top: `${Math.random() * 20}px`,
                             height: `${Math.random() * 40 + 30}px`,

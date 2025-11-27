@@ -56,9 +56,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
       {success && (
         <Alert className="border-green-500 bg-green-50 dark:bg-green-950">
           <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-600">
-            Profil wurde gespeichert.
-          </AlertDescription>
+          <AlertDescription className="text-green-600">Profil wurde gespeichert.</AlertDescription>
         </Alert>
       )}
 
@@ -66,7 +64,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         <div className="space-y-2">
           <Label htmlFor="firstName">Vorname</Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <User className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="firstName"
               name="firstName"
@@ -82,7 +80,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         <div className="space-y-2">
           <Label htmlFor="lastName">Nachname</Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <User className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="lastName"
               name="lastName"
@@ -99,24 +97,22 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
       <div className="space-y-2">
         <Label htmlFor="email">E-Mail-Adresse</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="email"
             type="email"
             value={profile.email}
             disabled
-            className="pl-10 bg-muted"
+            className="bg-muted pl-10"
           />
         </div>
-        <p className="text-xs text-muted-foreground">
-          E-Mail-Adresse kann nicht geändert werden.
-        </p>
+        <p className="text-muted-foreground text-xs">E-Mail-Adresse kann nicht geändert werden.</p>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="phone">Telefonnummer</Label>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Phone className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="phone"
             name="phone"

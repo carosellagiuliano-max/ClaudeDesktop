@@ -105,27 +105,20 @@ export function EmptyState({
   if (variant === 'compact') {
     return (
       <div className={cn('py-6 text-center', className)}>
-        <Icon className="mx-auto h-8 w-8 text-muted-foreground/50" />
-        <p className="mt-2 text-sm text-muted-foreground">{title}</p>
+        <Icon className="text-muted-foreground/50 mx-auto h-8 w-8" />
+        <p className="text-muted-foreground mt-2 text-sm">{title}</p>
       </div>
     );
   }
 
   if (variant === 'card') {
     return (
-      <div
-        className={cn(
-          'rounded-lg border border-dashed p-8 text-center',
-          className
-        )}
-      >
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-          <Icon className="h-6 w-6 text-muted-foreground" />
+      <div className={cn('rounded-lg border border-dashed p-8 text-center', className)}>
+        <div className="bg-muted mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+          <Icon className="text-muted-foreground h-6 w-6" />
         </div>
         <h3 className="mt-4 text-sm font-medium">{title}</h3>
-        {description && (
-          <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-        )}
+        {description && <p className="text-muted-foreground mt-1 text-sm">{description}</p>}
         {action && (
           <Button onClick={action.onClick} className="mt-4" size="sm">
             {action.label}
@@ -138,14 +131,12 @@ export function EmptyState({
   // Default variant
   return (
     <div className={cn('flex flex-col items-center justify-center py-12', className)}>
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-        <Icon className="h-8 w-8 text-muted-foreground" />
+      <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-full">
+        <Icon className="text-muted-foreground h-8 w-8" />
       </div>
       <h3 className="mt-4 text-lg font-medium">{title}</h3>
       {description && (
-        <p className="mt-2 max-w-sm text-center text-sm text-muted-foreground">
-          {description}
-        </p>
+        <p className="text-muted-foreground mt-2 max-w-sm text-center text-sm">{description}</p>
       )}
       {action && (
         <Button onClick={action.onClick} className="mt-6">
@@ -163,9 +154,9 @@ export function EmptyState({
 export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
     <div className="space-y-3">
-      <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
+      <div className="bg-muted h-10 w-full animate-pulse rounded-md" />
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="h-12 w-full animate-pulse rounded-md bg-muted/50" />
+        <div key={i} className="bg-muted/50 h-12 w-full animate-pulse rounded-md" />
       ))}
     </div>
   );
@@ -174,9 +165,9 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
 export function CardSkeleton() {
   return (
     <div className="rounded-lg border p-6">
-      <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
-      <div className="mt-4 h-8 w-1/2 animate-pulse rounded bg-muted" />
-      <div className="mt-2 h-3 w-2/3 animate-pulse rounded bg-muted/50" />
+      <div className="bg-muted h-4 w-1/3 animate-pulse rounded" />
+      <div className="bg-muted mt-4 h-8 w-1/2 animate-pulse rounded" />
+      <div className="bg-muted/50 mt-2 h-3 w-2/3 animate-pulse rounded" />
     </div>
   );
 }
@@ -186,9 +177,9 @@ export function GridSkeleton({ count = 6 }: { count?: number }) {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="rounded-lg border p-4">
-          <div className="aspect-square w-full animate-pulse rounded-md bg-muted" />
-          <div className="mt-4 h-4 w-3/4 animate-pulse rounded bg-muted" />
-          <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-muted/50" />
+          <div className="bg-muted aspect-square w-full animate-pulse rounded-md" />
+          <div className="bg-muted mt-4 h-4 w-3/4 animate-pulse rounded" />
+          <div className="bg-muted/50 mt-2 h-3 w-1/2 animate-pulse rounded" />
         </div>
       ))}
     </div>
@@ -199,18 +190,18 @@ export function CalendarSkeleton() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="h-8 w-32 animate-pulse rounded bg-muted" />
+        <div className="bg-muted h-8 w-32 animate-pulse rounded" />
         <div className="flex gap-2">
-          <div className="h-8 w-8 animate-pulse rounded bg-muted" />
-          <div className="h-8 w-8 animate-pulse rounded bg-muted" />
+          <div className="bg-muted h-8 w-8 animate-pulse rounded" />
+          <div className="bg-muted h-8 w-8 animate-pulse rounded" />
         </div>
       </div>
       <div className="grid grid-cols-7 gap-2">
         {Array.from({ length: 7 }).map((_, i) => (
-          <div key={i} className="h-6 animate-pulse rounded bg-muted/50" />
+          <div key={i} className="bg-muted/50 h-6 animate-pulse rounded" />
         ))}
         {Array.from({ length: 35 }).map((_, i) => (
-          <div key={i} className="aspect-square animate-pulse rounded bg-muted/30" />
+          <div key={i} className="bg-muted/30 aspect-square animate-pulse rounded" />
         ))}
       </div>
     </div>
@@ -224,7 +215,7 @@ export function ChartSkeleton() {
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className="w-full animate-pulse rounded-t bg-muted"
+            className="bg-muted w-full animate-pulse rounded-t"
             style={{ height: `${Math.random() * 60 + 20}%` }}
           />
         ))}
@@ -238,10 +229,10 @@ export function ListSkeleton({ rows = 5 }: { rows?: number }) {
     <div className="space-y-3">
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="flex items-center gap-4">
-          <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
+          <div className="bg-muted h-10 w-10 animate-pulse rounded-full" />
           <div className="flex-1 space-y-2">
-            <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
-            <div className="h-3 w-1/4 animate-pulse rounded bg-muted/50" />
+            <div className="bg-muted h-4 w-1/3 animate-pulse rounded" />
+            <div className="bg-muted/50 h-3 w-1/4 animate-pulse rounded" />
           </div>
         </div>
       ))}

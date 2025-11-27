@@ -61,10 +61,7 @@ export async function GET(request: NextRequest) {
     const feedbackService = getFeedbackService();
 
     // Get all active salons
-    const { data: salons } = await supabase
-      .from('salons')
-      .select('id, name')
-      .eq('is_active', true);
+    const { data: salons } = await supabase.from('salons').select('id, name').eq('is_active', true);
 
     if (!salons || salons.length === 0) {
       logger.info('No active salons found');
@@ -106,7 +103,6 @@ export async function GET(request: NextRequest) {
         const feedbackResults = await createFeedbackRequests(salon.id, feedbackService, supabase);
         results.feedbackRequests.created += feedbackResults.created;
         results.feedbackRequests.failed += feedbackResults.failed;
-
       } catch (salonError) {
         logger.error('Marketing cron failed for salon', salonError as Error, {
           salonId: salon.id,
@@ -129,7 +125,6 @@ export async function GET(request: NextRequest) {
       salonsProcessed: salons.length,
       duration,
     });
-
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     logger.error('Marketing cron job failed', new Error(errorMessage));

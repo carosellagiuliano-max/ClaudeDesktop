@@ -72,13 +72,7 @@ const SALON_ID = process.env.NEXT_PUBLIC_SALON_ID || '';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const {
-    cart,
-    isEmpty,
-    isDigitalOnly,
-    formatPrice,
-    clear,
-  } = useCart();
+  const { cart, isEmpty, isDigitalOnly, formatPrice, clear } = useCart();
 
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('cart');
   const [shippingMethod, setShippingMethod] = useState<ShippingMethodType>('standard');
@@ -110,7 +104,14 @@ export default function CheckoutPage() {
 
   // Get shipping options
   const shippingOptions = isDigitalOnly
-    ? [{ type: 'none' as const, name: 'Kein Versand', priceCents: 0, description: 'Digitale Produkte' }]
+    ? [
+        {
+          type: 'none' as const,
+          name: 'Kein Versand',
+          priceCents: 0,
+          description: 'Digitale Produkte',
+        },
+      ]
     : DEFAULT_SHIPPING_OPTIONS.map((opt) => ({
         ...opt,
         priceCents: freeShipping && opt.type !== 'pickup' ? 0 : opt.priceCents,
@@ -139,9 +140,7 @@ export default function CheckoutPage() {
   }, [shippingMethod, paymentMethod]);
 
   // Handlers
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -270,11 +269,11 @@ export default function CheckoutPage() {
   if (isEmpty && currentStep === 'cart') {
     return (
       <div className="container max-w-4xl py-12 md:py-20">
-        <div className="flex flex-col items-center justify-center text-center py-12">
-          <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mb-6">
-            <ShoppingBag className="h-10 w-10 text-muted-foreground" />
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-full">
+            <ShoppingBag className="text-muted-foreground h-10 w-10" />
           </div>
-          <h1 className="text-2xl font-bold mb-2">Ihr Warenkorb ist leer</h1>
+          <h1 className="mb-2 text-2xl font-bold">Ihr Warenkorb ist leer</h1>
           <p className="text-muted-foreground mb-6">
             Entdecken Sie unsere Produkte und Gutscheine.
           </p>
@@ -305,24 +304,20 @@ export default function CheckoutPage() {
                 <button
                   onClick={() => isClickable && setCurrentStep(step.id)}
                   disabled={!isClickable}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors ${
                     isActive
                       ? 'bg-primary text-primary-foreground'
                       : isCompleted
-                      ? 'bg-primary/10 text-primary cursor-pointer hover:bg-primary/20'
-                      : 'bg-muted text-muted-foreground'
+                        ? 'bg-primary/10 text-primary hover:bg-primary/20 cursor-pointer'
+                        : 'bg-muted text-muted-foreground'
                   }`}
                 >
-                  {isCompleted ? (
-                    <Check className="h-5 w-5" />
-                  ) : (
-                    <Icon className="h-5 w-5" />
-                  )}
-                  <span className="hidden sm:inline font-medium">{step.label}</span>
+                  {isCompleted ? <Check className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
+                  <span className="hidden font-medium sm:inline">{step.label}</span>
                 </button>
                 {index < STEPS.length - 1 && (
                   <div
-                    className={`w-8 md:w-12 h-0.5 mx-2 ${
+                    className={`mx-2 h-0.5 w-8 md:w-12 ${
                       index < currentStepIndex ? 'bg-primary' : 'bg-border'
                     }`}
                   />
@@ -333,9 +328,9 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid gap-8 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Step 1: Cart Review */}
           {currentStep === 'cart' && (
             <Card>
@@ -350,7 +345,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Discount Code */}
-                <div className="mt-6 pt-6 border-t">
+                <div className="mt-6 border-t pt-6">
                   <Label className="mb-2 block">Gutscheincode</Label>
                   <div className="flex gap-2">
                     <Input
@@ -359,20 +354,16 @@ export default function CheckoutPage() {
                       onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
                     />
                     <Button onClick={handleApplyDiscount} variant="outline">
-                      <Tag className="h-4 w-4 mr-2" />
+                      <Tag className="mr-2 h-4 w-4" />
                       Einlösen
                     </Button>
                   </div>
                   {appliedDiscount && (
-                    <div className="mt-2 flex items-center justify-between rounded-lg bg-green-50 dark:bg-green-950 px-3 py-2">
+                    <div className="mt-2 flex items-center justify-between rounded-lg bg-green-50 px-3 py-2 dark:bg-green-950">
                       <span className="text-sm text-green-600">
                         {appliedDiscount.code}: -{formatPrice(appliedDiscount.amount)}
                       </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setAppliedDiscount(null)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => setAppliedDiscount(null)}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
@@ -391,7 +382,7 @@ export default function CheckoutPage() {
                   <CardTitle>Kontaktdaten</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="name">Name *</Label>
                       <Input
@@ -443,7 +434,7 @@ export default function CheckoutPage() {
                     {shippingOptions.map((option) => (
                       <div
                         key={option.type}
-                        className={`flex items-center justify-between rounded-lg border p-4 cursor-pointer transition-colors ${
+                        className={`flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-colors ${
                           shippingMethod === option.type
                             ? 'border-primary bg-primary/5'
                             : 'hover:bg-muted/50'
@@ -456,9 +447,7 @@ export default function CheckoutPage() {
                             <Label htmlFor={option.type} className="cursor-pointer font-medium">
                               {option.name}
                             </Label>
-                            <p className="text-sm text-muted-foreground">
-                              {option.description}
-                            </p>
+                            <p className="text-muted-foreground text-sm">{option.description}</p>
                           </div>
                         </div>
                         <span className="font-medium">
@@ -508,7 +497,7 @@ export default function CheckoutPage() {
                         placeholder="c/o, Apartment, etc."
                       />
                     </div>
-                    <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="zip">PLZ *</Label>
                         <Input
@@ -534,12 +523,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">Land</Label>
-                      <Input
-                        id="country"
-                        name="country"
-                        value={formData.country}
-                        disabled
-                      />
+                      <Input id="country" name="country" value={formData.country} disabled />
                     </div>
                   </CardContent>
                 </Card>
@@ -579,7 +563,7 @@ export default function CheckoutPage() {
                   >
                     {/* Online Payment */}
                     <div
-                      className={`flex items-start justify-between rounded-lg border p-4 cursor-pointer transition-colors ${
+                      className={`flex cursor-pointer items-start justify-between rounded-lg border p-4 transition-colors ${
                         paymentMethod === 'online'
                           ? 'border-primary bg-primary/5'
                           : 'hover:bg-muted/50'
@@ -589,17 +573,20 @@ export default function CheckoutPage() {
                       <div className="flex items-start gap-3">
                         <RadioGroupItem value="online" id="online" className="mt-1" />
                         <div>
-                          <Label htmlFor="online" className="cursor-pointer font-medium flex items-center gap-2">
+                          <Label
+                            htmlFor="online"
+                            className="flex cursor-pointer items-center gap-2 font-medium"
+                          >
                             <CreditCard className="h-4 w-4" />
                             Online bezahlen
                           </Label>
-                          <p className="text-sm text-muted-foreground mt-1">
+                          <p className="text-muted-foreground mt-1 text-sm">
                             Sicher mit Kreditkarte, TWINT oder weiteren Zahlungsmethoden
                           </p>
-                          <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                            <span className="bg-muted px-2 py-0.5 rounded">Visa</span>
-                            <span className="bg-muted px-2 py-0.5 rounded">Mastercard</span>
-                            <span className="bg-muted px-2 py-0.5 rounded">TWINT</span>
+                          <div className="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
+                            <span className="bg-muted rounded px-2 py-0.5">Visa</span>
+                            <span className="bg-muted rounded px-2 py-0.5">Mastercard</span>
+                            <span className="bg-muted rounded px-2 py-0.5">TWINT</span>
                           </div>
                         </div>
                       </div>
@@ -608,7 +595,7 @@ export default function CheckoutPage() {
                     {/* Pay at Venue - only for pickup orders */}
                     {shippingMethod === 'pickup' && (
                       <div
-                        className={`flex items-start justify-between rounded-lg border p-4 cursor-pointer transition-colors ${
+                        className={`flex cursor-pointer items-start justify-between rounded-lg border p-4 transition-colors ${
                           paymentMethod === 'pay_at_venue'
                             ? 'border-primary bg-primary/5'
                             : 'hover:bg-muted/50'
@@ -618,17 +605,20 @@ export default function CheckoutPage() {
                         <div className="flex items-start gap-3">
                           <RadioGroupItem value="pay_at_venue" id="pay_at_venue" className="mt-1" />
                           <div>
-                            <Label htmlFor="pay_at_venue" className="cursor-pointer font-medium flex items-center gap-2">
+                            <Label
+                              htmlFor="pay_at_venue"
+                              className="flex cursor-pointer items-center gap-2 font-medium"
+                            >
                               <Store className="h-4 w-4" />
                               Im Salon bezahlen
                             </Label>
-                            <p className="text-sm text-muted-foreground mt-1">
+                            <p className="text-muted-foreground mt-1 text-sm">
                               Bezahlen Sie bequem bei der Abholung im Salon
                             </p>
-                            <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                              <span className="bg-muted px-2 py-0.5 rounded">Bar</span>
-                              <span className="bg-muted px-2 py-0.5 rounded">Karte</span>
-                              <span className="bg-muted px-2 py-0.5 rounded">TWINT</span>
+                            <div className="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
+                              <span className="bg-muted rounded px-2 py-0.5">Bar</span>
+                              <span className="bg-muted rounded px-2 py-0.5">Karte</span>
+                              <span className="bg-muted rounded px-2 py-0.5">TWINT</span>
                             </div>
                           </div>
                         </div>
@@ -638,13 +628,13 @@ export default function CheckoutPage() {
 
                   {/* Info for pay at venue */}
                   {paymentMethod === 'pay_at_venue' && (
-                    <div className="mt-4 flex items-start gap-3 rounded-lg bg-blue-50 dark:bg-blue-950 p-4">
-                      <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                    <div className="mt-4 flex items-start gap-3 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                      <Info className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
                       <div className="text-sm text-blue-800 dark:text-blue-200">
-                        <p className="font-medium mb-1">Hinweis zur Abholung</p>
+                        <p className="mb-1 font-medium">Hinweis zur Abholung</p>
                         <p>
-                          Ihre Bestellung wird für Sie reserviert. Bitte holen Sie diese
-                          innerhalb von 7 Tagen ab und bezahlen Sie bei Abholung.
+                          Ihre Bestellung wird für Sie reserviert. Bitte holen Sie diese innerhalb
+                          von 7 Tagen ab und bezahlen Sie bei Abholung.
                         </p>
                       </div>
                     </div>
@@ -659,22 +649,20 @@ export default function CheckoutPage() {
                 </CardHeader>
                 <CardContent>
                   {/* Order Summary */}
-                  <div className="space-y-4 mb-6">
+                  <div className="mb-6 space-y-4">
                     <div>
-                      <h4 className="font-medium mb-2">Kontakt</h4>
-                      <p className="text-sm text-muted-foreground">{formData.email}</p>
-                      <p className="text-sm text-muted-foreground">{formData.name}</p>
+                      <h4 className="mb-2 font-medium">Kontakt</h4>
+                      <p className="text-muted-foreground text-sm">{formData.email}</p>
+                      <p className="text-muted-foreground text-sm">{formData.name}</p>
                     </div>
 
                     {shippingMethod !== 'none' && (
                       <div>
-                        <h4 className="font-medium mb-2">Versand</h4>
+                        <h4 className="mb-2 font-medium">Versand</h4>
                         {shippingMethod === 'pickup' ? (
-                          <p className="text-sm text-muted-foreground">
-                            Abholung im Salon
-                          </p>
+                          <p className="text-muted-foreground text-sm">Abholung im Salon</p>
                         ) : (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-muted-foreground text-sm">
                             {formData.street}
                             {formData.street2 && `, ${formData.street2}`}
                             <br />
@@ -685,8 +673,8 @@ export default function CheckoutPage() {
                     )}
 
                     <div>
-                      <h4 className="font-medium mb-2">Zahlungsmethode</h4>
-                      <p className="text-sm text-muted-foreground flex items-center gap-2">
+                      <h4 className="mb-2 font-medium">Zahlungsmethode</h4>
+                      <p className="text-muted-foreground flex items-center gap-2 text-sm">
                         {paymentMethod === 'online' ? (
                           <>
                             <CreditCard className="h-4 w-4" />
@@ -711,16 +699,14 @@ export default function CheckoutPage() {
                         <span>
                           {item.quantity}x {item.name}
                         </span>
-                        <span className="font-medium">
-                          {formatPrice(item.totalPriceCents)}
-                        </span>
+                        <span className="font-medium">{formatPrice(item.totalPriceCents)}</span>
                       </div>
                     ))}
                   </div>
 
                   <Separator className="my-6" />
 
-                  <p className="text-sm text-muted-foreground mb-6">
+                  <p className="text-muted-foreground mb-6 text-sm">
                     {paymentMethod === 'online' ? (
                       <>
                         Durch Klicken auf &ldquo;Jetzt bezahlen&rdquo; werden Sie zu unserem
@@ -728,8 +714,8 @@ export default function CheckoutPage() {
                       </>
                     ) : (
                       <>
-                        Durch Klicken auf &ldquo;Bestellung aufgeben&rdquo; reservieren wir
-                        Ihre Bestellung. Sie bezahlen bei Abholung.
+                        Durch Klicken auf &ldquo;Bestellung aufgeben&rdquo; reservieren wir Ihre
+                        Bestellung. Sie bezahlen bei Abholung.
                       </>
                     )}
                   </p>
@@ -795,7 +781,7 @@ export default function CheckoutPage() {
             </Card>
 
             {/* Trust Badges */}
-            <div className="mt-6 text-center text-sm text-muted-foreground">
+            <div className="text-muted-foreground mt-6 text-center text-sm">
               <p className="mb-2">Sichere Zahlung mit</p>
               <div className="flex justify-center gap-4">
                 <span>Visa</span>

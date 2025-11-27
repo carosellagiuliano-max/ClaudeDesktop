@@ -160,20 +160,18 @@ export function AdminProductList({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">
-            {total} Produkte insgesamt
-          </p>
+          <p className="text-muted-foreground text-sm">{total} Produkte insgesamt</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Suchen..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 w-48"
+                className="w-48 pl-8"
               />
             </div>
             <Button type="submit" variant="secondary">
@@ -196,7 +194,7 @@ export function AdminProductList({
             </Select>
           )}
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Neues Produkt
           </Button>
         </div>
@@ -221,12 +219,10 @@ export function AdminProductList({
             <TableBody>
               {products.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
+                  <TableCell colSpan={8} className="py-8 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <Package className="h-8 w-8 text-muted-foreground" />
-                      <p className="text-muted-foreground">
-                        Keine Produkte gefunden
-                      </p>
+                      <Package className="text-muted-foreground h-8 w-8" />
+                      <p className="text-muted-foreground">Keine Produkte gefunden</p>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -234,7 +230,7 @@ export function AdminProductList({
                 products.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell>
-                      <div className="h-10 w-10 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+                      <div className="bg-muted flex h-10 w-10 items-center justify-center overflow-hidden rounded-md">
                         {product.image_url ? (
                           <Image
                             src={product.image_url}
@@ -244,7 +240,7 @@ export function AdminProductList({
                             className="object-cover"
                           />
                         ) : (
-                          <ImageIcon className="h-5 w-5 text-muted-foreground" />
+                          <ImageIcon className="text-muted-foreground h-5 w-5" />
                         )}
                       </div>
                     </TableCell>
@@ -252,27 +248,21 @@ export function AdminProductList({
                       <div>
                         <p className="font-medium">{product.name}</p>
                         {product.description && (
-                          <p className="text-xs text-muted-foreground line-clamp-1">
+                          <p className="text-muted-foreground line-clamp-1 text-xs">
                             {product.description}
                           </p>
                         )}
                       </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {product.sku || '-'}
-                    </TableCell>
+                    <TableCell className="text-muted-foreground">{product.sku || '-'}</TableCell>
                     <TableCell>
-                      {product.category && (
-                        <Badge variant="secondary">{product.category}</Badge>
-                      )}
+                      {product.category && <Badge variant="secondary">{product.category}</Badge>}
                     </TableCell>
                     <TableCell className="text-right">
                       <div>
-                        <p className="font-medium">
-                          {formatCurrency(product.price_cents)}
-                        </p>
+                        <p className="font-medium">{formatCurrency(product.price_cents)}</p>
                         {product.compare_at_price_cents && (
-                          <p className="text-xs text-muted-foreground line-through">
+                          <p className="text-muted-foreground text-xs line-through">
                             {formatCurrency(product.compare_at_price_cents)}
                           </p>
                         )}
@@ -305,11 +295,11 @@ export function AdminProductList({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>
-                            <Eye className="h-4 w-4 mr-2" />
+                            <Eye className="mr-2 h-4 w-4" />
                             Anzeigen
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
+                            <Edit className="mr-2 h-4 w-4" />
                             Bearbeiten
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
@@ -317,7 +307,7 @@ export function AdminProductList({
                             onClick={() => handleDeleteClick(product)}
                             className="text-destructive"
                           >
-                            <Trash2 className="h-4 w-4 mr-2" />
+                            <Trash2 className="mr-2 h-4 w-4" />
                             Löschen
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -334,7 +324,7 @@ export function AdminProductList({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Seite {page} von {totalPages}
           </p>
           <div className="flex items-center gap-2">
@@ -364,8 +354,8 @@ export function AdminProductList({
           <DialogHeader>
             <DialogTitle>Produkt löschen</DialogTitle>
             <DialogDescription>
-              Sind Sie sicher, dass Sie &quot;{selectedProduct?.name}&quot;
-              löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+              Sind Sie sicher, dass Sie &quot;{selectedProduct?.name}&quot; löschen möchten? Diese
+              Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

@@ -1,11 +1,5 @@
 import { BaseService, ServiceResult, ServiceListResult } from './base';
-import type {
-  Service,
-  ServiceCategory,
-  Staff,
-  InsertTables,
-  UpdateTables,
-} from '../db/types';
+import type { Service, ServiceCategory, Staff, InsertTables, UpdateTables } from '../db/types';
 
 // ============================================
 // SERVICE CATEGORY SERVICE
@@ -17,7 +11,10 @@ class ServiceCategoryServiceClass extends BaseService<'service_categories'> {
   }
 
   // Get categories for salon
-  async findBySalon(salonId: string, activeOnly: boolean = true): Promise<ServiceListResult<ServiceCategory>> {
+  async findBySalon(
+    salonId: string,
+    activeOnly: boolean = true
+  ): Promise<ServiceListResult<ServiceCategory>> {
     const filters: Record<string, unknown> = { salon_id: salonId };
     if (activeOnly) filters.is_active = true;
 
@@ -28,15 +25,17 @@ class ServiceCategoryServiceClass extends BaseService<'service_categories'> {
   }
 
   // Get category with services
-  async findWithServices(categoryId: string): Promise<
-    ServiceResult<ServiceCategory & { services: Service[] }>
-  > {
+  async findWithServices(
+    categoryId: string
+  ): Promise<ServiceResult<ServiceCategory & { services: Service[] }>> {
     const { data, error } = await this.client
       .from('service_categories')
-      .select(`
+      .select(
+        `
         *,
         services (*)
-      `)
+      `
+      )
       .eq('id', categoryId)
       .single();
 
@@ -85,10 +84,13 @@ class ServiceServiceClass extends BaseService<'services'> {
 
     let query = this.client
       .from('services')
-      .select(`
+      .select(
+        `
         *,
         category:service_categories (*)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .eq('salon_id', salonId);
 
     if (activeOnly) {
@@ -118,10 +120,12 @@ class ServiceServiceClass extends BaseService<'services'> {
   async findWithVariants(serviceId: string): Promise<ServiceResult<ServiceWithVariants>> {
     const { data, error } = await this.client
       .from('services')
-      .select(`
+      .select(
+        `
         *,
         service_length_variants (*)
-      `)
+      `
+      )
       .eq('id', serviceId)
       .single();
 
@@ -138,15 +142,17 @@ class ServiceServiceClass extends BaseService<'services'> {
   }
 
   // Get services grouped by category
-  async findGroupedByCategory(salonId: string): Promise<
-    ServiceResult<Array<ServiceCategory & { services: Service[] }>>
-  > {
+  async findGroupedByCategory(
+    salonId: string
+  ): Promise<ServiceResult<Array<ServiceCategory & { services: Service[] }>>> {
     const { data, error } = await this.client
       .from('service_categories')
-      .select(`
+      .select(
+        `
         *,
         services (*)
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .eq('is_active', true)
       .order('sort_order', { ascending: true });
@@ -170,9 +176,11 @@ class ServiceServiceClass extends BaseService<'services'> {
   async findStaffForService(serviceId: string): Promise<ServiceListResult<Staff>> {
     const { data, error } = await this.client
       .from('staff_service_skills')
-      .select(`
+      .select(
+        `
         staff (*)
-      `)
+      `
+      )
       .eq('service_id', serviceId);
 
     if (error) {

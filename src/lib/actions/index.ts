@@ -44,11 +44,7 @@ export {
 } from './products';
 
 // Contact form
-export {
-  submitContactForm,
-  type ContactFormData,
-  type ContactFormResult,
-} from './contact';
+export { submitContactForm, type ContactFormData, type ContactFormResult } from './contact';
 
 // Booking
 export {

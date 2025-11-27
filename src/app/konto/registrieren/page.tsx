@@ -27,21 +27,21 @@ export default async function RegisterPage() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+    <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
           <Link href="/" className="inline-flex items-center gap-2">
-            <Scissors className="h-8 w-8 text-primary" />
+            <Scissors className="text-primary h-8 w-8" />
             <span className="text-2xl font-bold">SCHNITTWERK</span>
           </Link>
         </div>
 
         {/* Register Card */}
         <Card className="border-border/50">
-          <CardHeader className="text-center pb-2">
+          <CardHeader className="pb-2 text-center">
             <CardTitle className="text-2xl">Konto erstellen</CardTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Registrieren Sie sich für exklusive Vorteile
             </p>
           </CardHeader>
@@ -53,8 +53,8 @@ export default async function RegisterPage() {
         {/* Benefits */}
         <Card className="border-border/50 bg-muted/30 mt-6">
           <CardContent className="p-4">
-            <p className="text-sm font-medium mb-2">Mit einem Konto können Sie:</p>
-            <ul className="text-sm text-muted-foreground space-y-1">
+            <p className="mb-2 text-sm font-medium">Mit einem Konto können Sie:</p>
+            <ul className="text-muted-foreground space-y-1 text-sm">
               <li>- Termine online buchen und verwalten</li>
               <li>- Ihre Buchungshistorie einsehen</li>
               <li>- Schneller buchen mit gespeicherten Daten</li>
@@ -64,7 +64,7 @@ export default async function RegisterPage() {
         </Card>
 
         {/* Footer */}
-        <p className="text-center text-sm text-muted-foreground mt-8">
+        <p className="text-muted-foreground mt-8 text-center text-sm">
           <Link href="/" className="hover:text-primary">
             Zurück zur Startseite
           </Link>

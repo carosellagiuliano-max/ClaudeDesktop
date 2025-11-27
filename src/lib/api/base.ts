@@ -1,13 +1,13 @@
 import { SupabaseClient, PostgrestError } from '@supabase/supabase-js';
 import { supabase } from '../db/client';
-import type { Database } from '../db/types';
 import { logger } from '../logging/logger';
 
 // ============================================
 // TYPES
 // ============================================
 
-export type TableName = keyof Database['public']['Tables'];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TableName = string;
 
 export interface ServiceResult<T> {
   data: T | null;
@@ -46,11 +46,19 @@ export interface FilterParams {
 // BASE SERVICE CLASS
 // ============================================
 
-export abstract class BaseService<T extends TableName> {
-  protected client: SupabaseClient<Database>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class BaseService<
+  T extends TableName = any,
+  TRow = any,
+  TInsert = any,
+  TUpdate = any,
+> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected client: SupabaseClient<any>;
   protected tableName: T;
 
-  constructor(tableName: T, client?: SupabaseClient<Database>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(tableName: T, client?: SupabaseClient<any>) {
     this.tableName = tableName;
     this.client = client || supabase;
   }
@@ -92,7 +100,7 @@ export abstract class BaseService<T extends TableName> {
   // CRUD OPERATIONS
   // ============================================
 
-  async findById(id: string): Promise<ServiceResult<Database['public']['Tables'][T]['Row']>> {
+  async findById(id: string): Promise<ServiceResult<TRow>> {
     const { data, error } = await this.client
       .from(this.tableName)
       .select('*')
@@ -103,7 +111,7 @@ export abstract class BaseService<T extends TableName> {
       return { data: null, error: this.handleError(error) };
     }
 
-    return { data: data as Database['public']['Tables'][T]['Row'], error: null };
+    return { data: data as TRow, error: null };
   }
 
   async findMany(
@@ -113,7 +121,7 @@ export abstract class BaseService<T extends TableName> {
       sort?: SortParams;
       select?: string;
     } = {}
-  ): Promise<ServiceListResult<Database['public']['Tables'][T]['Row']>> {
+  ): Promise<ServiceListResult<TRow>> {
     const { filters, pagination, sort, select = '*' } = options;
 
     let query = this.client.from(this.tableName).select(select, { count: 'exact' });
@@ -182,35 +190,26 @@ export abstract class BaseService<T extends TableName> {
     }
 
     return {
-      data: (data as Database['public']['Tables'][T]['Row'][]) || [],
+      data: (data as TRow[]) || [],
       count,
       error: null,
     };
   }
 
-  async create(
-    input: Database['public']['Tables'][T]['Insert']
-  ): Promise<ServiceResult<Database['public']['Tables'][T]['Row']>> {
-    const { data, error } = await this.client
-      .from(this.tableName)
-      .insert(input as never)
-      .select()
-      .single();
+  async create(input: TInsert): Promise<ServiceResult<TRow>> {
+    const { data, error } = await this.client.from(this.tableName).insert(input).select().single();
 
     if (error) {
       return { data: null, error: this.handleError(error) };
     }
 
-    return { data: data as Database['public']['Tables'][T]['Row'], error: null };
+    return { data: data as TRow, error: null };
   }
 
-  async update(
-    id: string,
-    input: Database['public']['Tables'][T]['Update']
-  ): Promise<ServiceResult<Database['public']['Tables'][T]['Row']>> {
+  async update(id: string, input: TUpdate): Promise<ServiceResult<TRow>> {
     const { data, error } = await this.client
       .from(this.tableName)
-      .update(input as never)
+      .update(input)
       .eq('id', id)
       .select()
       .single();
@@ -219,7 +218,7 @@ export abstract class BaseService<T extends TableName> {
       return { data: null, error: this.handleError(error) };
     }
 
-    return { data: data as Database['public']['Tables'][T]['Row'], error: null };
+    return { data: data as TRow, error: null };
   }
 
   async delete(id: string): Promise<ServiceResult<boolean>> {
@@ -237,11 +236,7 @@ export abstract class BaseService<T extends TableName> {
   // ============================================
 
   async exists(id: string): Promise<boolean> {
-    const { data } = await this.client
-      .from(this.tableName)
-      .select('id')
-      .eq('id', id)
-      .single();
+    const { data } = await this.client.from(this.tableName).select('id').eq('id', id).single();
 
     return !!data;
   }

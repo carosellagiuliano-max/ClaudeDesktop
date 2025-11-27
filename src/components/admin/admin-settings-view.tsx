@@ -132,29 +132,29 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
   return (
     <Tabs defaultValue="general" className="space-y-6">
-      <TabsList className="flex-wrap h-auto gap-1">
+      <TabsList className="h-auto flex-wrap gap-1">
         <TabsTrigger value="general">
-          <Building className="h-4 w-4 mr-2" />
+          <Building className="mr-2 h-4 w-4" />
           Allgemein
         </TabsTrigger>
         <TabsTrigger value="hours">
-          <Clock className="h-4 w-4 mr-2" />
+          <Clock className="mr-2 h-4 w-4" />
           Öffnungszeiten
         </TabsTrigger>
         <TabsTrigger value="booking">
-          <CalendarClock className="h-4 w-4 mr-2" />
+          <CalendarClock className="mr-2 h-4 w-4" />
           Buchungsregeln
         </TabsTrigger>
         <TabsTrigger value="services">
-          <Scissors className="h-4 w-4 mr-2" />
+          <Scissors className="mr-2 h-4 w-4" />
           Leistungen
         </TabsTrigger>
         <TabsTrigger value="payments">
-          <CreditCard className="h-4 w-4 mr-2" />
+          <CreditCard className="mr-2 h-4 w-4" />
           Zahlungen
         </TabsTrigger>
         <TabsTrigger value="notifications">
-          <Mail className="h-4 w-4 mr-2" />
+          <Mail className="mr-2 h-4 w-4" />
           Benachrichtigungen
         </TabsTrigger>
       </TabsList>
@@ -164,19 +164,13 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
         <Card>
           <CardHeader>
             <CardTitle>Salon-Informationen</CardTitle>
-            <CardDescription>
-              Grundlegende Informationen über Ihren Salon
-            </CardDescription>
+            <CardDescription>Grundlegende Informationen über Ihren Salon</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Salon Name</Label>
-                <Input
-                  id="name"
-                  defaultValue={salon?.name || ''}
-                  placeholder="SCHNITTWERK"
-                />
+                <Input id="name" defaultValue={salon?.name || ''} placeholder="SCHNITTWERK" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">E-Mail</Label>
@@ -225,11 +219,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">Stadt</Label>
-                <Input
-                  id="city"
-                  defaultValue={salon?.city || ''}
-                  placeholder="St. Gallen"
-                />
+                <Input id="city" defaultValue={salon?.city || ''} placeholder="St. Gallen" />
               </div>
             </div>
 
@@ -245,7 +235,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
             <div className="flex justify-end">
               <Button onClick={handleSave} disabled={isSaving}>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 {isSaving ? 'Speichern...' : 'Speichern'}
               </Button>
             </div>
@@ -258,16 +248,14 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
         <Card>
           <CardHeader>
             <CardTitle>Öffnungszeiten</CardTitle>
-            <CardDescription>
-              Legen Sie die Öffnungszeiten Ihres Salons fest
-            </CardDescription>
+            <CardDescription>Legen Sie die Öffnungszeiten Ihres Salons fest</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {weekDays.map((day) => (
                 <div
                   key={day.key}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
+                  className="flex items-center justify-between border-b py-2 last:border-0"
                 >
                   <div className="flex items-center gap-4">
                     <Switch id={`${day.key}-open`} defaultChecked={day.key !== 'sunday'} />
@@ -276,24 +264,16 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                     </Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Input
-                      type="time"
-                      defaultValue="09:00"
-                      className="w-28"
-                    />
+                    <Input type="time" defaultValue="09:00" className="w-28" />
                     <span className="text-muted-foreground">bis</span>
-                    <Input
-                      type="time"
-                      defaultValue="18:00"
-                      className="w-28"
-                    />
+                    <Input type="time" defaultValue="18:00" className="w-28" />
                   </div>
                 </div>
               ))}
             </div>
-            <div className="flex justify-end mt-6">
+            <div className="mt-6 flex justify-end">
               <Button onClick={handleSave} disabled={isSaving}>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 {isSaving ? 'Speichern...' : 'Speichern'}
               </Button>
             </div>
@@ -308,9 +288,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
           <Card>
             <CardHeader>
               <CardTitle>Zeitliche Regeln</CardTitle>
-              <CardDescription>
-                Legen Sie fest, wann Kunden Termine buchen können
-              </CardDescription>
+              <CardDescription>Legen Sie fest, wann Kunden Termine buchen können</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
@@ -329,7 +307,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                       })
                     }
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Wie viele Stunden im Voraus muss gebucht werden?
                   </p>
                 </div>
@@ -348,7 +326,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                       })
                     }
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Wie weit im Voraus können Termine gebucht werden?
                   </p>
                 </div>
@@ -368,19 +346,17 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                       })
                     }
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Zeit zwischen zwei aufeinanderfolgenden Terminen
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-4 pt-4 border-t">
-                <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="space-y-4 border-t pt-4">
+                <div className="flex items-center justify-between rounded-lg border p-3">
                   <div>
                     <p className="font-medium">Same-Day Buchungen</p>
-                    <p className="text-sm text-muted-foreground">
-                      Termine am selben Tag erlauben
-                    </p>
+                    <p className="text-muted-foreground text-sm">Termine am selben Tag erlauben</p>
                   </div>
                   <Switch
                     checked={bookingRules.allowSameDayBooking}
@@ -389,10 +365,10 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                     }
                   />
                 </div>
-                <div className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center justify-between rounded-lg border p-3">
                   <div>
                     <p className="font-medium">Telefonnummer erforderlich</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Kunden müssen eine Telefonnummer angeben
                     </p>
                   </div>
@@ -407,7 +383,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
               <div className="flex justify-end">
                 <Button onClick={handleSave} disabled={isSaving}>
-                  <Save className="h-4 w-4 mr-2" />
+                  <Save className="mr-2 h-4 w-4" />
                   {isSaving ? 'Speichern...' : 'Speichern'}
                 </Button>
               </div>
@@ -418,15 +394,13 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
           <Card>
             <CardHeader>
               <CardTitle>Anzahlungen</CardTitle>
-              <CardDescription>
-                Konfigurieren Sie Anzahlungen für Terminbuchungen
-              </CardDescription>
+              <CardDescription>Konfigurieren Sie Anzahlungen für Terminbuchungen</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
                   <p className="font-medium">Anzahlung aktivieren</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Kunden müssen bei der Buchung eine Anzahlung leisten
                   </p>
                 </div>
@@ -439,7 +413,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
               </div>
 
               {depositSettings.requireDeposit && (
-                <div className="grid gap-4 md:grid-cols-2 animate-in fade-in slide-in-from-top-2">
+                <div className="animate-in fade-in slide-in-from-top-2 grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="depositPercent">Anzahlung (%)</Label>
                     <Input
@@ -455,9 +429,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                         })
                       }
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Prozentsatz des Terminpreises
-                    </p>
+                    <p className="text-muted-foreground text-xs">Prozentsatz des Terminpreises</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="depositMin">Mindestanzahlung (CHF)</Label>
@@ -474,9 +446,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                         })
                       }
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Mindestbetrag für Anzahlung
-                    </p>
+                    <p className="text-muted-foreground text-xs">Mindestbetrag für Anzahlung</p>
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="refundHours">Rückerstattungsfrist (Stunden)</Label>
@@ -493,8 +463,9 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                         })
                       }
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Bis wie viele Stunden vor dem Termin ist eine vollständige Rückerstattung möglich?
+                    <p className="text-muted-foreground text-xs">
+                      Bis wie viele Stunden vor dem Termin ist eine vollständige Rückerstattung
+                      möglich?
                     </p>
                   </div>
                 </div>
@@ -502,7 +473,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
               <div className="flex justify-end">
                 <Button onClick={handleSave} disabled={isSaving}>
-                  <Save className="h-4 w-4 mr-2" />
+                  <Save className="mr-2 h-4 w-4" />
                   {isSaving ? 'Speichern...' : 'Speichern'}
                 </Button>
               </div>
@@ -517,12 +488,10 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Leistungen</CardTitle>
-              <CardDescription>
-                Verwalten Sie die angebotenen Dienstleistungen
-              </CardDescription>
+              <CardDescription>Verwalten Sie die angebotenen Dienstleistungen</CardDescription>
             </div>
             <Button>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Neue Leistung
             </Button>
           </CardHeader>
@@ -541,10 +510,8 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
               <TableBody>
                 {services.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8">
-                      <p className="text-muted-foreground">
-                        Keine Leistungen vorhanden
-                      </p>
+                    <TableCell colSpan={6} className="py-8 text-center">
+                      <p className="text-muted-foreground">Keine Leistungen vorhanden</p>
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -554,20 +521,16 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                         <div>
                           <p className="font-medium">{service.name}</p>
                           {service.description && (
-                            <p className="text-xs text-muted-foreground line-clamp-1">
+                            <p className="text-muted-foreground line-clamp-1 text-xs">
                               {service.description}
                             </p>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
-                        {service.category && (
-                          <Badge variant="secondary">{service.category}</Badge>
-                        )}
+                        {service.category && <Badge variant="secondary">{service.category}</Badge>}
                       </TableCell>
-                      <TableCell className="text-center">
-                        {service.duration_minutes} Min.
-                      </TableCell>
+                      <TableCell className="text-center">{service.duration_minutes} Min.</TableCell>
                       <TableCell className="text-right font-medium">
                         {formatCurrency(service.price_cents)}
                       </TableCell>
@@ -602,17 +565,15 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
           <Card>
             <CardHeader>
               <CardTitle>Zahlungseinstellungen</CardTitle>
-              <CardDescription>
-                Konfigurieren Sie die Zahlungsmethoden
-              </CardDescription>
+              <CardDescription>Konfigurieren Sie die Zahlungsmethoden</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex items-center justify-between p-4 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="flex items-center gap-4">
-                  <CreditCard className="h-8 w-8 text-primary" />
+                  <CreditCard className="text-primary h-8 w-8" />
                   <div>
                     <h4 className="font-medium">Stripe</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Kreditkarten und TWINT akzeptieren
                     </p>
                   </div>
@@ -628,15 +589,15 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
               <div className="space-y-4">
                 <h4 className="font-medium">Akzeptierte Zahlungsmethoden</h4>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex items-center justify-between rounded-lg border p-3">
                     <span>Kreditkarten (Visa, Mastercard, Amex)</span>
                     <Switch defaultChecked />
                   </div>
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex items-center justify-between rounded-lg border p-3">
                     <span>TWINT</span>
                     <Switch defaultChecked />
                   </div>
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex items-center justify-between rounded-lg border p-3">
                     <span>Bezahlung vor Ort</span>
                     <Switch defaultChecked />
                   </div>
@@ -645,7 +606,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
               <div className="flex justify-end">
                 <Button onClick={handleSave} disabled={isSaving}>
-                  <Save className="h-4 w-4 mr-2" />
+                  <Save className="mr-2 h-4 w-4" />
                   {isSaving ? 'Speichern...' : 'Speichern'}
                 </Button>
               </div>
@@ -681,9 +642,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                       })
                     }
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Schweizer Normalsatz: 8.1%
-                  </p>
+                  <p className="text-muted-foreground text-xs">Schweizer Normalsatz: 8.1%</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="vatNumber">MwSt-Nummer (UID)</Label>
@@ -691,20 +650,18 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
                     id="vatNumber"
                     placeholder="CHE-123.456.789 MWST"
                     value={vatSettings.vatNumber}
-                    onChange={(e) =>
-                      setVatSettings({ ...vatSettings, vatNumber: e.target.value })
-                    }
+                    onChange={(e) => setVatSettings({ ...vatSettings, vatNumber: e.target.value })}
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Ihre Unternehmens-Identifikationsnummer
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
                   <p className="font-medium">MwSt auf Rechnungen anzeigen</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     MwSt-Betrag separat auf Rechnungen ausweisen
                   </p>
                 </div>
@@ -718,7 +675,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
               <div className="flex justify-end">
                 <Button onClick={handleSave} disabled={isSaving}>
-                  <Save className="h-4 w-4 mr-2" />
+                  <Save className="mr-2 h-4 w-4" />
                   {isSaving ? 'Speichern...' : 'Speichern'}
                 </Button>
               </div>
@@ -732,45 +689,37 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
         <Card>
           <CardHeader>
             <CardTitle>E-Mail-Benachrichtigungen</CardTitle>
-            <CardDescription>
-              Konfigurieren Sie automatische Benachrichtigungen
-            </CardDescription>
+            <CardDescription>Konfigurieren Sie automatische Benachrichtigungen</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
                   <p className="font-medium">Terminbestätigung</p>
-                  <p className="text-sm text-muted-foreground">
-                    E-Mail an Kunden nach Buchung
-                  </p>
+                  <p className="text-muted-foreground text-sm">E-Mail an Kunden nach Buchung</p>
                 </div>
                 <Switch defaultChecked />
               </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
                   <p className="font-medium">Terminerinnerung</p>
-                  <p className="text-sm text-muted-foreground">
-                    24 Stunden vor dem Termin
-                  </p>
+                  <p className="text-muted-foreground text-sm">24 Stunden vor dem Termin</p>
                 </div>
                 <Switch defaultChecked />
               </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
                   <p className="font-medium">Bestellbestätigung</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     E-Mail nach erfolgreicher Bestellung
                   </p>
                 </div>
                 <Switch defaultChecked />
               </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
                   <p className="font-medium">Versandbestätigung</p>
-                  <p className="text-sm text-muted-foreground">
-                    E-Mail bei Versand der Bestellung
-                  </p>
+                  <p className="text-muted-foreground text-sm">E-Mail bei Versand der Bestellung</p>
                 </div>
                 <Switch defaultChecked />
               </div>
@@ -778,7 +727,7 @@ export function AdminSettingsView({ salon, services }: AdminSettingsViewProps) {
 
             <div className="flex justify-end">
               <Button onClick={handleSave} disabled={isSaving}>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 {isSaving ? 'Speichern...' : 'Speichern'}
               </Button>
             </div>

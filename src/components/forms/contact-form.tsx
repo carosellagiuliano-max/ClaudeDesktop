@@ -55,14 +55,13 @@ export function ContactForm() {
 
   if (success) {
     return (
-      <div className="text-center py-12">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
+      <div className="py-12 text-center">
+        <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <CheckCircle className="h-8 w-8 text-green-600" />
         </div>
-        <h3 className="text-xl font-semibold mb-2">Nachricht gesendet!</h3>
+        <h3 className="mb-2 text-xl font-semibold">Nachricht gesendet!</h3>
         <p className="text-muted-foreground mb-6">
-          Vielen Dank für Ihre Nachricht. Wir werden uns so schnell wie möglich
-          bei Ihnen melden.
+          Vielen Dank für Ihre Nachricht. Wir werden uns so schnell wie möglich bei Ihnen melden.
         </p>
         <Button variant="outline" onClick={() => setSuccess(false)}>
           Weitere Nachricht senden
@@ -92,7 +91,7 @@ export function ContactForm() {
             aria-invalid={!!fieldErrors.firstName}
           />
           {fieldErrors.firstName && (
-            <p className="text-sm text-destructive">{fieldErrors.firstName}</p>
+            <p className="text-destructive text-sm">{fieldErrors.firstName}</p>
           )}
         </div>
         <div className="space-y-2">
@@ -106,7 +105,7 @@ export function ContactForm() {
             aria-invalid={!!fieldErrors.lastName}
           />
           {fieldErrors.lastName && (
-            <p className="text-sm text-destructive">{fieldErrors.lastName}</p>
+            <p className="text-destructive text-sm">{fieldErrors.lastName}</p>
           )}
         </div>
       </div>
@@ -123,9 +122,7 @@ export function ContactForm() {
             disabled={isPending}
             aria-invalid={!!fieldErrors.email}
           />
-          {fieldErrors.email && (
-            <p className="text-sm text-destructive">{fieldErrors.email}</p>
-          )}
+          {fieldErrors.email && <p className="text-destructive text-sm">{fieldErrors.email}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="phone">Telefon</Label>
@@ -153,9 +150,7 @@ export function ContactForm() {
             ))}
           </SelectContent>
         </Select>
-        {fieldErrors.reason && (
-          <p className="text-sm text-destructive">{fieldErrors.reason}</p>
-        )}
+        {fieldErrors.reason && <p className="text-destructive text-sm">{fieldErrors.reason}</p>}
       </div>
 
       <div className="space-y-2">
@@ -169,12 +164,10 @@ export function ContactForm() {
           disabled={isPending}
           aria-invalid={!!fieldErrors.message}
         />
-        {fieldErrors.message && (
-          <p className="text-sm text-destructive">{fieldErrors.message}</p>
-        )}
+        {fieldErrors.message && <p className="text-destructive text-sm">{fieldErrors.message}</p>}
       </div>
 
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         * Pflichtfelder. Mit dem Absenden erklären Sie sich mit unserer{' '}
         <Link href="/datenschutz" className="text-primary hover:underline">
           Datenschutzerklärung

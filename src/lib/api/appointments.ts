@@ -51,7 +51,8 @@ class AppointmentServiceClass extends BaseService<'appointments'> {
   async findWithRelations(appointmentId: string): Promise<ServiceResult<AppointmentWithRelations>> {
     const { data, error } = await this.client
       .from('appointments')
-      .select(`
+      .select(
+        `
         *,
         customer:customers (*),
         staff (*),
@@ -59,7 +60,8 @@ class AppointmentServiceClass extends BaseService<'appointments'> {
           *,
           service:services (*)
         )
-      `)
+      `
+      )
       .eq('id', appointmentId)
       .single();
 
@@ -86,11 +88,14 @@ class AppointmentServiceClass extends BaseService<'appointments'> {
 
     let query = this.client
       .from('appointments')
-      .select(`
+      .select(
+        `
         *,
         customer:customers (*),
         staff (*)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .eq('salon_id', salonId);
 
     if (startDate) {
@@ -134,14 +139,17 @@ class AppointmentServiceClass extends BaseService<'appointments'> {
 
     let query = this.client
       .from('appointments')
-      .select(`
+      .select(
+        `
         *,
         staff (*),
         appointment_services (
           *,
           service:services (*)
         )
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .eq('customer_id', customerId);
 
     if (upcoming) {
@@ -164,7 +172,10 @@ class AppointmentServiceClass extends BaseService<'appointments'> {
   }
 
   // Get today's appointments
-  async findToday(salonId: string, staffId?: string): Promise<ServiceListResult<AppointmentWithRelations>> {
+  async findToday(
+    salonId: string,
+    staffId?: string
+  ): Promise<ServiceListResult<AppointmentWithRelations>> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 

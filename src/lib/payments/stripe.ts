@@ -111,8 +111,11 @@ export async function createCheckoutSession(
 
     return { data: session, error: null };
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Fehler beim Erstellen der Checkout-Session';
-    logger.error('Failed to create checkout session', err instanceof Error ? err : undefined, { orderId });
+    const message =
+      err instanceof Error ? err.message : 'Fehler beim Erstellen der Checkout-Session';
+    logger.error('Failed to create checkout session', err instanceof Error ? err : undefined, {
+      orderId,
+    });
     return { data: null, error: message };
   }
 }
@@ -153,14 +156,7 @@ export async function createPaymentIntent(
     return { data: null, error: 'Stripe ist nicht konfiguriert' };
   }
 
-  const {
-    amountCents,
-    currency = 'chf',
-    customerId,
-    orderId,
-    salonId,
-    metadata = {},
-  } = params;
+  const { amountCents, currency = 'chf', customerId, orderId, salonId, metadata = {} } = params;
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
@@ -185,8 +181,11 @@ export async function createPaymentIntent(
 
     return { data: paymentIntent, error: null };
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Fehler beim Erstellen des Payment Intents';
-    logger.error('Failed to create payment intent', err instanceof Error ? err : undefined, { orderId });
+    const message =
+      err instanceof Error ? err.message : 'Fehler beim Erstellen des Payment Intents';
+    logger.error('Failed to create payment intent', err instanceof Error ? err : undefined, {
+      orderId,
+    });
     return { data: null, error: message };
   }
 }
@@ -247,7 +246,8 @@ export async function cancelPaymentIntent(
     const paymentIntent = await stripe.paymentIntents.cancel(paymentIntentId);
     return { data: paymentIntent, error: null };
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Fehler beim Stornieren des Payment Intents';
+    const message =
+      err instanceof Error ? err.message : 'Fehler beim Stornieren des Payment Intents';
     return { data: null, error: message };
   }
 }
@@ -284,7 +284,9 @@ export async function createRefund(
     return { data: refund, error: null };
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Fehler beim Erstellen der Rückerstattung';
-    logger.error('Failed to create refund', err instanceof Error ? err : undefined, { paymentIntentId });
+    logger.error('Failed to create refund', err instanceof Error ? err : undefined, {
+      paymentIntentId,
+    });
     return { data: null, error: message };
   }
 }
@@ -376,7 +378,10 @@ export function centsToChf(cents: number): number {
 /**
  * Calculates Swiss VAT (8.1%)
  */
-export function calculateVat(amountCents: number, vatRate: number = 0.081): {
+export function calculateVat(
+  amountCents: number,
+  vatRate: number = 0.081
+): {
   netCents: number;
   vatCents: number;
   grossCents: number;

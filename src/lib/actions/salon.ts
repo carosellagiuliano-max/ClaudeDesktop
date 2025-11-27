@@ -77,15 +77,7 @@ export type AddonService = {
 };
 
 // Day names in German
-const DAY_NAMES = [
-  'Montag',
-  'Dienstag',
-  'Mittwoch',
-  'Donnerstag',
-  'Freitag',
-  'Samstag',
-  'Sonntag',
-];
+const DAY_NAMES = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
 // ============================================
 // GET SALON
@@ -182,10 +174,12 @@ export const getServicesWithCategories = unstable_cache(
     // Get services with length variants
     const { data: services, error: svcError } = await supabase
       .from('services')
-      .select(`
+      .select(
+        `
         *,
         service_length_variants (*)
-      `)
+      `
+      )
       .eq('salon_id', salonId)
       .eq('is_active', true)
       .order('sort_order', { ascending: true });
@@ -215,14 +209,15 @@ export const getServicesWithCategories = unstable_cache(
           hasLengthVariants: svc.has_length_variants || false,
           isBookableOnline: svc.is_bookable_online,
           sortOrder: svc.sort_order,
-          lengthVariants: svc.service_length_variants?.map((v: any) => ({
-            id: v.id,
-            name: v.name,
-            description: v.description,
-            durationMinutes: v.duration_minutes,
-            priceCents: v.price_cents,
-            sortOrder: v.sort_order,
-          })) || [],
+          lengthVariants:
+            svc.service_length_variants?.map((v: any) => ({
+              id: v.id,
+              name: v.name,
+              description: v.description,
+              durationMinutes: v.duration_minutes,
+              priceCents: v.price_cents,
+              sortOrder: v.sort_order,
+            })) || [],
         })),
     }));
   },

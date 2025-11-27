@@ -11,13 +11,7 @@ import Stripe from 'stripe';
 // TYPES
 // ============================================
 
-export type DepositStatus =
-  | 'pending'
-  | 'paid'
-  | 'applied'
-  | 'refunded'
-  | 'forfeited'
-  | 'cancelled';
+export type DepositStatus = 'pending' | 'paid' | 'applied' | 'refunded' | 'forfeited' | 'cancelled';
 
 export interface AppointmentDeposit {
   id: string;
@@ -88,10 +82,7 @@ export class DepositService {
   /**
    * Calculate deposit amount for a service
    */
-  async calculateDepositAmount(
-    serviceId: string,
-    servicePriceCents?: number
-  ): Promise<number> {
+  async calculateDepositAmount(serviceId: string, servicePriceCents?: number): Promise<number> {
     const { data, error } = await this.supabase.rpc('calculate_deposit_amount', {
       p_service_id: serviceId,
       p_service_price_cents: servicePriceCents || null,
@@ -323,10 +314,7 @@ export class DepositService {
   /**
    * Apply deposit to final payment
    */
-  async applyDepositToPayment(
-    appointmentId: string,
-    orderId?: string
-  ): Promise<number> {
+  async applyDepositToPayment(appointmentId: string, orderId?: string): Promise<number> {
     const { data, error } = await this.supabase.rpc('apply_deposit_to_payment', {
       p_appointment_id: appointmentId,
       p_order_id: orderId || null,
@@ -429,8 +417,7 @@ export class DepositService {
           acc.totalCollected +
           (['paid', 'applied', 'forfeited'].includes(d.status) ? d.amount_cents : 0),
         totalRefunded: acc.totalRefunded + (d.refund_amount_cents || 0),
-        totalForfeited:
-          acc.totalForfeited + (d.status === 'forfeited' ? d.amount_cents : 0),
+        totalForfeited: acc.totalForfeited + (d.status === 'forfeited' ? d.amount_cents : 0),
         pendingCount: acc.pendingCount + (d.status === 'pending' ? 1 : 0),
         paidCount: acc.paidCount + (d.status === 'paid' ? 1 : 0),
       }),

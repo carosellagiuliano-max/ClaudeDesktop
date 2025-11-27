@@ -23,17 +23,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Keine Berechtigung' }, { status: 403 });
     }
 
-    const { data: products, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('name');
+    const { data: products, error } = await supabase.from('products').select('*').order('name');
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const headers = ['ID', 'SKU', 'Name', 'Beschreibung', 'Kategorie', 'Preis (CHF)', 'Bestand', 'Min. Bestand', 'Aktiv'];
-    const rows = (products || []).map(p => [
+    const headers = [
+      'ID',
+      'SKU',
+      'Name',
+      'Beschreibung',
+      'Kategorie',
+      'Preis (CHF)',
+      'Bestand',
+      'Min. Bestand',
+      'Aktiv',
+    ];
+    const rows = (products || []).map((p) => [
       p.id,
       p.sku || '',
       p.name,
@@ -47,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+      ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
 
     return new NextResponse(csv, {

@@ -14,11 +14,7 @@ export const metadata: Metadata = {
 // DATA FETCHING
 // ============================================
 
-async function getCustomersData(searchParams: {
-  search?: string;
-  page?: string;
-  limit?: string;
-}) {
+async function getCustomersData(searchParams: { search?: string; page?: string; limit?: string }) {
   const supabase = await createServerClient();
   const page = parseInt(searchParams.page || '1');
   const limit = parseInt(searchParams.limit || '20');

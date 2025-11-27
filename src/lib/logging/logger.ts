@@ -33,7 +33,16 @@ interface LogEntry {
 // SENSITIVE DATA MASKING
 // ============================================
 
-const SENSITIVE_KEYS = ['password', 'token', 'secret', 'key', 'authorization', 'cookie', 'credit_card', 'cvv'];
+const SENSITIVE_KEYS = [
+  'password',
+  'token',
+  'secret',
+  'key',
+  'authorization',
+  'cookie',
+  'credit_card',
+  'cvv',
+];
 
 function maskSensitiveData(obj: unknown, depth = 0): unknown {
   if (depth > 10) return '[MAX_DEPTH]';
@@ -54,13 +63,13 @@ function maskSensitiveData(obj: unknown, depth = 0): unknown {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(item => maskSensitiveData(item, depth + 1));
+    return obj.map((item) => maskSensitiveData(item, depth + 1));
   }
 
   if (typeof obj === 'object') {
     const masked: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
-      if (SENSITIVE_KEYS.some(k => key.toLowerCase().includes(k))) {
+      if (SENSITIVE_KEYS.some((k) => key.toLowerCase().includes(k))) {
         masked[key] = '[REDACTED]';
       } else {
         masked[key] = maskSensitiveData(value, depth + 1);
@@ -155,11 +164,13 @@ export const logger = {
         message,
         timestamp: new Date().toISOString(),
         context,
-        error: error ? {
-          message: error.message,
-          name: error.name,
-          stack: error.stack,
-        } : undefined,
+        error: error
+          ? {
+              message: error.message,
+              name: error.name,
+              stack: error.stack,
+            }
+          : undefined,
       };
       console.error(formatLogEntry(entry));
 

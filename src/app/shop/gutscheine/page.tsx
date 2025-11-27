@@ -67,7 +67,7 @@ export default function GutscheinePage() {
       <div className="container-wide mb-8">
         <Link
           href="/shop"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="text-muted-foreground hover:text-foreground inline-flex items-center text-sm transition-colors"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Zurück zum Shop
@@ -76,40 +76,36 @@ export default function GutscheinePage() {
 
       {/* Page Header */}
       <section className="container-wide mb-12">
-        <div className="grid gap-12 lg:grid-cols-2 items-center">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <Badge className="mb-4">Das perfekte Geschenk</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Geschenkgutscheine
-            </h1>
-            <p className="text-lg text-muted-foreground mb-6">
-              Verschenken Sie Entspannung, Styling und Verwöhnmomente. Unsere
-              Gutscheine sind für alle Leistungen und Produkte bei SCHNITTWERK
-              einlösbar.
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">Geschenkgutscheine</h1>
+            <p className="text-muted-foreground mb-6 text-lg">
+              Verschenken Sie Entspannung, Styling und Verwöhnmomente. Unsere Gutscheine sind für
+              alle Leistungen und Produkte bei SCHNITTWERK einlösbar.
             </p>
-            <ul className="space-y-2 text-muted-foreground">
+            <ul className="text-muted-foreground space-y-2">
               <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-primary" />
+                <CheckCircle className="text-primary h-4 w-4" />
                 Wert frei wählbar (ab CHF 25)
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-primary" />
-                2 Jahre gültig
+                <CheckCircle className="text-primary h-4 w-4" />2 Jahre gültig
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-primary" />
+                <CheckCircle className="text-primary h-4 w-4" />
                 Einlösbar für alle Leistungen & Produkte
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-primary" />
+                <CheckCircle className="text-primary h-4 w-4" />
                 Persönliche Grußbotschaft möglich
               </li>
             </ul>
           </div>
 
           {/* Image Placeholder */}
-          <div className="relative aspect-square bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl flex items-center justify-center">
-            <Gift className="h-24 w-24 text-primary/30" />
+          <div className="from-primary/20 to-primary/5 relative flex aspect-square items-center justify-center rounded-2xl bg-gradient-to-br">
+            <Gift className="text-primary/30 h-24 w-24" />
           </div>
         </div>
       </section>
@@ -118,18 +114,18 @@ export default function GutscheinePage() {
       <section className="container-wide">
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Configuration Form */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-8 lg:col-span-2">
             {/* Amount Selection */}
             <Card className="border-border/50">
               <CardHeader>
                 <CardTitle>1. Betrag wählen</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="mb-6 grid grid-cols-3 gap-3">
                   {presetAmounts.map((amount) => (
                     <button
                       key={amount.value}
-                      className="p-4 rounded-lg border border-border/50 hover:border-primary hover:bg-primary/5 transition-colors text-center"
+                      className="border-border/50 hover:border-primary hover:bg-primary/5 rounded-lg border p-4 text-center transition-colors"
                     >
                       <span className="text-lg font-semibold">{amount.label}</span>
                     </button>
@@ -148,7 +144,7 @@ export default function GutscheinePage() {
                       className="w-32"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground">Mindestbetrag CHF 25</p>
+                  <p className="text-muted-foreground text-xs">Mindestbetrag CHF 25</p>
                 </div>
               </CardContent>
             </Card>
@@ -163,17 +159,17 @@ export default function GutscheinePage() {
                   {deliveryOptions.map((option) => (
                     <label
                       key={option.id}
-                      className="flex items-start gap-4 p-4 rounded-lg border border-border/50 cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-colors"
+                      className="border-border/50 hover:border-primary/50 hover:bg-primary/5 flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-colors"
                     >
                       <RadioGroupItem value={option.id} className="mt-1" />
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
-                        <option.icon className="h-5 w-5 text-muted-foreground" />
+                      <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-lg">
+                        <option.icon className="text-muted-foreground h-5 w-5" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <span className="font-medium">{option.name}</span>
                           {option.price > 0 ? (
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-muted-foreground text-sm">
                               + CHF {(option.price / 100).toFixed(2)}
                             </span>
                           ) : (
@@ -182,9 +178,7 @@ export default function GutscheinePage() {
                             </Badge>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {option.description}
-                        </p>
+                        <p className="text-muted-foreground text-sm">{option.description}</p>
                       </div>
                     </label>
                   ))}
@@ -215,9 +209,7 @@ export default function GutscheinePage() {
                     placeholder="z.B. Alles Gute zum Geburtstag! Gönn dir etwas Schönes..."
                     rows={3}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Maximal 200 Zeichen
-                  </p>
+                  <p className="text-muted-foreground text-xs">Maximal 200 Zeichen</p>
                 </div>
               </CardContent>
             </Card>
@@ -231,17 +223,15 @@ export default function GutscheinePage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Preview */}
-                <div className="relative aspect-[3/2] bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center">
+                <div className="from-primary/10 to-primary/5 relative flex aspect-[3/2] items-center justify-center rounded-lg bg-gradient-to-br">
                   <div className="text-center">
-                    <Gift className="h-8 w-8 text-primary mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
-                      Vorschau
-                    </p>
+                    <Gift className="text-primary mx-auto mb-2 h-8 w-8" />
+                    <p className="text-muted-foreground text-sm">Vorschau</p>
                   </div>
                 </div>
 
                 {/* Summary */}
-                <div className="space-y-3 pt-4 border-t">
+                <div className="space-y-3 border-t pt-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Gutscheinwert</span>
                     <span>CHF 50.00</span>
@@ -250,21 +240,21 @@ export default function GutscheinePage() {
                     <span className="text-muted-foreground">Versand</span>
                     <span className="text-primary">Kostenlos</span>
                   </div>
-                  <div className="flex justify-between font-semibold text-lg pt-3 border-t">
+                  <div className="flex justify-between border-t pt-3 text-lg font-semibold">
                     <span>Gesamt</span>
                     <span className="text-primary">CHF 50.00</span>
                   </div>
                 </div>
 
                 {/* Buy Button */}
-                <Button className="w-full btn-glow" size="lg">
+                <Button className="btn-glow w-full" size="lg">
                   <ShoppingBag className="mr-2 h-4 w-4" />
                   In den Warenkorb
                 </Button>
 
                 {/* Trust Badges */}
-                <div className="text-center pt-4 border-t">
-                  <p className="text-xs text-muted-foreground">
+                <div className="border-t pt-4 text-center">
+                  <p className="text-muted-foreground text-xs">
                     Sichere Zahlung mit Karte oder TWINT
                   </p>
                 </div>
@@ -278,41 +268,35 @@ export default function GutscheinePage() {
       <section className="container-wide mt-16">
         <Card className="bg-muted/30 border-border/50">
           <CardContent className="p-8">
-            <h2 className="text-xl font-bold mb-6 text-center">
-              Häufige Fragen
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+            <h2 className="mb-6 text-center text-xl font-bold">Häufige Fragen</h2>
+            <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
               <div>
-                <h3 className="font-semibold mb-2">
-                  Wie lange ist der Gutschein gültig?
-                </h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="mb-2 font-semibold">Wie lange ist der Gutschein gültig?</h3>
+                <p className="text-muted-foreground text-sm">
                   Alle Gutscheine sind 2 Jahre ab Kaufdatum gültig.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">
+                <h3 className="mb-2 font-semibold">
                   Kann ich den Gutschein auch für Produkte einlösen?
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  Ja, der Gutschein ist für alle Leistungen und Produkte
-                  einlösbar.
+                <p className="text-muted-foreground text-sm">
+                  Ja, der Gutschein ist für alle Leistungen und Produkte einlösbar.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">
+                <h3 className="mb-2 font-semibold">
                   Was passiert, wenn der Gutscheinwert nicht aufgebraucht wird?
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  Das Restguthaben bleibt erhalten und kann beim nächsten Besuch
-                  eingelöst werden.
+                <p className="text-muted-foreground text-sm">
+                  Das Restguthaben bleibt erhalten und kann beim nächsten Besuch eingelöst werden.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">
+                <h3 className="mb-2 font-semibold">
                   Kann ich den Gutschein auch bar auszahlen lassen?
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Nein, eine Barauszahlung ist leider nicht möglich.
                 </p>
               </div>

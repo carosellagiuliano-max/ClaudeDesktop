@@ -123,15 +123,13 @@ interface AdminTeamViewProps {
 // CONSTANTS
 // ============================================
 
-const roleConfig: Record<
-  string,
-  { label: string; variant: 'default' | 'secondary' | 'outline' }
-> = {
-  admin: { label: 'Administrator', variant: 'default' },
-  manager: { label: 'Manager', variant: 'default' },
-  staff: { label: 'Mitarbeiter', variant: 'secondary' },
-  hq: { label: 'Hauptverwaltung', variant: 'outline' },
-};
+const roleConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'outline' }> =
+  {
+    admin: { label: 'Administrator', variant: 'default' },
+    manager: { label: 'Manager', variant: 'default' },
+    staff: { label: 'Mitarbeiter', variant: 'secondary' },
+    hq: { label: 'Hauptverwaltung', variant: 'outline' },
+  };
 
 const dayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 const shortDayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -188,7 +186,9 @@ export function AdminTeamView({
 
   // Working Hours Dialog
   const [hoursDialogOpen, setHoursDialogOpen] = useState(false);
-  const [editingHours, setEditingHours] = useState<Record<number, { start: string; end: string; active: boolean }>>({});
+  const [editingHours, setEditingHours] = useState<
+    Record<number, { start: string; end: string; active: boolean }>
+  >({});
 
   // Skills Dialog
   const [skillsDialogOpen, setSkillsDialogOpen] = useState(false);
@@ -233,7 +233,11 @@ export function AdminTeamView({
     for (let i = 0; i < 7; i++) {
       const dayHour = staffHours.find((h) => h.day_of_week === i);
       hoursMap[i] = dayHour
-        ? { start: dayHour.start_time.slice(0, 5), end: dayHour.end_time.slice(0, 5), active: dayHour.is_active }
+        ? {
+            start: dayHour.start_time.slice(0, 5),
+            end: dayHour.end_time.slice(0, 5),
+            active: dayHour.is_active,
+          }
         : { start: '09:00', end: '18:00', active: false };
     }
 
@@ -412,12 +416,10 @@ export function AdminTeamView({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">
-            {activeStaff.length} aktive Mitarbeiter
-          </p>
+          <p className="text-muted-foreground text-sm">{activeStaff.length} aktive Mitarbeiter</p>
         </div>
         <Button>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Mitarbeiter hinzufügen
         </Button>
       </div>
@@ -464,7 +466,7 @@ export function AdminTeamView({
                         <div>
                           <h3 className="font-medium">{member.display_name}</h3>
                           <Badge variant={role.variant} className="mt-1">
-                            <Shield className="h-3 w-3 mr-1" />
+                            <Shield className="mr-1 h-3 w-3" />
                             {role.label}
                           </Badge>
                         </div>
@@ -477,19 +479,19 @@ export function AdminTeamView({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
+                            <Edit className="mr-2 h-4 w-4" />
                             Bearbeiten
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => openHoursDialog(member)}>
-                            <Clock className="h-4 w-4 mr-2" />
+                            <Clock className="mr-2 h-4 w-4" />
                             Arbeitszeiten
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => openSkillsDialog(member)}>
-                            <Award className="h-4 w-4 mr-2" />
+                            <Award className="mr-2 h-4 w-4" />
                             Skills
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => openAbsenceDialog(member)}>
-                            <Calendar className="h-4 w-4 mr-2" />
+                            <Calendar className="mr-2 h-4 w-4" />
                             Abwesenheit
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
@@ -497,7 +499,7 @@ export function AdminTeamView({
                             onClick={() => handleDeleteClick(member)}
                             className="text-destructive"
                           >
-                            <Trash2 className="h-4 w-4 mr-2" />
+                            <Trash2 className="mr-2 h-4 w-4" />
                             Deaktivieren
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -508,7 +510,7 @@ export function AdminTeamView({
                       {member.email && (
                         <a
                           href={`mailto:${member.email}`}
-                          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                          className="text-muted-foreground hover:text-foreground flex items-center gap-2"
                         >
                           <Mail className="h-4 w-4" />
                           {member.email}
@@ -517,7 +519,7 @@ export function AdminTeamView({
                       {member.phone && (
                         <a
                           href={`tel:${member.phone}`}
-                          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                          className="text-muted-foreground hover:text-foreground flex items-center gap-2"
                         >
                           <Phone className="h-4 w-4" />
                           {member.phone}
@@ -526,7 +528,7 @@ export function AdminTeamView({
                     </div>
 
                     {/* Quick info */}
-                    <div className="mt-4 pt-4 border-t flex gap-4 text-xs text-muted-foreground">
+                    <div className="text-muted-foreground mt-4 flex gap-4 border-t pt-4 text-xs">
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {memberHours.filter((h) => h.is_active).length} Tage
@@ -545,7 +547,7 @@ export function AdminTeamView({
           {/* Inactive Staff */}
           {inactiveStaff.length > 0 && (
             <div className="mt-8 space-y-4">
-              <h3 className="text-lg font-medium text-muted-foreground">
+              <h3 className="text-muted-foreground text-lg font-medium">
                 Inaktive Mitarbeiter ({inactiveStaff.length})
               </h3>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -554,13 +556,13 @@ export function AdminTeamView({
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10 bg-muted">
+                          <Avatar className="bg-muted h-10 w-10">
                             <AvatarFallback className="bg-muted text-muted-foreground">
                               {getInitials(member.display_name)}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <h3 className="font-medium text-muted-foreground">
+                            <h3 className="text-muted-foreground font-medium">
                               {member.display_name}
                             </h3>
                             <Badge variant="outline" className="mt-1">
@@ -568,11 +570,7 @@ export function AdminTeamView({
                             </Badge>
                           </div>
                         </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleActivate(member)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => handleActivate(member)}>
                           Aktivieren
                         </Button>
                       </div>
@@ -592,7 +590,7 @@ export function AdminTeamView({
             </CardHeader>
             <CardContent>
               {absences.length === 0 ? (
-                <p className="text-center py-8 text-muted-foreground">
+                <p className="text-muted-foreground py-8 text-center">
                   Keine geplanten Abwesenheiten
                 </p>
               ) : (
@@ -610,16 +608,17 @@ export function AdminTeamView({
                   <TableBody>
                     {absences.map((absence) => {
                       const staffMember = staff.find((s) => s.id === absence.staff_id);
-                      const type = absenceTypes[absence.absence_type] || { label: absence.absence_type, color: 'bg-gray-500' };
+                      const type = absenceTypes[absence.absence_type] || {
+                        label: absence.absence_type,
+                        color: 'bg-gray-500',
+                      };
                       return (
                         <TableRow key={absence.id}>
                           <TableCell className="font-medium">
                             {staffMember?.display_name || 'Unbekannt'}
                           </TableCell>
                           <TableCell>
-                            <Badge className={`${type.color} text-white`}>
-                              {type.label}
-                            </Badge>
+                            <Badge className={`${type.color} text-white`}>{type.label}</Badge>
                           </TableCell>
                           <TableCell>{formatDate(absence.start_date)}</TableCell>
                           <TableCell>{formatDate(absence.end_date)}</TableCell>
@@ -654,9 +653,9 @@ export function AdminTeamView({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="sticky left-0 bg-background">Mitarbeiter</TableHead>
+                      <TableHead className="bg-background sticky left-0">Mitarbeiter</TableHead>
                       {services.map((service) => (
-                        <TableHead key={service.id} className="text-center min-w-[100px]">
+                        <TableHead key={service.id} className="min-w-[100px] text-center">
                           {service.name}
                         </TableHead>
                       ))}
@@ -667,7 +666,7 @@ export function AdminTeamView({
                       const memberSkills = getStaffSkills(member.id);
                       return (
                         <TableRow key={member.id}>
-                          <TableCell className="sticky left-0 bg-background font-medium">
+                          <TableCell className="bg-background sticky left-0 font-medium">
                             {member.display_name}
                           </TableCell>
                           {services.map((service) => {
@@ -676,7 +675,7 @@ export function AdminTeamView({
                             return (
                               <TableCell key={service.id} className="text-center">
                                 {level ? (
-                                  <Badge className={`${level.color} text-white text-xs`}>
+                                  <Badge className={`${level.color} text-xs text-white`}>
                                     {level.label}
                                   </Badge>
                                 ) : (
@@ -702,8 +701,8 @@ export function AdminTeamView({
           <DialogHeader>
             <DialogTitle>Mitarbeiter deaktivieren</DialogTitle>
             <DialogDescription>
-              Sind Sie sicher, dass Sie {selectedMember?.display_name} deaktivieren
-              möchten? Der Mitarbeiter hat keinen Zugriff mehr auf das System.
+              Sind Sie sicher, dass Sie {selectedMember?.display_name} deaktivieren möchten? Der
+              Mitarbeiter hat keinen Zugriff mehr auf das System.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -722,9 +721,7 @@ export function AdminTeamView({
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Arbeitszeiten - {selectedMember?.display_name}</DialogTitle>
-            <DialogDescription>
-              Definieren Sie die regelmässigen Arbeitszeiten
-            </DialogDescription>
+            <DialogDescription>Definieren Sie die regelmässigen Arbeitszeiten</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             {[1, 2, 3, 4, 5, 6, 0].map((day) => (
@@ -794,7 +791,7 @@ export function AdminTeamView({
               Wählen Sie die Dienstleistungen und Kompetenz-Level
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4 max-h-96 overflow-y-auto">
+          <div className="max-h-96 space-y-4 overflow-y-auto py-4">
             {services.map((service) => (
               <div key={service.id} className="flex items-center justify-between gap-4">
                 <span className="font-medium">{service.name}</span>
@@ -833,18 +830,14 @@ export function AdminTeamView({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Abwesenheit - {selectedMember?.display_name}</DialogTitle>
-            <DialogDescription>
-              Erfassen Sie eine neue Abwesenheit
-            </DialogDescription>
+            <DialogDescription>Erfassen Sie eine neue Abwesenheit</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="absenceType">Art der Abwesenheit</Label>
               <Select
                 value={newAbsence.type}
-                onValueChange={(value) =>
-                  setNewAbsence({ ...newAbsence, type: value })
-                }
+                onValueChange={(value) => setNewAbsence({ ...newAbsence, type: value })}
               >
                 <SelectTrigger id="absenceType">
                   <SelectValue />
@@ -865,9 +858,7 @@ export function AdminTeamView({
                   id="startDate"
                   type="date"
                   value={newAbsence.startDate}
-                  onChange={(e) =>
-                    setNewAbsence({ ...newAbsence, startDate: e.target.value })
-                  }
+                  onChange={(e) => setNewAbsence({ ...newAbsence, startDate: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -876,9 +867,7 @@ export function AdminTeamView({
                   id="endDate"
                   type="date"
                   value={newAbsence.endDate}
-                  onChange={(e) =>
-                    setNewAbsence({ ...newAbsence, endDate: e.target.value })
-                  }
+                  onChange={(e) => setNewAbsence({ ...newAbsence, endDate: e.target.value })}
                 />
               </div>
             </div>
@@ -887,9 +876,7 @@ export function AdminTeamView({
               <Input
                 id="notes"
                 value={newAbsence.notes}
-                onChange={(e) =>
-                  setNewAbsence({ ...newAbsence, notes: e.target.value })
-                }
+                onChange={(e) => setNewAbsence({ ...newAbsence, notes: e.target.value })}
                 placeholder="z.B. Grund, Vertretung..."
               />
             </div>

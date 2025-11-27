@@ -3,13 +3,7 @@
 import Link from 'next/link';
 import { ShoppingBag, X, ArrowRight, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/contexts/cart-context';
@@ -21,15 +15,7 @@ import { CartSummary } from './cart-summary';
 // ============================================
 
 export function CartDrawer() {
-  const {
-    cart,
-    isOpen,
-    closeCart,
-    isEmpty,
-    itemCount,
-    clear,
-    formatPrice,
-  } = useCart();
+  const { cart, isOpen, closeCart, isEmpty, itemCount, clear, formatPrice } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -39,7 +25,7 @@ export function CartDrawer() {
             <ShoppingBag className="h-5 w-5" />
             Warenkorb
             {itemCount > 0 && (
-              <span className="ml-2 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+              <span className="bg-primary text-primary-foreground ml-2 rounded-full px-2 py-0.5 text-xs">
                 {itemCount}
               </span>
             )}
@@ -49,12 +35,12 @@ export function CartDrawer() {
         {isEmpty ? (
           // Empty State
           <div className="flex flex-1 flex-col items-center justify-center space-y-4 py-12">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-              <ShoppingBag className="h-10 w-10 text-muted-foreground" />
+            <div className="bg-muted flex h-20 w-20 items-center justify-center rounded-full">
+              <ShoppingBag className="text-muted-foreground h-10 w-10" />
             </div>
             <div className="text-center">
               <h3 className="font-semibold">Ihr Warenkorb ist leer</h3>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-sm">
                 Entdecken Sie unsere Produkte und Gutscheine.
               </p>
             </div>
@@ -84,7 +70,7 @@ export function CartDrawer() {
                 className="text-muted-foreground hover:text-destructive"
                 onClick={clear}
               >
-                <Trash2 className="h-4 w-4 mr-2" />
+                <Trash2 className="mr-2 h-4 w-4" />
                 Warenkorb leeren
               </Button>
             </div>
@@ -102,12 +88,7 @@ export function CartDrawer() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full"
-                onClick={closeCart}
-              >
+              <Button variant="outline" size="lg" className="w-full" onClick={closeCart}>
                 Weiter einkaufen
               </Button>
             </SheetFooter>
@@ -135,7 +116,7 @@ export function CartButton() {
     >
       <ShoppingBag className="h-5 w-5" />
       {itemCount > 0 && (
-        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
+        <span className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-medium">
           {itemCount > 9 ? '9+' : itemCount}
         </span>
       )}

@@ -23,10 +23,7 @@ interface LoyaltyAccount {
 // POST - Adjust Loyalty Points
 // ============================================
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: customerId } = await params;
     const supabase = await createServerClient();
@@ -41,17 +38,14 @@ export async function POST(
     }
 
     // Check staff role
-    const { data: staffMember } = await supabase
+    const { data: staffMember } = (await supabase
       .from('staff')
       .select('id, role, salon_id')
       .eq('user_id', user.id)
-      .single() as { data: StaffMember | null };
+      .single()) as { data: StaffMember | null };
 
     if (!staffMember || !['admin', 'manager', 'hq'].includes(staffMember.role)) {
-      return NextResponse.json(
-        { error: 'Keine Berechtigung für diese Aktion' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Keine Berechtigung für diese Aktion' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -66,16 +60,16 @@ export async function POST(
     }
 
     // Get or create loyalty account
-    let { data: loyaltyAccount } = await supabase
+    let { data: loyaltyAccount } = (await supabase
       .from('loyalty_accounts')
       .select('id, points_balance')
       .eq('customer_id', customerId)
-      .single() as { data: LoyaltyAccount | null };
+      .single()) as { data: LoyaltyAccount | null };
 
     if (!loyaltyAccount) {
       // Create new loyalty account
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: newAccount, error: createError } = await (supabase as any)
+      const { data: newAccount, error: createError } = (await (supabase as any)
         .from('loyalty_accounts')
         .insert({
           customer_id: customerId,
@@ -85,7 +79,7 @@ export async function POST(
           total_points_earned: 0,
         })
         .select('id, points_balance')
-        .single() as { data: LoyaltyAccount | null; error: unknown };
+        .single()) as { data: LoyaltyAccount | null; error: unknown };
 
       if (createError) {
         console.error('Loyalty account creation error:', createError);
@@ -99,10 +93,7 @@ export async function POST(
     const newBalance = (loyaltyAccount.points_balance || 0) + points;
 
     if (newBalance < 0) {
-      return NextResponse.json(
-        { error: 'Nicht genügend Punkte vorhanden' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Nicht genügend Punkte vorhanden' }, { status: 400 });
     }
 
     // Create transaction record
@@ -133,11 +124,11 @@ export async function POST(
     // If adding points, also update total_points_earned
     if (points > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: currentAccount } = await (supabase as any)
+      const { data: currentAccount } = (await (supabase as any)
         .from('loyalty_accounts')
         .select('total_points_earned')
         .eq('id', loyaltyAccount.id)
-        .single() as { data: { total_points_earned: number } | null };
+        .single()) as { data: { total_points_earned: number } | null };
 
       updateData.total_points_earned = (currentAccount?.total_points_earned || 0) + points;
     }
@@ -171,10 +162,7 @@ export async function POST(
 // GET - Get Loyalty History
 // ============================================
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: customerId } = await params;
     const supabase = await createServerClient();
@@ -247,11 +235,11 @@ async function checkTierUpgrade(
 
   // Get current tier
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: account } = await (supabase as any)
+  const { data: account } = (await (supabase as any)
     .from('loyalty_accounts')
     .select('tier')
     .eq('id', accountId)
-    .single() as { data: { tier: string } | null };
+    .single()) as { data: { tier: string } | null };
 
   if (account && account.tier !== newTier) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

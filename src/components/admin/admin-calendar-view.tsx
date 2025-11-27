@@ -172,14 +172,11 @@ function getAppointmentHeight(startTime: string, endTime: string): number {
 export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('week');
-  const [selectedStaff, setSelectedStaff] = useState<string[]>(
-    staff.map((s) => s.id)
-  );
+  const [selectedStaff, setSelectedStaff] = useState<string[]>(staff.map((s) => s.id));
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [staffBlocks, setStaffBlocks] = useState<StaffBlock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedAppointment, setSelectedAppointment] =
-    useState<Appointment | null>(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Staff Block Dialog
@@ -216,13 +213,15 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
     time: '09:00',
     notes: '',
   });
-  const [customerResults, setCustomerResults] = useState<Array<{
-    id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string | null;
-  }>>([]);
+  const [customerResults, setCustomerResults] = useState<
+    Array<{
+      id: string;
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string | null;
+    }>
+  >([]);
   const [isSearching, setIsSearching] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -365,9 +364,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
   // Toggle staff filter
   const toggleStaffFilter = (staffId: string) => {
     setSelectedStaff((prev) =>
-      prev.includes(staffId)
-        ? prev.filter((id) => id !== staffId)
-        : [...prev, staffId]
+      prev.includes(staffId) ? prev.filter((id) => id !== staffId) : [...prev, staffId]
     );
   };
 
@@ -559,7 +556,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
   };
 
   // Select customer from search results
-  const selectCustomer = (customer: typeof customerResults[0]) => {
+  const selectCustomer = (customer: (typeof customerResults)[0]) => {
     setNewAppointmentForm({
       ...newAppointmentForm,
       customerId: customer.id,
@@ -685,7 +682,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
           <Button variant="outline" size="icon" onClick={goNext}>
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <h2 className="text-lg font-semibold ml-2">
+          <h2 className="ml-2 text-lg font-semibold">
             {viewMode === 'week'
               ? `${format(weekDays[0], 'd. MMM', { locale: de })} - ${format(weekDays[6], 'd. MMM yyyy', { locale: de })}`
               : format(currentDate, 'EEEE, d. MMMM yyyy', { locale: de })}
@@ -693,10 +690,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Select
-            value={viewMode}
-            onValueChange={(value) => setViewMode(value as ViewMode)}
-          >
+          <Select value={viewMode} onValueChange={(value) => setViewMode(value as ViewMode)}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -706,21 +700,17 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
             </SelectContent>
           </Select>
 
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIsFilterOpen(true)}
-          >
+          <Button variant="outline" size="icon" onClick={() => setIsFilterOpen(true)}>
             <Filter className="h-4 w-4" />
           </Button>
 
           <Button variant="outline" onClick={() => openBlockDialog()}>
-            <Ban className="h-4 w-4 mr-2" />
+            <Ban className="mr-2 h-4 w-4" />
             Zeitblock
           </Button>
 
           <Button onClick={() => openNewAppointmentDialog()}>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Neuer Termin
           </Button>
         </div>
@@ -730,56 +720,48 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center h-96">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <div className="flex h-96 items-center justify-center">
+              <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
             </div>
           ) : (
             <div className="overflow-auto">
               <div className="min-w-[800px]">
                 {/* Header with days */}
                 <div className="grid grid-cols-[60px_1fr] border-b">
-                  <div className="p-2 border-r" />
-                  <div
-                    className={cn(
-                      'grid',
-                      viewMode === 'week' ? 'grid-cols-7' : 'grid-cols-1'
-                    )}
-                  >
-                    {(viewMode === 'week' ? weekDays : [currentDate]).map(
-                      (day) => (
+                  <div className="border-r p-2" />
+                  <div className={cn('grid', viewMode === 'week' ? 'grid-cols-7' : 'grid-cols-1')}>
+                    {(viewMode === 'week' ? weekDays : [currentDate]).map((day) => (
+                      <div
+                        key={day.toISOString()}
+                        className={cn(
+                          'border-r p-2 text-center last:border-r-0',
+                          isSameDay(day, new Date()) && 'bg-primary/5'
+                        )}
+                      >
+                        <div className="text-muted-foreground text-sm">
+                          {format(day, 'EEE', { locale: de })}
+                        </div>
                         <div
-                          key={day.toISOString()}
                           className={cn(
-                            'p-2 text-center border-r last:border-r-0',
-                            isSameDay(day, new Date()) && 'bg-primary/5'
+                            'text-lg font-semibold',
+                            isSameDay(day, new Date()) && 'text-primary'
                           )}
                         >
-                          <div className="text-sm text-muted-foreground">
-                            {format(day, 'EEE', { locale: de })}
-                          </div>
-                          <div
-                            className={cn(
-                              'text-lg font-semibold',
-                              isSameDay(day, new Date()) &&
-                                'text-primary'
-                            )}
-                          >
-                            {format(day, 'd')}
-                          </div>
+                          {format(day, 'd')}
                         </div>
-                      )
-                    )}
+                      </div>
+                    ))}
                   </div>
                 </div>
 
                 {/* Time grid */}
-                <div className="grid grid-cols-[60px_1fr] relative">
+                <div className="relative grid grid-cols-[60px_1fr]">
                   {/* Time labels */}
                   <div className="border-r">
                     {HOURS.map((hour) => (
                       <div
                         key={hour}
-                        className="h-[60px] border-b text-xs text-muted-foreground p-1"
+                        className="text-muted-foreground h-[60px] border-b p-1 text-xs"
                       >
                         {hour}:00
                       </div>
@@ -789,100 +771,83 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                   {/* Appointment columns */}
                   <div
                     className={cn(
-                      'grid relative',
+                      'relative grid',
                       viewMode === 'week' ? 'grid-cols-7' : 'grid-cols-1'
                     )}
                   >
-                    {(viewMode === 'week' ? weekDays : [currentDate]).map(
-                      (day) => (
-                        <div
-                          key={day.toISOString()}
-                          className="border-r last:border-r-0 relative"
-                        >
-                          {/* Hour lines */}
-                          {HOURS.map((hour) => (
+                    {(viewMode === 'week' ? weekDays : [currentDate]).map((day) => (
+                      <div key={day.toISOString()} className="relative border-r last:border-r-0">
+                        {/* Hour lines */}
+                        {HOURS.map((hour) => (
+                          <div key={hour} className="h-[60px] border-b border-dashed" />
+                        ))}
+
+                        {/* Staff Blocks */}
+                        {getBlocksForDay(day).map((block) => {
+                          const top = getAppointmentTop(block.start_time);
+                          const height = getAppointmentHeight(block.start_time, block.end_time);
+
+                          return (
                             <div
-                              key={hour}
-                              className="h-[60px] border-b border-dashed"
-                            />
-                          ))}
-
-                          {/* Staff Blocks */}
-                          {getBlocksForDay(day).map((block) => {
-                            const top = getAppointmentTop(block.start_time);
-                            const height = getAppointmentHeight(
-                              block.start_time,
-                              block.end_time
-                            );
-
-                            return (
-                              <div
-                                key={block.id}
-                                className="absolute left-1 right-1 rounded-md p-1 overflow-hidden bg-gray-400/80 text-white text-xs border-2 border-dashed border-gray-500 group"
-                                style={{
-                                  top: `${top}px`,
-                                  height: `${Math.max(height, 20)}px`,
-                                }}
-                              >
-                                <div className="flex items-center gap-1">
-                                  <Ban className="h-3 w-3 flex-shrink-0" />
-                                  <span className="truncate">{block.reason}</span>
-                                  <button
-                                    onClick={() => handleDeleteBlock(block.id)}
-                                    className="ml-auto opacity-0 group-hover:opacity-100 hover:bg-white/20 rounded p-0.5 transition-opacity"
-                                  >
-                                    <X className="h-3 w-3" />
-                                  </button>
-                                </div>
-                                {height >= 40 && block.staff && (
-                                  <div className="truncate opacity-80">
-                                    {block.staff.display_name}
-                                  </div>
-                                )}
+                              key={block.id}
+                              className="group absolute right-1 left-1 overflow-hidden rounded-md border-2 border-dashed border-gray-500 bg-gray-400/80 p-1 text-xs text-white"
+                              style={{
+                                top: `${top}px`,
+                                height: `${Math.max(height, 20)}px`,
+                              }}
+                            >
+                              <div className="flex items-center gap-1">
+                                <Ban className="h-3 w-3 flex-shrink-0" />
+                                <span className="truncate">{block.reason}</span>
+                                <button
+                                  onClick={() => handleDeleteBlock(block.id)}
+                                  className="ml-auto rounded p-0.5 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white/20"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
                               </div>
-                            );
-                          })}
-
-                          {/* Appointments */}
-                          {getAppointmentsForDay(day).map((apt) => {
-                            const top = getAppointmentTop(apt.start_time);
-                            const height = getAppointmentHeight(
-                              apt.start_time,
-                              apt.end_time
-                            );
-                            const staffColor =
-                              apt.staff?.color || 'hsl(var(--primary))';
-
-                            return (
-                              <button
-                                key={apt.id}
-                                onClick={() => setSelectedAppointment(apt)}
-                                className={cn(
-                                  'absolute left-1 right-1 rounded-md p-1 text-left overflow-hidden transition-opacity hover:opacity-90',
-                                  'text-white text-xs'
-                                )}
-                                style={{
-                                  top: `${top}px`,
-                                  height: `${Math.max(height, 20)}px`,
-                                  backgroundColor: staffColor,
-                                }}
-                              >
-                                <div className="font-medium truncate">
-                                  {apt.customer
-                                    ? `${apt.customer.first_name} ${apt.customer.last_name}`
-                                    : 'Unbekannt'}
+                              {height >= 40 && block.staff && (
+                                <div className="truncate opacity-80">
+                                  {block.staff.display_name}
                                 </div>
-                                {height >= 40 && (
-                                  <div className="truncate opacity-90">
-                                    {apt.service?.name}
-                                  </div>
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )
-                    )}
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {/* Appointments */}
+                        {getAppointmentsForDay(day).map((apt) => {
+                          const top = getAppointmentTop(apt.start_time);
+                          const height = getAppointmentHeight(apt.start_time, apt.end_time);
+                          const staffColor = apt.staff?.color || 'hsl(var(--primary))';
+
+                          return (
+                            <button
+                              key={apt.id}
+                              onClick={() => setSelectedAppointment(apt)}
+                              className={cn(
+                                'absolute right-1 left-1 overflow-hidden rounded-md p-1 text-left transition-opacity hover:opacity-90',
+                                'text-xs text-white'
+                              )}
+                              style={{
+                                top: `${top}px`,
+                                height: `${Math.max(height, 20)}px`,
+                                backgroundColor: staffColor,
+                              }}
+                            >
+                              <div className="truncate font-medium">
+                                {apt.customer
+                                  ? `${apt.customer.first_name} ${apt.customer.last_name}`
+                                  : 'Unbekannt'}
+                              </div>
+                              {height >= 40 && (
+                                <div className="truncate opacity-90">{apt.service?.name}</div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -906,11 +871,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
               >
                 Alle auswählen
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSelectedStaff([])}
-              >
+              <Button variant="ghost" size="sm" onClick={() => setSelectedStaff([])}>
                 Keine auswählen
               </Button>
             </div>
@@ -922,15 +883,11 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                     checked={selectedStaff.includes(member.id)}
                     onCheckedChange={() => toggleStaffFilter(member.id)}
                   />
-                  <Label
-                    htmlFor={member.id}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
+                  <Label htmlFor={member.id} className="flex cursor-pointer items-center gap-2">
                     <div
-                      className="w-3 h-3 rounded-full"
+                      className="h-3 w-3 rounded-full"
                       style={{
-                        backgroundColor:
-                          member.color || 'hsl(var(--primary))',
+                        backgroundColor: member.color || 'hsl(var(--primary))',
                       }}
                     />
                     {member.display_name}
@@ -943,10 +900,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
       </Dialog>
 
       {/* Appointment Detail Dialog */}
-      <Dialog
-        open={!!selectedAppointment}
-        onOpenChange={() => setSelectedAppointment(null)}
-      >
+      <Dialog open={!!selectedAppointment} onOpenChange={() => setSelectedAppointment(null)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Termindetails</DialogTitle>
@@ -957,7 +911,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
               <div className="space-y-2">
                 <h4 className="font-medium">Kunde</h4>
                 <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
+                  <User className="text-muted-foreground h-4 w-4" />
                   <span>
                     {selectedAppointment.customer
                       ? `${selectedAppointment.customer.first_name} ${selectedAppointment.customer.last_name}`
@@ -966,7 +920,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 </div>
                 {selectedAppointment.customer?.email && (
                   <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <Mail className="text-muted-foreground h-4 w-4" />
                     <a
                       href={`mailto:${selectedAppointment.customer.email}`}
                       className="text-primary hover:underline"
@@ -977,7 +931,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 )}
                 {selectedAppointment.customer?.phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <Phone className="text-muted-foreground h-4 w-4" />
                     <a
                       href={`tel:${selectedAppointment.customer.phone}`}
                       className="text-primary hover:underline"
@@ -992,17 +946,15 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
               <div className="space-y-2">
                 <h4 className="font-medium">Termin</h4>
                 <div className="flex items-center gap-2">
-                  <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                  <CalendarIcon className="text-muted-foreground h-4 w-4" />
                   <span>
-                    {format(
-                      parseISO(selectedAppointment.start_time),
-                      'EEEE, d. MMMM yyyy',
-                      { locale: de }
-                    )}
+                    {format(parseISO(selectedAppointment.start_time), 'EEEE, d. MMMM yyyy', {
+                      locale: de,
+                    })}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <Clock className="text-muted-foreground h-4 w-4" />
                   <span>
                     {format(parseISO(selectedAppointment.start_time), 'HH:mm')} -{' '}
                     {format(parseISO(selectedAppointment.end_time), 'HH:mm')} Uhr
@@ -1020,7 +972,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 <div className="space-y-2">
                   <h4 className="font-medium">Leistung</h4>
                   <p>{selectedAppointment.service.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {selectedAppointment.service.duration_minutes} Minuten
                   </p>
                 </div>
@@ -1032,11 +984,9 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                   <h4 className="font-medium">Mitarbeiter</h4>
                   <div className="flex items-center gap-2">
                     <div
-                      className="w-3 h-3 rounded-full"
+                      className="h-3 w-3 rounded-full"
                       style={{
-                        backgroundColor:
-                          selectedAppointment.staff.color ||
-                          'hsl(var(--primary))',
+                        backgroundColor: selectedAppointment.staff.color || 'hsl(var(--primary))',
                       }}
                     />
                     <span>{selectedAppointment.staff.display_name}</span>
@@ -1048,38 +998,24 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
               {selectedAppointment.notes && (
                 <div className="space-y-2">
                   <h4 className="font-medium">Notizen</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedAppointment.notes}
-                  </p>
+                  <p className="text-muted-foreground text-sm">{selectedAppointment.notes}</p>
                 </div>
               )}
 
               {/* Actions */}
-              <div className="flex gap-2 pt-4 border-t">
+              <div className="flex gap-2 border-t pt-4">
                 {selectedAppointment.status === 'pending' && (
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={handleConfirmAppointment}
-                  >
-                    <Check className="h-4 w-4 mr-2" />
+                  <Button variant="outline" className="flex-1" onClick={handleConfirmAppointment}>
+                    <Check className="mr-2 h-4 w-4" />
                     Bestätigen
                   </Button>
                 )}
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={openRescheduleDialog}
-                >
-                  <RefreshCw className="h-4 w-4 mr-2" />
+                <Button variant="outline" className="flex-1" onClick={openRescheduleDialog}>
+                  <RefreshCw className="mr-2 h-4 w-4" />
                   Verschieben
                 </Button>
-                <Button
-                  variant="destructive"
-                  className="flex-1"
-                  onClick={handleCancelAppointment}
-                >
-                  <X className="h-4 w-4 mr-2" />
+                <Button variant="destructive" className="flex-1" onClick={handleCancelAppointment}>
+                  <X className="mr-2 h-4 w-4" />
                   Stornieren
                 </Button>
               </div>
@@ -1102,9 +1038,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
               <Label htmlFor="blockStaff">Mitarbeiter</Label>
               <Select
                 value={blockForm.staffId}
-                onValueChange={(value) =>
-                  setBlockForm({ ...blockForm, staffId: value })
-                }
+                onValueChange={(value) => setBlockForm({ ...blockForm, staffId: value })}
               >
                 <SelectTrigger id="blockStaff">
                   <SelectValue placeholder="Mitarbeiter wählen" />
@@ -1124,9 +1058,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 id="blockDate"
                 type="date"
                 value={blockForm.date}
-                onChange={(e) =>
-                  setBlockForm({ ...blockForm, date: e.target.value })
-                }
+                onChange={(e) => setBlockForm({ ...blockForm, date: e.target.value })}
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -1147,9 +1079,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                     id="blockStart"
                     type="time"
                     value={blockForm.startTime}
-                    onChange={(e) =>
-                      setBlockForm({ ...blockForm, startTime: e.target.value })
-                    }
+                    onChange={(e) => setBlockForm({ ...blockForm, startTime: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -1158,9 +1088,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                     id="blockEnd"
                     type="time"
                     value={blockForm.endTime}
-                    onChange={(e) =>
-                      setBlockForm({ ...blockForm, endTime: e.target.value })
-                    }
+                    onChange={(e) => setBlockForm({ ...blockForm, endTime: e.target.value })}
                   />
                 </div>
               </div>
@@ -1171,9 +1099,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 id="blockReason"
                 placeholder="z.B. Urlaub, Krankheit, Weiterbildung..."
                 value={blockForm.reason}
-                onChange={(e) =>
-                  setBlockForm({ ...blockForm, reason: e.target.value })
-                }
+                onChange={(e) => setBlockForm({ ...blockForm, reason: e.target.value })}
               />
             </div>
           </div>
@@ -1204,9 +1130,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 id="newDate"
                 type="date"
                 value={rescheduleForm.newDate}
-                onChange={(e) =>
-                  setRescheduleForm({ ...rescheduleForm, newDate: e.target.value })
-                }
+                onChange={(e) => setRescheduleForm({ ...rescheduleForm, newDate: e.target.value })}
               />
             </div>
             <div className="space-y-2">
@@ -1215,9 +1139,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                 id="newTime"
                 type="time"
                 value={rescheduleForm.newTime}
-                onChange={(e) =>
-                  setRescheduleForm({ ...rescheduleForm, newTime: e.target.value })
-                }
+                onChange={(e) => setRescheduleForm({ ...rescheduleForm, newTime: e.target.value })}
               />
             </div>
             <div className="space-y-2">
@@ -1254,12 +1176,10 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
 
       {/* New Appointment Dialog (Offline Booking) */}
       <Dialog open={isNewAppointmentOpen} onOpenChange={setIsNewAppointmentOpen}>
-        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Neuer Termin</DialogTitle>
-            <DialogDescription>
-              Erstellen Sie einen Termin für einen Kunden
-            </DialogDescription>
+            <DialogDescription>Erstellen Sie einen Termin für einen Kunden</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             {/* Customer Selection */}
@@ -1281,32 +1201,32 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                       }}
                     />
                     {isSearching && (
-                      <Loader2 className="absolute right-3 top-3 h-4 w-4 animate-spin" />
+                      <Loader2 className="absolute top-3 right-3 h-4 w-4 animate-spin" />
                     )}
                   </div>
                   {customerResults.length > 0 && (
-                    <div className="border rounded-md divide-y">
+                    <div className="divide-y rounded-md border">
                       {customerResults.map((customer) => (
                         <button
                           key={customer.id}
                           type="button"
-                          className="w-full px-3 py-2 text-left hover:bg-muted text-sm"
+                          className="hover:bg-muted w-full px-3 py-2 text-left text-sm"
                           onClick={() => selectCustomer(customer)}
                         >
                           <div className="font-medium">
                             {customer.first_name} {customer.last_name}
                           </div>
-                          <div className="text-muted-foreground text-xs">
-                            {customer.email}
-                          </div>
+                          <div className="text-muted-foreground text-xs">{customer.email}</div>
                         </button>
                       ))}
                     </div>
                   )}
                   {newAppointmentForm.customerId && (
-                    <div className="p-2 bg-muted rounded-md text-sm">
+                    <div className="bg-muted rounded-md p-2 text-sm">
                       <div className="font-medium">{newAppointmentForm.customerName}</div>
-                      <div className="text-muted-foreground">{newAppointmentForm.customerEmail}</div>
+                      <div className="text-muted-foreground">
+                        {newAppointmentForm.customerEmail}
+                      </div>
                     </div>
                   )}
                   <Button
@@ -1322,12 +1242,12 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                       })
                     }
                   >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Neuen Kunden anlegen
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-3 p-3 border rounded-md">
+                <div className="space-y-3 rounded-md border p-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Neuer Kunde</span>
                     <Button
@@ -1426,7 +1346,7 @@ export function AdminCalendarView({ staff, services }: AdminCalendarViewProps) {
                       <SelectItem key={s.id} value={s.id}>
                         <div className="flex items-center gap-2">
                           <div
-                            className="w-3 h-3 rounded-full"
+                            className="h-3 w-3 rounded-full"
                             style={{ backgroundColor: s.color || 'hsl(var(--primary))' }}
                           />
                           {s.display_name}

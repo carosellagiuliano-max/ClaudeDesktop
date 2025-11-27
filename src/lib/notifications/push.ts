@@ -320,13 +320,9 @@ export class PushService {
       keys: subscription.keys,
     };
 
-    await webpush.sendNotification(
-      pushSubscription,
-      JSON.stringify(payload),
-      {
-        TTL: 86400, // 24 hours
-      }
-    );
+    await webpush.sendNotification(pushSubscription, JSON.stringify(payload), {
+      TTL: 86400, // 24 hours
+    });
   }
 
   private async updateLastUsed(subscriptionId: string): Promise<void> {

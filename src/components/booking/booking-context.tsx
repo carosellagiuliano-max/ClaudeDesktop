@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  useContext,
-  useReducer,
-  useCallback,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react';
 import type {
   BookableService,
   BookableStaff,
@@ -100,9 +94,7 @@ function bookingReducer(state: BookingState, action: BookingAction): BookingStat
     case 'REMOVE_SERVICE':
       return {
         ...state,
-        selectedServices: state.selectedServices.filter(
-          (s) => s.id !== action.payload
-        ),
+        selectedServices: state.selectedServices.filter((s) => s.id !== action.payload),
       };
 
     case 'SET_SERVICES':
@@ -261,12 +253,9 @@ export function BookingProvider({ children, salonId }: BookingProviderProps) {
   }, []);
 
   // Customer
-  const updateCustomerInfo = useCallback(
-    (info: Partial<BookingState['customerInfo']>) => {
-      dispatch({ type: 'UPDATE_CUSTOMER_INFO', payload: info });
-    },
-    []
-  );
+  const updateCustomerInfo = useCallback((info: Partial<BookingState['customerInfo']>) => {
+    dispatch({ type: 'UPDATE_CUSTOMER_INFO', payload: info });
+  }, []);
 
   const setPaymentMethod = useCallback((method: 'online' | 'at_venue') => {
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method });
@@ -286,15 +275,9 @@ export function BookingProvider({ children, salonId }: BookingProviderProps) {
   }, []);
 
   // Computed values
-  const totalDuration = state.selectedServices.reduce(
-    (sum, s) => sum + s.durationMinutes,
-    0
-  );
+  const totalDuration = state.selectedServices.reduce((sum, s) => sum + s.durationMinutes, 0);
 
-  const totalPrice = state.selectedServices.reduce(
-    (sum, s) => sum + s.currentPrice,
-    0
-  );
+  const totalPrice = state.selectedServices.reduce((sum, s) => sum + s.currentPrice, 0);
 
   const canProceed = (() => {
     switch (state.currentStep) {
@@ -338,9 +321,7 @@ export function BookingProvider({ children, salonId }: BookingProviderProps) {
     canProceed,
   };
 
-  return (
-    <BookingContext.Provider value={value}>{children}</BookingContext.Provider>
-  );
+  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
 }
 
 // ============================================

@@ -90,9 +90,8 @@ export function addItemToCart(
     );
   } else {
     // Add new item
-    const unitPrice = input.type === 'voucher' && input.voucherValue
-      ? input.voucherValue
-      : productData.priceCents;
+    const unitPrice =
+      input.type === 'voucher' && input.voucherValue ? input.voucherValue : productData.priceCents;
 
     const newItem: CartItem = {
       id: generateItemId(),
@@ -279,7 +278,7 @@ export function calculateTotals(
 
   // VAT (8.1% in Switzerland) - already included in prices
   // For display purposes, we calculate the included VAT
-  const taxCents = Math.round(taxableAmount * 0.081 / 1.081);
+  const taxCents = Math.round((taxableAmount * 0.081) / 1.081);
 
   // Total
   const totalCents = subtotalCents - discountCents + shippingCents;

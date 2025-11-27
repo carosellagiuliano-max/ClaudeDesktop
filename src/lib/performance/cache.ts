@@ -62,10 +62,7 @@ export const CacheDurations = {
 /**
  * Cache wrapper for salon data
  */
-export function cachedSalonData<T>(
-  fn: () => Promise<T>,
-  tags: string[] = [CacheTags.SALON]
-) {
+export function cachedSalonData<T>(fn: () => Promise<T>, tags: string[] = [CacheTags.SALON]) {
   return unstable_cache(fn, tags, {
     revalidate: CacheDurations.SALON_DATA,
     tags,
@@ -75,13 +72,8 @@ export function cachedSalonData<T>(
 /**
  * Cache wrapper for services
  */
-export function cachedServices<T>(
-  fn: () => Promise<T>,
-  salonId?: string
-) {
-  const tags = salonId
-    ? [CacheTags.SERVICES, `salon-${salonId}`]
-    : [CacheTags.SERVICES];
+export function cachedServices<T>(fn: () => Promise<T>, salonId?: string) {
+  const tags = salonId ? [CacheTags.SERVICES, `salon-${salonId}`] : [CacheTags.SERVICES];
 
   return unstable_cache(fn, tags, {
     revalidate: CacheDurations.SERVICES,
@@ -92,13 +84,8 @@ export function cachedServices<T>(
 /**
  * Cache wrapper for products
  */
-export function cachedProducts<T>(
-  fn: () => Promise<T>,
-  salonId?: string
-) {
-  const tags = salonId
-    ? [CacheTags.PRODUCTS, `salon-${salonId}`]
-    : [CacheTags.PRODUCTS];
+export function cachedProducts<T>(fn: () => Promise<T>, salonId?: string) {
+  const tags = salonId ? [CacheTags.PRODUCTS, `salon-${salonId}`] : [CacheTags.PRODUCTS];
 
   return unstable_cache(fn, tags, {
     revalidate: CacheDurations.SERVICES,
@@ -109,10 +96,7 @@ export function cachedProducts<T>(
 /**
  * Cache wrapper for dashboard stats
  */
-export function cachedDashboardStats<T>(
-  fn: () => Promise<T>,
-  salonId: string
-) {
+export function cachedDashboardStats<T>(fn: () => Promise<T>, salonId: string) {
   const tags = [CacheTags.DASHBOARD_STATS, `salon-${salonId}`];
 
   return unstable_cache(fn, tags, {
@@ -185,10 +169,7 @@ const pendingRequests = new Map<string, Promise<unknown>>();
 /**
  * Deduplicate concurrent requests for the same resource
  */
-export async function deduplicatedFetch<T>(
-  key: string,
-  fetcher: () => Promise<T>
-): Promise<T> {
+export async function deduplicatedFetch<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
   // Check if there's already a pending request
   const pending = pendingRequests.get(key) as Promise<T> | undefined;
   if (pending) {

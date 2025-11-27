@@ -26,10 +26,7 @@ export type {
 export { SlotEngineError } from './types';
 
 // Slot Engine
-export {
-  computeAvailableSlots,
-  groupSlotsByDate,
-} from './slot-engine';
+export { computeAvailableSlots, groupSlotsByDate } from './slot-engine';
 
 // Reservation System
 export {

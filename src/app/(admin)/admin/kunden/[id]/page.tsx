@@ -129,9 +129,10 @@ async function getCustomerData(customerId: string) {
   const supabase = await createServerClient();
 
   // Get customer details
-  const { data: customer, error } = await supabase
+  const { data: customer, error } = (await supabase
     .from('customers')
-    .select(`
+    .select(
+      `
       *,
       profiles (
         email,
@@ -143,33 +144,37 @@ async function getCustomerData(customerId: string) {
         tier,
         total_points_earned
       )
-    `)
+    `
+    )
     .eq('id', customerId)
-    .single() as { data: CustomerDbRow | null; error: unknown };
+    .single()) as { data: CustomerDbRow | null; error: unknown };
 
   if (error || !customer) {
     return null;
   }
 
   // Get appointments
-  const { data: appointmentsData } = await supabase
+  const { data: appointmentsData } = (await supabase
     .from('appointments')
-    .select(`
+    .select(
+      `
       id,
       start_time,
       status,
       total_price_cents,
       services (name),
       staff (display_name)
-    `)
+    `
+    )
     .eq('customer_id', customerId)
     .order('start_time', { ascending: false })
-    .limit(20) as { data: CustomerAppointmentRow[] | null };
+    .limit(20)) as { data: CustomerAppointmentRow[] | null };
 
   // Get orders
-  const { data: ordersData } = await supabase
+  const { data: ordersData } = (await supabase
     .from('orders')
-    .select(`
+    .select(
+      `
       id,
       order_number,
       created_at,
@@ -177,43 +182,48 @@ async function getCustomerData(customerId: string) {
       payment_status,
       total_cents,
       order_items (id)
-    `)
+    `
+    )
     .eq('customer_id', customerId)
     .order('created_at', { ascending: false })
-    .limit(20) as { data: CustomerOrderRow[] | null };
+    .limit(20)) as { data: CustomerOrderRow[] | null };
 
   // Get loyalty transactions
-  const { data: loyaltyData } = await supabase
+  const { data: loyaltyData } = (await supabase
     .from('loyalty_transactions')
     .select('*')
     .eq('customer_id', customerId)
     .order('created_at', { ascending: false })
-    .limit(20) as { data: LoyaltyTransactionRow[] | null };
+    .limit(20)) as { data: LoyaltyTransactionRow[] | null };
 
   // Get consents
-  const { data: consentsData } = await supabase
+  const { data: consentsData } = (await supabase
     .from('consents')
     .select('*')
-    .eq('profile_id', customer.profile_id || '') as { data: ConsentRow[] | null };
+    .eq('profile_id', customer.profile_id || '')) as { data: ConsentRow[] | null };
 
   // Calculate totals
-  const totalVisits = appointmentsData?.filter(a => a.status === 'completed').length || 0;
-  const appointmentSpend = appointmentsData?.reduce(
-    (sum, a) => sum + (a.status === 'completed' ? a.total_price_cents || 0 : 0),
-    0
-  ) || 0;
-  const orderSpend = ordersData?.reduce(
-    (sum, o) => sum + (o.payment_status === 'succeeded' ? o.total_cents || 0 : 0),
-    0
-  ) || 0;
+  const totalVisits = appointmentsData?.filter((a) => a.status === 'completed').length || 0;
+  const appointmentSpend =
+    appointmentsData?.reduce(
+      (sum, a) => sum + (a.status === 'completed' ? a.total_price_cents || 0 : 0),
+      0
+    ) || 0;
+  const orderSpend =
+    ordersData?.reduce(
+      (sum, o) => sum + (o.payment_status === 'succeeded' ? o.total_cents || 0 : 0),
+      0
+    ) || 0;
 
   // Find last visit
-  const completedAppointments = appointmentsData?.filter(a => a.status === 'completed') || [];
+  const completedAppointments = appointmentsData?.filter((a) => a.status === 'completed') || [];
   const lastVisit = completedAppointments[0];
 
   // Get marketing consent
-  const marketingConsent = consentsData?.find(c => c.consent_type === 'marketing')?.consented ?? false;
-  const dataConsent = consentsData?.find(c => c.consent_type === 'data_processing')?.consented ?? true;
+  const marketingConsent =
+    consentsData?.find((c) => c.consent_type === 'marketing')?.consented ?? false;
+  const dataConsent =
+    consentsData?.find((c) => c.consent_type === 'data_processing')?.consented ?? true;
 
   // Transform data
   const customerDetail: CustomerDetail = {
@@ -237,17 +247,20 @@ async function getCustomerData(customerId: string) {
     dataProcessingConsent: dataConsent,
   };
 
-  const appointments: CustomerAppointment[] = (appointmentsData || []).map(a => ({
+  const appointments: CustomerAppointment[] = (appointmentsData || []).map((a) => ({
     id: a.id,
     date: new Date(a.start_time).toISOString().split('T')[0],
-    time: new Date(a.start_time).toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' }),
+    time: new Date(a.start_time).toLocaleTimeString('de-CH', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
     serviceName: a.services?.name || 'Unbekannt',
     staffName: a.staff?.display_name || 'Unbekannt',
     status: a.status,
     totalCents: a.total_price_cents || 0,
   }));
 
-  const orders: CustomerOrder[] = (ordersData || []).map(o => ({
+  const orders: CustomerOrder[] = (ordersData || []).map((o) => ({
     id: o.id,
     orderNumber: o.order_number,
     date: o.created_at,
@@ -257,7 +270,7 @@ async function getCustomerData(customerId: string) {
     itemCount: o.order_items?.length || 0,
   }));
 
-  const loyaltyTransactions: CustomerLoyaltyTransaction[] = (loyaltyData || []).map(l => ({
+  const loyaltyTransactions: CustomerLoyaltyTransaction[] = (loyaltyData || []).map((l) => ({
     id: l.id,
     date: l.created_at,
     type: l.transaction_type,

@@ -1,14 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  Calendar,
-  Clock,
-  ChevronLeft,
-  ChevronRight,
-  AlertCircle,
-  Loader2,
-} from 'lucide-react';
+import { Calendar, Clock, ChevronLeft, ChevronRight, AlertCircle, Loader2 } from 'lucide-react';
 import {
   format,
   addDays,
@@ -66,8 +59,7 @@ export function TimeSelection({
 
   // Get slots for selected date
   const selectedDateSlots = selectedDate
-    ? slotsByDate.find((d) => d.date === format(selectedDate, 'yyyy-MM-dd'))
-        ?.slots || []
+    ? slotsByDate.find((d) => d.date === format(selectedDate, 'yyyy-MM-dd'))?.slots || []
     : [];
 
   // Filter slots by selected staff if any
@@ -114,12 +106,8 @@ export function TimeSelection({
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold mb-2">
-          Wählen Sie Ihren Wunschtermin
-        </h2>
-        <p className="text-muted-foreground">
-          Verfügbare Termine werden grün angezeigt.
-        </p>
+        <h2 className="mb-2 text-2xl font-bold">Wählen Sie Ihren Wunschtermin</h2>
+        <p className="text-muted-foreground">Verfügbare Termine werden grün angezeigt.</p>
       </div>
 
       {/* Error Message */}
@@ -129,12 +117,7 @@ export function TimeSelection({
           <AlertDescription>
             {error}
             {onRefreshSlots && (
-              <Button
-                variant="link"
-                size="sm"
-                onClick={onRefreshSlots}
-                className="ml-2 h-auto p-0"
-              >
+              <Button variant="link" size="sm" onClick={onRefreshSlots} className="ml-2 h-auto p-0">
                 Erneut versuchen
               </Button>
             )}
@@ -145,10 +128,8 @@ export function TimeSelection({
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="ml-3 text-muted-foreground">
-            Verfügbare Termine werden geladen...
-          </span>
+          <Loader2 className="text-primary h-8 w-8 animate-spin" />
+          <span className="text-muted-foreground ml-3">Verfügbare Termine werden geladen...</span>
         </div>
       )}
 
@@ -160,10 +141,7 @@ export function TimeSelection({
               variant="outline"
               size="icon"
               onClick={goToPreviousWeek}
-              disabled={isBefore(
-                currentWeekStart,
-                startOfWeek(new Date(), { weekStartsOn: 1 })
-              )}
+              disabled={isBefore(currentWeekStart, startOfWeek(new Date(), { weekStartsOn: 1 }))}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -188,27 +166,20 @@ export function TimeSelection({
                   onClick={() => !isPast && isAvailable && setSelectedDate(day)}
                   disabled={isPast || !isAvailable}
                   className={cn(
-                    'flex flex-col items-center p-2 sm:p-3 rounded-lg border-2 transition-all',
+                    'flex flex-col items-center rounded-lg border-2 p-2 transition-all sm:p-3',
                     isSelected && 'border-primary bg-primary/10',
                     !isSelected && isAvailable && 'border-primary/50 hover:bg-primary/5',
                     !isSelected && !isAvailable && 'border-muted opacity-50',
-                    isPast && 'opacity-30 cursor-not-allowed'
+                    isPast && 'cursor-not-allowed opacity-30'
                   )}
                 >
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {format(day, 'EEE', { locale: de })}
                   </span>
-                  <span
-                    className={cn(
-                      'text-lg font-semibold',
-                      isToday(day) && 'text-primary'
-                    )}
-                  >
+                  <span className={cn('text-lg font-semibold', isToday(day) && 'text-primary')}>
                     {format(day, 'd')}
                   </span>
-                  {isAvailable && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1" />
-                  )}
+                  {isAvailable && <span className="bg-primary mt-1 h-1.5 w-1.5 rounded-full" />}
                 </button>
               );
             })}
@@ -217,25 +188,24 @@ export function TimeSelection({
           {/* Time Slots */}
           {selectedDate && (
             <div>
-              <h3 className="font-semibold mb-4">
+              <h3 className="mb-4 font-semibold">
                 {isToday(selectedDate)
                   ? 'Heute'
                   : format(selectedDate, 'EEEE, d. MMMM', { locale: de })}
               </h3>
 
               {filteredSlots.length > 0 ? (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
                   {filteredSlots.map((slot, index) => {
                     const isSelected =
-                      state.selectedSlot?.startsAt.getTime() ===
-                      slot.startsAt.getTime();
+                      state.selectedSlot?.startsAt.getTime() === slot.startsAt.getTime();
 
                     return (
                       <button
                         key={`${slot.staffId}-${slot.startsAt.toISOString()}`}
                         onClick={() => handleSlotSelect(slot)}
                         className={cn(
-                          'p-3 rounded-lg border-2 text-center transition-all',
+                          'rounded-lg border-2 p-3 text-center transition-all',
                           isSelected
                             ? 'border-primary bg-primary text-primary-foreground'
                             : 'border-border hover:border-primary/50 hover:bg-primary/5'
@@ -245,7 +215,7 @@ export function TimeSelection({
                           {format(slot.startsAt, 'HH:mm')}
                         </span>
                         {!state.selectedStaff && !state.noStaffPreference && (
-                          <span className="block text-xs opacity-70 mt-0.5">
+                          <span className="mt-0.5 block text-xs opacity-70">
                             {slot.staffName.split(' ')[0]}
                           </span>
                         )}
@@ -256,10 +226,8 @@ export function TimeSelection({
               ) : (
                 <Card className="border-dashed">
                   <CardContent className="p-6 text-center">
-                    <Clock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-muted-foreground">
-                      Keine verfügbaren Termine an diesem Tag
-                    </p>
+                    <Clock className="text-muted-foreground mx-auto mb-2 h-8 w-8" />
+                    <p className="text-muted-foreground">Keine verfügbaren Termine an diesem Tag</p>
                   </CardContent>
                 </Card>
               )}
@@ -269,7 +237,7 @@ export function TimeSelection({
       )}
 
       {/* Navigation */}
-      <div className="flex justify-between pt-4 border-t">
+      <div className="flex justify-between border-t pt-4">
         <Button variant="outline" onClick={goBack}>
           Zurück
         </Button>

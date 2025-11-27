@@ -17,10 +17,7 @@ import type {
   ShippingOption,
   ShippingMethodType,
 } from './types';
-import {
-  DEFAULT_SHIPPING_OPTIONS,
-  FREE_SHIPPING_THRESHOLD_CENTS,
-} from './types';
+import { DEFAULT_SHIPPING_OPTIONS, FREE_SHIPPING_THRESHOLD_CENTS } from './types';
 
 // Swiss VAT rate (8.1%)
 const SWISS_VAT_RATE = 0.081;
@@ -45,10 +42,7 @@ export function generateOrderNumberPrefix(): string {
 /**
  * Creates a new order from input
  */
-export function createOrder(
-  input: CreateOrderInput,
-  orderNumber: string
-): Order {
+export function createOrder(input: CreateOrderInput, orderNumber: string): Order {
   const id = crypto.randomUUID();
   const now = new Date();
 
@@ -90,10 +84,7 @@ export function createOrder(
 /**
  * Creates an order item from input
  */
-export function createOrderItem(
-  orderId: string,
-  input: CreateOrderItemInput
-): OrderItem {
+export function createOrderItem(orderId: string, input: CreateOrderItemInput): OrderItem {
   const id = crypto.randomUUID();
   const discountCents = input.discountCents || 0;
   const totalCents = input.unitPriceCents * input.quantity - discountCents;
@@ -156,11 +147,7 @@ export function applyVoucher(order: Order, voucher: ApplyVoucherInput): Order {
   const maxDiscount = order.subtotalCents + order.shippingCents - order.discountCents;
   const discountToApply = Math.min(voucher.discountCents, maxDiscount);
 
-  const totals = calculateOrderTotals(
-    order.items,
-    discountToApply,
-    order.shippingCents
-  );
+  const totals = calculateOrderTotals(order.items, discountToApply, order.shippingCents);
 
   return {
     ...order,
@@ -176,11 +163,7 @@ export function applyVoucher(order: Order, voucher: ApplyVoucherInput): Order {
  * Remove voucher from order
  */
 export function removeVoucher(order: Order): Order {
-  const totals = calculateOrderTotals(
-    order.items,
-    0,
-    order.shippingCents
-  );
+  const totals = calculateOrderTotals(order.items, 0, order.shippingCents);
 
   return {
     ...order,
@@ -224,10 +207,7 @@ export function isValidStatusTransition(
 /**
  * Transition order to new status
  */
-export function transitionOrderStatus(
-  order: Order,
-  newStatus: OrderStatus
-): Order | null {
+export function transitionOrderStatus(order: Order, newStatus: OrderStatus): Order | null {
   if (!isValidStatusTransition(order.status, newStatus)) {
     return null;
   }
@@ -252,8 +232,7 @@ export function calculateOrderTotals(
   const itemTaxCents = items.reduce((sum, item) => sum + item.taxCents, 0);
 
   // Apply free shipping if threshold met
-  const actualShippingCents =
-    subtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS ? 0 : shippingCents;
+  const actualShippingCents = subtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS ? 0 : shippingCents;
 
   // Calculate shipping tax
   const shippingTaxCents = calculateTaxFromGross(actualShippingCents, SWISS_VAT_RATE);
@@ -312,13 +291,15 @@ export function getAvailableShippingOptions(
   isDigitalOnly: boolean
 ): ShippingOption[] {
   if (isDigitalOnly) {
-    return [{
-      type: 'none',
-      name: 'Kein Versand',
-      description: 'Digitale Produkte',
-      priceCents: 0,
-      available: true,
-    }];
+    return [
+      {
+        type: 'none',
+        name: 'Kein Versand',
+        description: 'Digitale Produkte',
+        priceCents: 0,
+        available: true,
+      },
+    ];
   }
 
   return DEFAULT_SHIPPING_OPTIONS.map((option) => ({
@@ -381,9 +362,7 @@ export function validateOrderInput(input: CreateOrderInput): OrderValidation {
   });
 
   // Validate shipping for physical products
-  const hasPhysicalProducts = input.items?.some(
-    (item) => item.itemType === 'product'
-  );
+  const hasPhysicalProducts = input.items?.some((item) => item.itemType === 'product');
   if (hasPhysicalProducts) {
     if (!input.shippingMethod) {
       errors.push('Versandart ist erforderlich');
@@ -480,10 +459,7 @@ export function canCancel(order: Order): boolean {
  * Check if order can be refunded
  */
 export function canRefund(order: Order): boolean {
-  return (
-    order.paymentStatus === 'succeeded' &&
-    order.refundedAmountCents < order.totalCents
-  );
+  return order.paymentStatus === 'succeeded' && order.refundedAmountCents < order.totalCents;
 }
 
 // ============================================

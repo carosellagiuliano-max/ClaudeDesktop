@@ -13,13 +13,7 @@ import {
   Download,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -95,26 +89,24 @@ function formatDate(dateString: string): string {
 // Simple bar chart component
 function SimpleBarChart({ data, maxValue }: { data: RevenueData[]; maxValue: number }) {
   return (
-    <div className="flex items-end gap-1 h-48">
+    <div className="flex h-48 items-end gap-1">
       {data.map((item, index) => {
         const height = maxValue > 0 ? (item.revenue / maxValue) * 100 : 0;
         return (
           <div
             key={item.date}
-            className="flex-1 flex flex-col items-center gap-1"
+            className="flex flex-1 flex-col items-center gap-1"
             title={`${formatDate(item.date)}: ${formatPrice(item.revenue)}`}
           >
             <div
               className={cn(
-                'w-full bg-primary rounded-t transition-all',
+                'bg-primary w-full rounded-t transition-all',
                 height === 0 && 'bg-muted'
               )}
               style={{ height: `${Math.max(height, 2)}%` }}
             />
             {index % 5 === 0 && (
-              <span className="text-xs text-muted-foreground">
-                {formatDate(item.date)}
-              </span>
+              <span className="text-muted-foreground text-xs">{formatDate(item.date)}</span>
             )}
           </div>
         );
@@ -138,9 +130,10 @@ export function AdminAnalyticsView({
   // Calculate week-over-week change (simplified)
   const thisWeekRevenue = revenueData.slice(-7).reduce((sum, d) => sum + d.revenue, 0);
   const lastWeekRevenue = revenueData.slice(-14, -7).reduce((sum, d) => sum + d.revenue, 0);
-  const revenueChange = lastWeekRevenue > 0
-    ? Math.round(((thisWeekRevenue - lastWeekRevenue) / lastWeekRevenue) * 100)
-    : 0;
+  const revenueChange =
+    lastWeekRevenue > 0
+      ? Math.round(((thisWeekRevenue - lastWeekRevenue) / lastWeekRevenue) * 100)
+      : 0;
 
   // Export CSV
   const handleExportCSV = () => {
@@ -173,9 +166,7 @@ export function AdminAnalyticsView({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Analytics</h1>
-          <p className="text-muted-foreground">
-            Übersicht der letzten 30 Tage
-          </p>
+          <p className="text-muted-foreground">Übersicht der letzten 30 Tage</p>
         </div>
         <Button variant="outline" onClick={handleExportCSV}>
           <Download className="mr-2 h-4 w-4" />
@@ -188,7 +179,7 @@ export function AdminAnalyticsView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Gesamtumsatz</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <DollarSign className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatPrice(stats.totalRevenue)}</div>
@@ -198,10 +189,9 @@ export function AdminAnalyticsView({
               ) : (
                 <TrendingDown className="h-3 w-3 text-red-500" />
               )}
-              <span className={cn(
-                revenueChange >= 0 ? 'text-green-600' : 'text-red-600'
-              )}>
-                {revenueChange >= 0 ? '+' : ''}{revenueChange}%
+              <span className={cn(revenueChange >= 0 ? 'text-green-600' : 'text-red-600')}>
+                {revenueChange >= 0 ? '+' : ''}
+                {revenueChange}%
               </span>
               <span className="text-muted-foreground">vs. letzte Woche</span>
             </div>
@@ -211,11 +201,11 @@ export function AdminAnalyticsView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Bestellungen</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+            <ShoppingCart className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalOrders}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Ø {formatPrice(stats.averageOrderValue)} pro Bestellung
             </p>
           </CardContent>
@@ -224,26 +214,22 @@ export function AdminAnalyticsView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Termine</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalAppointments}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.cancelRate}% Stornierungsrate
-            </p>
+            <p className="text-muted-foreground text-xs">{stats.cancelRate}% Stornierungsrate</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Neue Kunden</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.newCustomers}</div>
-            <p className="text-xs text-muted-foreground">
-              diesen Monat
-            </p>
+            <p className="text-muted-foreground text-xs">diesen Monat</p>
           </CardContent>
         </Card>
       </div>
@@ -252,9 +238,7 @@ export function AdminAnalyticsView({
       <Card>
         <CardHeader>
           <CardTitle>Umsatzverlauf</CardTitle>
-          <CardDescription>
-            Täglicher Umsatz der letzten 30 Tage
-          </CardDescription>
+          <CardDescription>Täglicher Umsatz der letzten 30 Tage</CardDescription>
         </CardHeader>
         <CardContent>
           <SimpleBarChart data={revenueData} maxValue={maxRevenue} />
@@ -278,9 +262,7 @@ export function AdminAnalyticsView({
           <Card>
             <CardHeader>
               <CardTitle>Meistverkaufte Produkte</CardTitle>
-              <CardDescription>
-                Nach Umsatz sortiert (letzte 30 Tage)
-              </CardDescription>
+              <CardDescription>Nach Umsatz sortiert (letzte 30 Tage)</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -302,7 +284,7 @@ export function AdminAnalyticsView({
                   ) : (
                     topProducts.map((product, index) => (
                       <TableRow key={product.id}>
-                        <TableCell className="font-medium text-muted-foreground">
+                        <TableCell className="text-muted-foreground font-medium">
                           {index + 1}
                         </TableCell>
                         <TableCell className="font-medium">{product.name}</TableCell>
@@ -323,9 +305,7 @@ export function AdminAnalyticsView({
           <Card>
             <CardHeader>
               <CardTitle>Beliebteste Services</CardTitle>
-              <CardDescription>
-                Nach Buchungen sortiert (letzte 30 Tage)
-              </CardDescription>
+              <CardDescription>Nach Buchungen sortiert (letzte 30 Tage)</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -347,7 +327,7 @@ export function AdminAnalyticsView({
                   ) : (
                     topServices.map((service, index) => (
                       <TableRow key={service.id}>
-                        <TableCell className="font-medium text-muted-foreground">
+                        <TableCell className="text-muted-foreground font-medium">
                           {index + 1}
                         </TableCell>
                         <TableCell className="font-medium">{service.name}</TableCell>

@@ -206,7 +206,8 @@ export function calculateSmsSegments(message: string): number {
  * Truncate message to fit within segment limit
  */
 export function truncateToSegments(message: string, maxSegments: number = 2): string {
-  const maxLength = maxSegments === 1 ? SMS_MAX_LENGTH : SMS_MAX_LENGTH + (maxSegments - 1) * SMS_EXTENDED_LENGTH;
+  const maxLength =
+    maxSegments === 1 ? SMS_MAX_LENGTH : SMS_MAX_LENGTH + (maxSegments - 1) * SMS_EXTENDED_LENGTH;
 
   if (message.length <= maxLength) {
     return message;

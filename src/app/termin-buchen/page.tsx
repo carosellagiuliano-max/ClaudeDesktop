@@ -25,15 +25,13 @@ export default async function TerminBuchenPage() {
   if (!bookingData) {
     return (
       <div className="container-wide py-16">
-        <Card className="max-w-md mx-auto">
+        <Card className="mx-auto max-w-md">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-2">
-              Buchung nicht verfügbar
-            </h2>
+            <AlertCircle className="text-destructive mx-auto mb-4 h-12 w-12" />
+            <h2 className="mb-2 text-xl font-bold">Buchung nicht verfügbar</h2>
             <p className="text-muted-foreground">
-              Die Online-Buchung ist derzeit nicht verfügbar. Bitte kontaktieren
-              Sie uns telefonisch.
+              Die Online-Buchung ist derzeit nicht verfügbar. Bitte kontaktieren Sie uns
+              telefonisch.
             </p>
           </CardContent>
         </Card>

@@ -19,7 +19,12 @@ export default async function KontoLayout({ children }: LayoutProps) {
   // This layout only protects /konto/termine and /konto/profil
   const isAuthPage =
     typeof window === 'undefined' ||
-    ['/konto/login', '/konto/registrieren', '/konto/passwort-vergessen', '/konto/passwort-aendern'].some(
+    [
+      '/konto/login',
+      '/konto/registrieren',
+      '/konto/passwort-vergessen',
+      '/konto/passwort-aendern',
+    ].some(
       (path) => false // Server-side, we can't check pathname
     );
 
@@ -45,24 +50,24 @@ export default async function KontoLayout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="container-wide py-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center text-sm text-muted-foreground mb-6">
+        <nav className="text-muted-foreground mb-6 flex items-center text-sm">
           <Link href="/" className="hover:text-foreground">
             Startseite
           </Link>
-          <ChevronRight className="h-4 w-4 mx-2" />
+          <ChevronRight className="mx-2 h-4 w-4" />
           <span className="text-foreground">Mein Konto</span>
         </nav>
 
         {/* Page Title */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Scissors className="h-8 w-8 text-primary" />
+            <Scissors className="text-primary h-8 w-8" />
             <div>
               <h1 className="text-2xl font-bold">Mein Konto</h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Willkommen, {user.profile?.first_name || 'Kunde'}!
               </p>
             </div>
@@ -75,7 +80,7 @@ export default async function KontoLayout({ children }: LayoutProps) {
             }}
           >
             <Button variant="outline" size="sm" type="submit">
-              <LogOut className="h-4 w-4 mr-2" />
+              <LogOut className="mr-2 h-4 w-4" />
               Abmelden
             </Button>
           </form>
@@ -90,17 +95,17 @@ export default async function KontoLayout({ children }: LayoutProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors"
+                  className="hover:bg-muted flex items-center gap-3 rounded-lg px-4 py-3 transition-colors"
                 >
-                  <item.icon className="h-5 w-5 text-muted-foreground" />
+                  <item.icon className="text-muted-foreground h-5 w-5" />
                   <span>{item.label}</span>
                 </Link>
               ))}
             </nav>
 
             {/* Quick Action */}
-            <div className="mt-8 p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p className="text-sm font-medium mb-3">Neuen Termin buchen?</p>
+            <div className="bg-primary/5 border-primary/20 mt-8 rounded-lg border p-4">
+              <p className="mb-3 text-sm font-medium">Neuen Termin buchen?</p>
               <Button asChild size="sm" className="w-full">
                 <Link href="/termin-buchen">Jetzt buchen</Link>
               </Button>

@@ -38,9 +38,7 @@ export function BookingSummary() {
               <div key={service.id} className="flex justify-between text-sm">
                 <div>
                   <p className="font-medium">{service.name}</p>
-                  <p className="text-muted-foreground text-xs">
-                    {service.durationMinutes} Min.
-                  </p>
+                  <p className="text-muted-foreground text-xs">{service.durationMinutes} Min.</p>
                 </div>
                 <span className="text-primary font-medium">
                   {formatPrice(service.currentPrice)}
@@ -49,9 +47,7 @@ export function BookingSummary() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            Noch keine Leistung ausgewählt
-          </p>
+          <p className="text-muted-foreground text-sm">Noch keine Leistung ausgewählt</p>
         )}
 
         <Separator />
@@ -59,7 +55,7 @@ export function BookingSummary() {
         {/* Duration */}
         {totalDuration > 0 && (
           <div className="flex items-center gap-2 text-sm">
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <Clock className="text-muted-foreground h-4 w-4" />
             <span className="text-muted-foreground">Dauer:</span>
             <span className="font-medium">{formatDuration(totalDuration)}</span>
           </div>
@@ -68,12 +64,10 @@ export function BookingSummary() {
         {/* Selected Staff */}
         {(state.selectedStaff || state.noStaffPreference) && (
           <div className="flex items-center gap-2 text-sm">
-            <User className="h-4 w-4 text-muted-foreground" />
+            <User className="text-muted-foreground h-4 w-4" />
             <span className="text-muted-foreground">Mitarbeiter:</span>
             <span className="font-medium">
-              {state.noStaffPreference
-                ? 'Keine Präferenz'
-                : state.selectedStaff?.name}
+              {state.noStaffPreference ? 'Keine Präferenz' : state.selectedStaff?.name}
             </span>
           </div>
         )}
@@ -81,13 +75,12 @@ export function BookingSummary() {
         {/* Selected Slot */}
         {state.selectedSlot && (
           <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="text-muted-foreground h-4 w-4" />
             <span className="text-muted-foreground">Termin:</span>
             <span className="font-medium">
               {format(state.selectedSlot.startsAt, 'EEE, d. MMM', {
                 locale: de,
-              })}
-              {' '}
+              })}{' '}
               {format(state.selectedSlot.startsAt, 'HH:mm')} Uhr
             </span>
           </div>
@@ -96,12 +89,10 @@ export function BookingSummary() {
         {/* Payment Method (on confirm step) */}
         {state.currentStep === 'confirm' && (
           <div className="flex items-center gap-2 text-sm">
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
+            <CreditCard className="text-muted-foreground h-4 w-4" />
             <span className="text-muted-foreground">Zahlung:</span>
             <span className="font-medium">
-              {state.paymentMethod === 'online'
-                ? 'Online bezahlen'
-                : 'Vor Ort bezahlen'}
+              {state.paymentMethod === 'online' ? 'Online bezahlen' : 'Vor Ort bezahlen'}
             </span>
           </div>
         )}
@@ -109,17 +100,13 @@ export function BookingSummary() {
         <Separator />
 
         {/* Total */}
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <span className="font-semibold">Gesamt</span>
-          <span className="text-xl font-bold text-primary">
-            {formatPrice(totalPrice)}
-          </span>
+          <span className="text-primary text-xl font-bold">{formatPrice(totalPrice)}</span>
         </div>
 
         {/* VAT Info */}
-        <p className="text-xs text-muted-foreground text-right">
-          inkl. 8.1% MwSt.
-        </p>
+        <p className="text-muted-foreground text-right text-xs">inkl. 8.1% MwSt.</p>
       </CardContent>
     </Card>
   );

@@ -60,10 +60,10 @@ async function getProductsData(searchParams: {
   const { data, count, error } = await query;
 
   // Get categories for filter
-  const { data: categoriesData } = await supabase
+  const { data: categoriesData } = (await supabase
     .from('products')
     .select('category')
-    .not('category', 'is', null) as { data: { category: string | null }[] | null };
+    .not('category', 'is', null)) as { data: { category: string | null }[] | null };
 
   const categories = [
     ...new Set(categoriesData?.map((p) => p.category).filter(Boolean)),
@@ -98,8 +98,7 @@ export default async function AdminProductsPage({
   }>;
 }) {
   const params = await searchParams;
-  const { products, total, page, limit, categories } =
-    await getProductsData(params);
+  const { products, total, page, limit, categories } = await getProductsData(params);
 
   return (
     <AdminProductList

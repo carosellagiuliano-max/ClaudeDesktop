@@ -12,11 +12,7 @@ class SalonServiceClass extends BaseService<'salons'> {
 
   // Get salon by slug
   async findBySlug(slug: string): Promise<ServiceResult<Salon>> {
-    const { data, error } = await this.client
-      .from('salons')
-      .select('*')
-      .eq('slug', slug)
-      .single();
+    const { data, error } = await this.client.from('salons').select('*').eq('slug', slug).single();
 
     if (error) {
       return { data: null, error: this.handleError(error) };
@@ -34,15 +30,17 @@ class SalonServiceClass extends BaseService<'salons'> {
   }
 
   // Get salon with opening hours
-  async findWithOpeningHours(salonId: string): Promise<
-    ServiceResult<Salon & { opening_hours: OpeningHours[] }>
-  > {
+  async findWithOpeningHours(
+    salonId: string
+  ): Promise<ServiceResult<Salon & { opening_hours: OpeningHours[] }>> {
     const { data, error } = await this.client
       .from('salons')
-      .select(`
+      .select(
+        `
         *,
         opening_hours (*)
-      `)
+      `
+      )
       .eq('id', salonId)
       .single();
 
@@ -61,7 +59,7 @@ class SalonServiceClass extends BaseService<'salons'> {
     const { data: current } = await this.findById(salonId);
 
     const newSettings = {
-      ...(current?.settings_json as Record<string, unknown> || {}),
+      ...((current?.settings_json as Record<string, unknown>) || {}),
       ...settings,
     };
 

@@ -68,8 +68,8 @@ export function LoyaltyRedemption({
       <Card>
         <CardContent className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 bg-gray-200 rounded w-1/3" />
-            <div className="h-10 bg-gray-200 rounded" />
+            <div className="h-6 w-1/3 rounded bg-gray-200" />
+            <div className="h-10 rounded bg-gray-200" />
           </div>
         </CardContent>
       </Card>
@@ -80,13 +80,13 @@ export function LoyaltyRedemption({
     return (
       <Card className="border-dashed">
         <CardContent className="p-6 text-center">
-          <Coins className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+          <Coins className="text-muted-foreground mx-auto mb-3 h-12 w-12" />
           <p className="text-muted-foreground">
             {!loyalty
               ? 'Sie sind noch nicht im Treueprogramm registriert.'
               : `Sie benötigen mindestens ${minPointsToRedeem} Punkte zum Einlösen.`}
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 text-sm">
             Aktuell: {loyalty?.pointsBalance || 0} Punkte
           </p>
           <Button variant="outline" onClick={onCancel} className="mt-4">
@@ -129,7 +129,7 @@ export function LoyaltyRedemption({
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Available Points */}
-        <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+        <div className="bg-muted flex items-center justify-between rounded-lg p-3">
           <span className="text-sm">Verfügbare Punkte:</span>
           <Badge variant="secondary" className="text-lg">
             {loyalty.pointsBalance.toLocaleString('de-CH')}
@@ -138,7 +138,7 @@ export function LoyaltyRedemption({
 
         {/* Points Slider */}
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <Label>Punkte einlösen:</Label>
             <Input
               type="number"
@@ -159,33 +159,32 @@ export function LoyaltyRedemption({
             className="py-4"
           />
 
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="text-muted-foreground flex justify-between text-xs">
             <span>Min: {minPointsToRedeem}</span>
             <span>Max: {maxRedeemablePoints.toLocaleString('de-CH')}</span>
           </div>
         </div>
 
         {/* Discount Preview */}
-        <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Check className="h-5 w-5 text-green-600" />
               <span className="font-medium">Ihr Rabatt:</span>
             </div>
-            <span className="text-2xl font-bold text-green-600">
-              {formatChf(discountCents)}
-            </span>
+            <span className="text-2xl font-bold text-green-600">{formatChf(discountCents)}</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 text-xs">
             {pointsToRedeem} Punkte = CHF {discountChf.toFixed(2)} Rabatt
           </p>
         </div>
 
         {/* Remaining Points */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-2 text-sm">
           <AlertCircle className="h-4 w-4" />
           <span>
-            Nach Einlösung verbleiben {(loyalty.pointsBalance - pointsToRedeem).toLocaleString('de-CH')} Punkte
+            Nach Einlösung verbleiben{' '}
+            {(loyalty.pointsBalance - pointsToRedeem).toLocaleString('de-CH')} Punkte
           </span>
         </div>
 
@@ -195,7 +194,7 @@ export function LoyaltyRedemption({
             Abbrechen
           </Button>
           <Button onClick={handleConfirm} className="flex-1">
-            <Gift className="h-4 w-4 mr-2" />
+            <Gift className="mr-2 h-4 w-4" />
             Einlösen
           </Button>
         </div>

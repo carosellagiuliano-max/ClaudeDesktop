@@ -39,9 +39,7 @@ const REASON_LABELS: Record<string, string> = {
 // SUBMIT CONTACT FORM
 // ============================================
 
-export async function submitContactForm(
-  formData: FormData
-): Promise<ContactFormResult> {
+export async function submitContactForm(formData: FormData): Promise<ContactFormResult> {
   try {
     // Parse form data
     const rawData = {
@@ -78,18 +76,16 @@ export async function submitContactForm(
     // Store inquiry in database
     const supabase = createServerClient();
 
-    const { error: dbError } = await supabase
-      .from('contact_inquiries')
-      .insert({
-        salon_id: salon?.id || '550e8400-e29b-41d4-a716-446655440001',
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-        phone: data.phone || null,
-        reason: data.reason,
-        message: data.message,
-        status: 'new',
-      });
+    const { error: dbError } = await supabase.from('contact_inquiries').insert({
+      salon_id: salon?.id || '550e8400-e29b-41d4-a716-446655440001',
+      first_name: data.firstName,
+      last_name: data.lastName,
+      email: data.email,
+      phone: data.phone || null,
+      reason: data.reason,
+      message: data.message,
+      status: 'new',
+    });
 
     if (dbError) {
       console.error('Error storing contact inquiry:', dbError);
@@ -105,17 +101,15 @@ export async function submitContactForm(
     }
 
     // Log to audit
-    await supabase
-      .from('audit_logs')
-      .insert({
-        salon_id: salon?.id || '550e8400-e29b-41d4-a716-446655440001',
-        action_type: 'contact_inquiry_submitted',
-        target_type: 'contact_inquiry',
-        metadata: {
-          email: data.email,
-          reason: data.reason,
-        },
-      });
+    await supabase.from('audit_logs').insert({
+      salon_id: salon?.id || '550e8400-e29b-41d4-a716-446655440001',
+      action_type: 'contact_inquiry_submitted',
+      target_type: 'contact_inquiry',
+      metadata: {
+        email: data.email,
+        reason: data.reason,
+      },
+    });
 
     return { success: true };
   } catch (error) {
@@ -157,12 +151,16 @@ async function sendContactNotificationEmail(
         <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">E-Mail:</td>
         <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td>
       </tr>
-      ${data.phone ? `
+      ${
+        data.phone
+          ? `
       <tr>
         <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Telefon:</td>
         <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a></td>
       </tr>
-      ` : ''}
+      `
+          : ''
+      }
       <tr>
         <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Anliegen:</td>
         <td style="padding: 8px; border-bottom: 1px solid #eee;">${REASON_LABELS[data.reason] || data.reason}</td>

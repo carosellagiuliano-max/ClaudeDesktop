@@ -40,10 +40,7 @@ export default async function TerminePage() {
     redirect('/konto/login?redirect=/konto/termine');
   }
 
-  const [appointments, salon] = await Promise.all([
-    getCustomerAppointments(user.id),
-    getSalon(),
-  ]);
+  const [appointments, salon] = await Promise.all([getCustomerAppointments(user.id), getSalon()]);
 
   const now = new Date();
   const upcomingAppointments = appointments.filter(
@@ -60,35 +57,35 @@ export default async function TerminePage() {
       case 'confirmed':
         return (
           <Badge variant="default" className="bg-green-500">
-            <CheckCircle2 className="h-3 w-3 mr-1" />
+            <CheckCircle2 className="mr-1 h-3 w-3" />
             Bestätigt
           </Badge>
         );
       case 'reserved':
         return (
           <Badge variant="secondary">
-            <Clock className="h-3 w-3 mr-1" />
+            <Clock className="mr-1 h-3 w-3" />
             Reserviert
           </Badge>
         );
       case 'cancelled':
         return (
           <Badge variant="destructive">
-            <XCircle className="h-3 w-3 mr-1" />
+            <XCircle className="mr-1 h-3 w-3" />
             Storniert
           </Badge>
         );
       case 'completed':
         return (
           <Badge variant="outline">
-            <CheckCircle2 className="h-3 w-3 mr-1" />
+            <CheckCircle2 className="mr-1 h-3 w-3" />
             Abgeschlossen
           </Badge>
         );
       case 'no_show':
         return (
           <Badge variant="destructive">
-            <AlertCircle className="h-3 w-3 mr-1" />
+            <AlertCircle className="mr-1 h-3 w-3" />
             Nicht erschienen
           </Badge>
         );
@@ -103,7 +100,7 @@ export default async function TerminePage() {
         <h2 className="text-xl font-semibold">Meine Termine</h2>
         <Button asChild>
           <Link href="/termin-buchen">
-            <CalendarPlus className="h-4 w-4 mr-2" />
+            <CalendarPlus className="mr-2 h-4 w-4" />
             Neuer Termin
           </Link>
         </Button>
@@ -111,21 +108,17 @@ export default async function TerminePage() {
 
       <Tabs defaultValue="upcoming" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upcoming">
-            Anstehend ({upcomingAppointments.length})
-          </TabsTrigger>
-          <TabsTrigger value="past">
-            Vergangene ({pastAppointments.length})
-          </TabsTrigger>
+          <TabsTrigger value="upcoming">Anstehend ({upcomingAppointments.length})</TabsTrigger>
+          <TabsTrigger value="past">Vergangene ({pastAppointments.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="upcoming" className="mt-6">
           {upcomingAppointments.length === 0 ? (
             <Card className="border-border/50">
               <CardContent className="py-12 text-center">
-                <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">Keine anstehenden Termine</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <Calendar className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+                <h3 className="mb-2 font-semibold">Keine anstehenden Termine</h3>
+                <p className="text-muted-foreground mb-4 text-sm">
                   Sie haben aktuell keine gebuchten Termine.
                 </p>
                 <Button asChild>
@@ -138,13 +131,13 @@ export default async function TerminePage() {
               {upcomingAppointments.map((appointment) => (
                 <Card key={appointment.id} className="border-border/50">
                   <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                       {/* Date Badge */}
-                      <div className="flex-shrink-0 text-center bg-primary/10 rounded-lg p-3 w-20">
-                        <p className="text-2xl font-bold text-primary">
+                      <div className="bg-primary/10 w-20 flex-shrink-0 rounded-lg p-3 text-center">
+                        <p className="text-primary text-2xl font-bold">
                           {format(appointment.startsAt, 'd')}
                         </p>
-                        <p className="text-xs text-muted-foreground uppercase">
+                        <p className="text-muted-foreground text-xs uppercase">
                           {format(appointment.startsAt, 'MMM', { locale: de })}
                         </p>
                       </div>
@@ -158,12 +151,12 @@ export default async function TerminePage() {
                             </p>
                             {getStatusBadge(appointment.status)}
                           </div>
-                          <p className="font-semibold text-primary">
+                          <p className="text-primary font-semibold">
                             {formatPrice(appointment.totalPriceCents)}
                           </p>
                         </div>
 
-                        <div className="grid gap-2 text-sm text-muted-foreground">
+                        <div className="text-muted-foreground grid gap-2 text-sm">
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4" />
                             <span>
@@ -199,7 +192,7 @@ export default async function TerminePage() {
                         )}
                         {!appointment.canCancel &&
                           ['reserved', 'confirmed'].includes(appointment.status) && (
-                            <p className="text-xs text-muted-foreground pt-2">
+                            <p className="text-muted-foreground pt-2 text-xs">
                               Stornierung nur bis 24 Stunden vor dem Termin möglich.
                             </p>
                           )}
@@ -216,9 +209,9 @@ export default async function TerminePage() {
           {pastAppointments.length === 0 ? (
             <Card className="border-border/50">
               <CardContent className="py-12 text-center">
-                <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">Keine vergangenen Termine</h3>
-                <p className="text-sm text-muted-foreground">
+                <Calendar className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+                <h3 className="mb-2 font-semibold">Keine vergangenen Termine</h3>
+                <p className="text-muted-foreground text-sm">
                   Sie haben noch keine Termine bei uns gehabt.
                 </p>
               </CardContent>
@@ -226,18 +219,15 @@ export default async function TerminePage() {
           ) : (
             <div className="space-y-4">
               {pastAppointments.map((appointment) => (
-                <Card
-                  key={appointment.id}
-                  className="border-border/50 bg-muted/30"
-                >
+                <Card key={appointment.id} className="border-border/50 bg-muted/30">
                   <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                       {/* Date Badge */}
-                      <div className="flex-shrink-0 text-center bg-muted rounded-lg p-3 w-20">
-                        <p className="text-2xl font-bold text-muted-foreground">
+                      <div className="bg-muted w-20 flex-shrink-0 rounded-lg p-3 text-center">
+                        <p className="text-muted-foreground text-2xl font-bold">
                           {format(appointment.startsAt, 'd')}
                         </p>
-                        <p className="text-xs text-muted-foreground uppercase">
+                        <p className="text-muted-foreground text-xs uppercase">
                           {format(appointment.startsAt, 'MMM', { locale: de })}
                         </p>
                       </div>
@@ -246,17 +236,17 @@ export default async function TerminePage() {
                       <div className="flex-1 space-y-2">
                         <div className="flex items-start justify-between">
                           <div>
-                            <p className="font-medium text-muted-foreground">
+                            <p className="text-muted-foreground font-medium">
                               {appointment.services.map((s) => s.name).join(', ')}
                             </p>
                             {getStatusBadge(appointment.status)}
                           </div>
-                          <p className="font-medium text-muted-foreground">
+                          <p className="text-muted-foreground font-medium">
                             {formatPrice(appointment.totalPriceCents)}
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="text-muted-foreground flex items-center gap-4 text-sm">
                           <span>
                             {format(appointment.startsAt, 'd. MMMM yyyy', {
                               locale: de,

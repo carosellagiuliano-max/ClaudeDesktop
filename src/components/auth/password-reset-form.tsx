@@ -36,12 +36,12 @@ export function PasswordResetForm() {
 
   if (success) {
     return (
-      <div className="text-center space-y-6">
+      <div className="space-y-6 text-center">
         <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
           <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">E-Mail gesendet!</h2>
+          <h2 className="mb-2 text-xl font-semibold">E-Mail gesendet!</h2>
           <p className="text-muted-foreground">
             Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir Ihnen einen Link zum
             Zurücksetzen des Passworts gesendet. Bitte prüfen Sie auch Ihren Spam-Ordner.
@@ -69,7 +69,7 @@ export function PasswordResetForm() {
       <div className="space-y-2">
         <Label htmlFor="email">E-Mail-Adresse</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="email"
             name="email"
@@ -81,7 +81,7 @@ export function PasswordResetForm() {
             autoComplete="email"
           />
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Geben Sie die E-Mail-Adresse ein, mit der Sie sich registriert haben.
         </p>
       </div>
@@ -98,11 +98,8 @@ export function PasswordResetForm() {
       </Button>
 
       <div className="text-center">
-        <Link
-          href="/konto/login"
-          className="text-sm text-muted-foreground hover:text-primary"
-        >
-          <ArrowLeft className="inline mr-1 h-4 w-4" />
+        <Link href="/konto/login" className="text-muted-foreground hover:text-primary text-sm">
+          <ArrowLeft className="mr-1 inline h-4 w-4" />
           Zurück zur Anmeldung
         </Link>
       </div>

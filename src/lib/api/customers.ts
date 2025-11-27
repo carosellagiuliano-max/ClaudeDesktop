@@ -112,7 +112,10 @@ class CustomerServiceClass extends BaseService<'customers'> {
   }
 
   // Get inactive customers (no visit in X days)
-  async findInactive(salonId: string, inactiveDays: number = 90): Promise<ServiceListResult<Customer>> {
+  async findInactive(
+    salonId: string,
+    inactiveDays: number = 90
+  ): Promise<ServiceListResult<Customer>> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - inactiveDays);
 

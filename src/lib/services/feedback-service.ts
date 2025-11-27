@@ -256,12 +256,15 @@ export class FeedbackService {
   ): Promise<{ feedback: FeedbackWithDetails[]; total: number }> {
     let query = this.supabase
       .from('customer_feedback')
-      .select(`
+      .select(
+        `
         *,
         customer:customers(first_name, last_name),
         service:services(name),
         staff:staff(first_name, last_name)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .eq('salon_id', salonId)
       .order('submitted_at', { ascending: false });
 
@@ -304,11 +307,13 @@ export class FeedbackService {
   async getCustomerFeedback(customerId: string): Promise<FeedbackWithDetails[]> {
     const { data, error } = await this.supabase
       .from('customer_feedback')
-      .select(`
+      .select(
+        `
         *,
         service:services(name),
         staff:staff(first_name, last_name)
-      `)
+      `
+      )
       .eq('customer_id', customerId)
       .order('submitted_at', { ascending: false });
 
@@ -324,10 +329,7 @@ export class FeedbackService {
    * Get feedback statistics for salon
    */
   async getSalonStats(salonId: string, staffId?: string): Promise<FeedbackStats> {
-    let query = this.supabase
-      .from('v_feedback_summary')
-      .select('*')
-      .eq('salon_id', salonId);
+    let query = this.supabase.from('v_feedback_summary').select('*').eq('salon_id', salonId);
 
     if (staffId) {
       query = query.eq('staff_id', staffId);
@@ -360,10 +362,11 @@ export class FeedbackService {
         threeStar: acc.threeStar + (row.three_star || 0),
         twoStar: acc.twoStar + (row.two_star || 0),
         oneStar: acc.oneStar + (row.one_star || 0),
-        ratingSum: acc.ratingSum + ((row.average_rating || 0) * (row.total_reviews || 0)),
-        serviceQualitySum: acc.serviceQualitySum + ((row.avg_service_quality || 0) * (row.total_reviews || 0)),
-        cleanlinessSum: acc.cleanlinessSum + ((row.avg_cleanliness || 0) * (row.total_reviews || 0)),
-        valueSum: acc.valueSum + ((row.avg_value_for_money || 0) * (row.total_reviews || 0)),
+        ratingSum: acc.ratingSum + (row.average_rating || 0) * (row.total_reviews || 0),
+        serviceQualitySum:
+          acc.serviceQualitySum + (row.avg_service_quality || 0) * (row.total_reviews || 0),
+        cleanlinessSum: acc.cleanlinessSum + (row.avg_cleanliness || 0) * (row.total_reviews || 0),
+        valueSum: acc.valueSum + (row.avg_value_for_money || 0) * (row.total_reviews || 0),
       }),
       {
         totalReviews: 0,
@@ -390,8 +393,12 @@ export class FeedbackService {
       twoStar: stats.twoStar,
       oneStar: stats.oneStar,
       responseRate: 0, // TODO: Calculate from responses
-      avgServiceQuality: stats.serviceQualitySum > 0 ? Math.round((stats.serviceQualitySum / total) * 10) / 10 : null,
-      avgCleanliness: stats.cleanlinessSum > 0 ? Math.round((stats.cleanlinessSum / total) * 10) / 10 : null,
+      avgServiceQuality:
+        stats.serviceQualitySum > 0
+          ? Math.round((stats.serviceQualitySum / total) * 10) / 10
+          : null,
+      avgCleanliness:
+        stats.cleanlinessSum > 0 ? Math.round((stats.cleanlinessSum / total) * 10) / 10 : null,
       avgValueForMoney: stats.valueSum > 0 ? Math.round((stats.valueSum / total) * 10) / 10 : null,
     };
   }

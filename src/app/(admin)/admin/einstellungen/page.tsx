@@ -18,16 +18,10 @@ async function getSettingsData() {
   const supabase = await createServerClient();
 
   // Get salon settings
-  const { data: salonData } = await supabase
-    .from('salons')
-    .select('*')
-    .single();
+  const { data: salonData } = await supabase.from('salons').select('*').single();
 
   // Get services
-  const { data: servicesData } = await supabase
-    .from('services')
-    .select('*')
-    .order('name');
+  const { data: servicesData } = await supabase.from('services').select('*').order('name');
 
   return {
     salon: salonData,

@@ -47,12 +47,12 @@ export function NewPasswordForm() {
 
   if (success) {
     return (
-      <div className="text-center space-y-6">
+      <div className="space-y-6 text-center">
         <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
           <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">Passwort geändert!</h2>
+          <h2 className="mb-2 text-xl font-semibold">Passwort geändert!</h2>
           <p className="text-muted-foreground">
             Ihr Passwort wurde erfolgreich aktualisiert. Sie können sich jetzt mit Ihrem neuen
             Passwort anmelden.
@@ -75,7 +75,7 @@ export function NewPasswordForm() {
       <div className="space-y-2">
         <Label htmlFor="password">Neues Passwort</Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="password"
             name="password"
@@ -88,13 +88,13 @@ export function NewPasswordForm() {
             autoComplete="new-password"
           />
         </div>
-        <p className="text-xs text-muted-foreground">Mindestens 8 Zeichen</p>
+        <p className="text-muted-foreground text-xs">Mindestens 8 Zeichen</p>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="confirmPassword">Passwort bestätigen</Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             id="confirmPassword"
             name="confirmPassword"
@@ -121,7 +121,7 @@ export function NewPasswordForm() {
       </Button>
 
       <div className="text-center">
-        <Link href="/konto/login" className="text-sm text-muted-foreground hover:text-primary">
+        <Link href="/konto/login" className="text-muted-foreground hover:text-primary text-sm">
           Zurück zur Anmeldung
         </Link>
       </div>

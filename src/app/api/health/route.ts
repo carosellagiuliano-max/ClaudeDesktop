@@ -43,11 +43,7 @@ async function checkDatabase(): Promise<HealthCheck> {
     const supabase = await createServerClient();
 
     // Simple query to check database connectivity
-    const { error } = await supabase
-      .from('salons')
-      .select('id')
-      .limit(1)
-      .single();
+    const { error } = await supabase.from('salons').select('id').limit(1).single();
 
     const latency = Math.round(performance.now() - start);
 
@@ -112,10 +108,7 @@ async function checkSupabaseAuth(): Promise<HealthCheck> {
 export async function GET() {
   try {
     // Run health checks in parallel
-    const [database, supabaseAuth] = await Promise.all([
-      checkDatabase(),
-      checkSupabaseAuth(),
-    ]);
+    const [database, supabaseAuth] = await Promise.all([checkDatabase(), checkSupabaseAuth()]);
 
     const checks = {
       database,

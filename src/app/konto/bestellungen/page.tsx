@@ -103,9 +103,9 @@ export default async function OrderHistoryPage() {
   if (!customer) {
     return (
       <div className="container max-w-4xl py-8">
-        <div className="text-center py-12">
-          <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Kein Kundenprofil gefunden</h1>
+        <div className="py-12 text-center">
+          <AlertCircle className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+          <h1 className="mb-2 text-2xl font-bold">Kein Kundenprofil gefunden</h1>
           <p className="text-muted-foreground mb-6">
             Bitte vervollständigen Sie Ihr Profil, um Bestellungen zu sehen.
           </p>
@@ -130,10 +130,8 @@ export default async function OrderHistoryPage() {
   return (
     <div className="container max-w-4xl py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Meine Bestellungen</h1>
-        <p className="text-muted-foreground">
-          Übersicht über alle Ihre Bestellungen
-        </p>
+        <h1 className="mb-2 text-3xl font-bold">Meine Bestellungen</h1>
+        <p className="text-muted-foreground">Übersicht über alle Ihre Bestellungen</p>
       </div>
 
       {!hasOrders ? (
@@ -141,10 +139,10 @@ export default async function OrderHistoryPage() {
         <Card>
           <CardContent className="py-12">
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-                <ShoppingBag className="h-8 w-8 text-muted-foreground" />
+              <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+                <ShoppingBag className="text-muted-foreground h-8 w-8" />
               </div>
-              <h2 className="text-xl font-semibold mb-2">Noch keine Bestellungen</h2>
+              <h2 className="mb-2 text-xl font-semibold">Noch keine Bestellungen</h2>
               <p className="text-muted-foreground mb-6">
                 Sie haben noch keine Bestellungen aufgegeben.
               </p>
@@ -157,12 +155,8 @@ export default async function OrderHistoryPage() {
       ) : (
         <Tabs defaultValue="active" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="active">
-              Aktiv ({activeOrders.length})
-            </TabsTrigger>
-            <TabsTrigger value="past">
-              Vergangene ({pastOrders.length})
-            </TabsTrigger>
+            <TabsTrigger value="active">Aktiv ({activeOrders.length})</TabsTrigger>
+            <TabsTrigger value="past">Vergangene ({pastOrders.length})</TabsTrigger>
           </TabsList>
 
           {/* Active Orders */}
@@ -170,15 +164,11 @@ export default async function OrderHistoryPage() {
             {activeOrders.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center">
-                  <p className="text-muted-foreground">
-                    Keine aktiven Bestellungen
-                  </p>
+                  <p className="text-muted-foreground">Keine aktiven Bestellungen</p>
                 </CardContent>
               </Card>
             ) : (
-              activeOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))
+              activeOrders.map((order) => <OrderCard key={order.id} order={order} />)
             )}
           </TabsContent>
 
@@ -187,15 +177,11 @@ export default async function OrderHistoryPage() {
             {pastOrders.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center">
-                  <p className="text-muted-foreground">
-                    Keine vergangenen Bestellungen
-                  </p>
+                  <p className="text-muted-foreground">Keine vergangenen Bestellungen</p>
                 </CardContent>
               </Card>
             ) : (
-              pastOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))
+              pastOrders.map((order) => <OrderCard key={order.id} order={order} />)
             )}
           </TabsContent>
         </Tabs>
@@ -222,16 +208,16 @@ interface OrderCardProps {
 
 function OrderCard({ order }: OrderCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="transition-shadow hover:shadow-md">
       <CardContent className="p-4">
         <Link href={`/konto/bestellungen/${order.id}`}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="mb-2 flex items-center gap-3">
                 <span className="font-mono font-semibold">{order.orderNumber}</span>
                 {getStatusBadge(order.status)}
               </div>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-4 text-sm">
                 <span>{formatDate(order.createdAt)}</span>
                 <span>•</span>
                 <span>{order.itemCount} Artikel</span>
@@ -241,12 +227,12 @@ function OrderCard({ order }: OrderCardProps) {
               <div className="text-right">
                 <p className="font-semibold">{formatPrice(order.totalCents)}</p>
                 {order.paidAt && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Bezahlt am {formatDate(order.paidAt)}
                   </p>
                 )}
               </div>
-              <ChevronRight className="h-5 w-5 text-muted-foreground" />
+              <ChevronRight className="text-muted-foreground h-5 w-5" />
             </div>
           </div>
         </Link>

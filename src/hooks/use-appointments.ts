@@ -135,11 +135,9 @@ export function useCreateReservation() {
  * Hook to confirm an appointment
  */
 export function useConfirmAppointment() {
-  return useMutation(
-    async (params: { appointmentId: string; confirmedBy?: string }) => {
-      return AppointmentService.confirm(params.appointmentId, params.confirmedBy);
-    }
-  );
+  return useMutation(async (params: { appointmentId: string; confirmedBy?: string }) => {
+    return AppointmentService.confirm(params.appointmentId, params.confirmedBy);
+  });
 }
 
 /**
@@ -148,11 +146,7 @@ export function useConfirmAppointment() {
 export function useCancelAppointment() {
   return useMutation(
     async (params: { appointmentId: string; cancelledBy: string; reason?: string }) => {
-      return AppointmentService.cancel(
-        params.appointmentId,
-        params.cancelledBy,
-        params.reason
-      );
+      return AppointmentService.cancel(params.appointmentId, params.cancelledBy, params.reason);
     }
   );
 }
@@ -161,22 +155,18 @@ export function useCancelAppointment() {
  * Hook to complete an appointment
  */
 export function useCompleteAppointment() {
-  return useMutation(
-    async (params: { appointmentId: string; completedBy: string }) => {
-      return AppointmentService.complete(params.appointmentId, params.completedBy);
-    }
-  );
+  return useMutation(async (params: { appointmentId: string; completedBy: string }) => {
+    return AppointmentService.complete(params.appointmentId, params.completedBy);
+  });
 }
 
 /**
  * Hook to mark appointment as no-show
  */
 export function useMarkNoShow() {
-  return useMutation(
-    async (params: { appointmentId: string; markedBy: string }) => {
-      return AppointmentService.markNoShow(params.appointmentId, params.markedBy);
-    }
-  );
+  return useMutation(async (params: { appointmentId: string; markedBy: string }) => {
+    return AppointmentService.markNoShow(params.appointmentId, params.markedBy);
+  });
 }
 
 /**
@@ -184,11 +174,7 @@ export function useMarkNoShow() {
  */
 export function useRescheduleAppointment() {
   return useMutation(
-    async (params: {
-      appointmentId: string;
-      newStartTime: Date;
-      newStaffId?: string;
-    }) => {
+    async (params: { appointmentId: string; newStartTime: Date; newStaffId?: string }) => {
       return AppointmentService.reschedule(
         params.appointmentId,
         params.newStartTime,

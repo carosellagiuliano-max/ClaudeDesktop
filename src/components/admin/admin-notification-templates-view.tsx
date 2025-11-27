@@ -21,13 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -262,19 +256,21 @@ export function AdminNotificationTemplatesView({
   // Merge templates with defaults
   const allTemplates = defaultTemplates.map((dt) => {
     const existing = templates.find((t) => t.code === dt.code);
-    return existing || {
-      id: '',
-      name: dt.name,
-      code: dt.code,
-      channel: 'email' as const,
-      subject: null,
-      bodyHtml: null,
-      bodyText: null,
-      smsBody: null,
-      availableVariables: dt.variables,
-      isActive: false,
-      updatedAt: '',
-    };
+    return (
+      existing || {
+        id: '',
+        name: dt.name,
+        code: dt.code,
+        channel: 'email' as const,
+        subject: null,
+        bodyHtml: null,
+        bodyText: null,
+        smsBody: null,
+        availableVariables: dt.variables,
+        isActive: false,
+        updatedAt: '',
+      }
+    );
   });
 
   return (
@@ -282,9 +278,7 @@ export function AdminNotificationTemplatesView({
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Benachrichtigungen</h1>
-        <p className="text-muted-foreground">
-          E-Mail- und SMS-Vorlagen verwalten
-        </p>
+        <p className="text-muted-foreground">E-Mail- und SMS-Vorlagen verwalten</p>
       </div>
 
       {/* Tabs */}
@@ -305,9 +299,7 @@ export function AdminNotificationTemplatesView({
           <Card>
             <CardHeader>
               <CardTitle>E-Mail-Vorlagen</CardTitle>
-              <CardDescription>
-                Passen Sie die automatischen Benachrichtigungen an
-              </CardDescription>
+              <CardDescription>Passen Sie die automatischen Benachrichtigungen an</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -331,14 +323,12 @@ export function AdminNotificationTemplatesView({
                         <TableCell>
                           <div>
                             <p className="font-medium">{info?.name || template.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {template.code}
-                            </p>
+                            <p className="text-muted-foreground text-xs">{template.code}</p>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <ChannelIcon className="h-4 w-4 text-muted-foreground" />
+                            <ChannelIcon className="text-muted-foreground h-4 w-4" />
                             <span className="capitalize">{template.channel}</span>
                           </div>
                         </TableCell>
@@ -381,11 +371,7 @@ export function AdminNotificationTemplatesView({
                                 </Button>
                               </>
                             )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEdit(template)}
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => handleEdit(template)}>
                               {template.id ? (
                                 <Edit className="h-4 w-4" />
                               ) : (
@@ -412,13 +398,13 @@ export function AdminNotificationTemplatesView({
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {Array.from(
-                  new Set(defaultTemplates.flatMap((t) => t.variables))
-                ).map((variable) => (
-                  <Badge key={variable} variant="outline">
-                    {`{{${variable}}}`}
-                  </Badge>
-                ))}
+                {Array.from(new Set(defaultTemplates.flatMap((t) => t.variables))).map(
+                  (variable) => (
+                    <Badge key={variable} variant="outline">
+                      {`{{${variable}}}`}
+                    </Badge>
+                  )
+                )}
               </div>
             </CardContent>
           </Card>
@@ -429,9 +415,7 @@ export function AdminNotificationTemplatesView({
           <Card>
             <CardHeader>
               <CardTitle>Versandverlauf</CardTitle>
-              <CardDescription>
-                Die letzten 50 Benachrichtigungen
-              </CardDescription>
+              <CardDescription>Die letzten 50 Benachrichtigungen</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -478,7 +462,7 @@ export function AdminNotificationTemplatesView({
                               </Badge>
                               {log.errorMessage && (
                                 <span
-                                  className="text-xs text-red-500 cursor-help"
+                                  className="cursor-help text-xs text-red-500"
                                   title={log.errorMessage}
                                 >
                                   (Fehler)
@@ -499,7 +483,7 @@ export function AdminNotificationTemplatesView({
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {selectedTemplate?.id ? 'Vorlage bearbeiten' : 'Neue Vorlage erstellen'}
@@ -556,28 +540,24 @@ export function AdminNotificationTemplatesView({
                 onChange={(e) => setEditSmsBody(e.target.value)}
                 maxLength={160}
               />
-              <p className="text-xs text-muted-foreground">
-                {editSmsBody.length}/160 Zeichen
-              </p>
+              <p className="text-muted-foreground text-xs">{editSmsBody.length}/160 Zeichen</p>
             </div>
 
             {/* Active Toggle */}
             <div className="flex items-center justify-between">
               <Label htmlFor="isActive">Vorlage aktiv</Label>
-              <Switch
-                id="isActive"
-                checked={editIsActive}
-                onCheckedChange={setEditIsActive}
-              />
+              <Switch id="isActive" checked={editIsActive} onCheckedChange={setEditIsActive} />
             </div>
 
             {/* Available Variables */}
             {selectedTemplate && (
-              <div className="rounded-lg bg-muted p-4">
-                <p className="text-sm font-medium mb-2">Verfügbare Variablen:</p>
+              <div className="bg-muted rounded-lg p-4">
+                <p className="mb-2 text-sm font-medium">Verfügbare Variablen:</p>
                 <div className="flex flex-wrap gap-2">
-                  {(selectedTemplate.availableVariables ||
-                    getTemplateInfo(selectedTemplate.code)?.variables || []
+                  {(
+                    selectedTemplate.availableVariables ||
+                    getTemplateInfo(selectedTemplate.code)?.variables ||
+                    []
                   ).map((v) => (
                     <Badge
                       key={v}
@@ -609,7 +589,7 @@ export function AdminNotificationTemplatesView({
 
       {/* Preview Dialog */}
       <Dialog open={previewDialogOpen} onOpenChange={setPreviewDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Vorschau: {selectedTemplate?.name}</DialogTitle>
           </DialogHeader>
@@ -618,9 +598,7 @@ export function AdminNotificationTemplatesView({
             {selectedTemplate?.subject && (
               <div>
                 <Label>Betreff</Label>
-                <p className="mt-1 p-3 bg-muted rounded-lg">
-                  {selectedTemplate.subject}
-                </p>
+                <p className="bg-muted mt-1 rounded-lg p-3">{selectedTemplate.subject}</p>
               </div>
             )}
 
@@ -628,7 +606,7 @@ export function AdminNotificationTemplatesView({
               <div>
                 <Label>E-Mail-Vorschau</Label>
                 <div
-                  className="mt-1 p-4 bg-white border rounded-lg prose prose-sm max-w-none"
+                  className="prose prose-sm mt-1 max-w-none rounded-lg border bg-white p-4"
                   dangerouslySetInnerHTML={{ __html: selectedTemplate.bodyHtml }}
                 />
               </div>
@@ -637,9 +615,7 @@ export function AdminNotificationTemplatesView({
             {selectedTemplate?.smsBody && (
               <div>
                 <Label>SMS-Vorschau</Label>
-                <p className="mt-1 p-3 bg-muted rounded-lg">
-                  {selectedTemplate.smsBody}
-                </p>
+                <p className="bg-muted mt-1 rounded-lg p-3">{selectedTemplate.smsBody}</p>
               </div>
             )}
           </div>
@@ -657,9 +633,7 @@ export function AdminNotificationTemplatesView({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Test-E-Mail senden</DialogTitle>
-            <DialogDescription>
-              Senden Sie eine Test-E-Mail mit Beispieldaten
-            </DialogDescription>
+            <DialogDescription>Senden Sie eine Test-E-Mail mit Beispieldaten</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
@@ -674,7 +648,7 @@ export function AdminNotificationTemplatesView({
               />
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Die Variablen werden mit Beispieldaten ausgefüllt.
             </p>
           </div>
@@ -683,10 +657,7 @@ export function AdminNotificationTemplatesView({
             <Button variant="outline" onClick={() => setTestDialogOpen(false)}>
               Abbrechen
             </Button>
-            <Button
-              onClick={handleSendTest}
-              disabled={!testEmail || isSendingTest}
-            >
+            <Button onClick={handleSendTest} disabled={!testEmail || isSendingTest}>
               {isSendingTest ? 'Wird gesendet...' : 'Test senden'}
             </Button>
           </DialogFooter>

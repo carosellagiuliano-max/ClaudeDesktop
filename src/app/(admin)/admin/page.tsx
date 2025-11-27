@@ -89,7 +89,7 @@ async function getDashboardData() {
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
   // Get today's appointments
-  const { data: todayAppointmentsData, count: todayCount } = await supabase
+  const { data: todayAppointmentsData, count: todayCount } = (await supabase
     .from('appointments')
     .select(
       `
@@ -113,7 +113,10 @@ async function getDashboardData() {
     )
     .gte('start_time', startOfDay)
     .lte('start_time', endOfDay)
-    .order('start_time', { ascending: true }) as { data: DashboardAppointmentRow[] | null; count: number | null };
+    .order('start_time', { ascending: true })) as {
+    data: DashboardAppointmentRow[] | null;
+    count: number | null;
+  };
 
   // Get week appointments count
   const { count: weekCount } = await supabase
@@ -129,16 +132,14 @@ async function getDashboardData() {
     .in('status', ['pending', 'paid', 'processing']);
 
   // Get monthly revenue
-  const { data: monthlyOrders } = await supabase
+  const { data: monthlyOrders } = (await supabase
     .from('orders')
     .select('total_cents')
     .gte('created_at', startOfMonth.toISOString())
-    .eq('payment_status', 'succeeded') as { data: MonthlyOrderRow[] | null };
+    .eq('payment_status', 'succeeded')) as { data: MonthlyOrderRow[] | null };
 
-  const monthlyRevenue = monthlyOrders?.reduce(
-    (sum, order) => sum + (order.total_cents || 0),
-    0
-  ) || 0;
+  const monthlyRevenue =
+    monthlyOrders?.reduce((sum, order) => sum + (order.total_cents || 0), 0) || 0;
 
   // Get new customers this month
   const { count: newCustomersCount } = await supabase
@@ -155,29 +156,27 @@ async function getDashboardData() {
     .eq('status', 'cancelled');
 
   // Get recent orders
-  const { data: recentOrdersData } = await supabase
+  const { data: recentOrdersData } = (await supabase
     .from('orders')
     .select('id, order_number, customer_email, total_cents, status, created_at')
     .order('created_at', { ascending: false })
-    .limit(5) as { data: RecentOrderRow[] | null };
+    .limit(5)) as { data: RecentOrderRow[] | null };
 
   // Transform appointments data
-  const todayAppointments: TodayAppointment[] = (todayAppointmentsData || []).map(
-    (apt) => ({
-      id: apt.id,
-      time: new Date(apt.start_time).toLocaleTimeString('de-CH', {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-      customerName: apt.customers
-        ? `${apt.customers.first_name} ${apt.customers.last_name}`
-        : 'Unbekannt',
-      serviceName: apt.services?.name || 'Unbekannt',
-      staffName: apt.staff?.display_name || 'Unbekannt',
-      status: apt.status as TodayAppointment['status'],
-      duration: apt.services?.duration_minutes || 30,
-    })
-  );
+  const todayAppointments: TodayAppointment[] = (todayAppointmentsData || []).map((apt) => ({
+    id: apt.id,
+    time: new Date(apt.start_time).toLocaleTimeString('de-CH', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    customerName: apt.customers
+      ? `${apt.customers.first_name} ${apt.customers.last_name}`
+      : 'Unbekannt',
+    serviceName: apt.services?.name || 'Unbekannt',
+    staffName: apt.staff?.display_name || 'Unbekannt',
+    status: apt.status as TodayAppointment['status'],
+    duration: apt.services?.duration_minutes || 30,
+  }));
 
   // Transform orders data
   const recentOrders: RecentOrder[] = (recentOrdersData || []).map((order) => ({

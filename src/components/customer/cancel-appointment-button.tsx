@@ -56,7 +56,7 @@ export function CancelAppointmentButton({
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
-          <XCircle className="h-4 w-4 mr-2" />
+          <XCircle className="mr-2 h-4 w-4" />
           Termin stornieren
         </Button>
       </AlertDialogTrigger>

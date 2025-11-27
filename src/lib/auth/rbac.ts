@@ -50,7 +50,9 @@ export function hasAllowedRole(userRole: StaffRole, allowedRoles: StaffRole[]): 
 export async function getCurrentStaffMember(): Promise<StaffMember | null> {
   const supabase = await createServerClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return null;

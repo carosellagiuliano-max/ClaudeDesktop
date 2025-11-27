@@ -3,15 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  Menu,
-  X,
-  Phone,
-  Instagram,
-  ShoppingBag,
-  User,
-  Calendar,
-} from 'lucide-react';
+import { Menu, X, Phone, Instagram, ShoppingBag, User, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -75,9 +67,9 @@ export function Header() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        'fixed top-0 right-0 left-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'bg-background/95 backdrop-blur-md shadow-sm border-b border-border/50'
+          ? 'bg-background/95 border-border/50 border-b shadow-sm backdrop-blur-md'
           : 'bg-transparent'
       )}
     >
@@ -98,7 +90,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium transition-colors rounded-md',
+                  'rounded-md px-4 py-2 text-sm font-medium transition-colors',
                   pathname === item.href
                     ? 'text-primary bg-primary/10'
                     : 'text-foreground/80 hover:text-foreground hover:bg-muted'
@@ -119,7 +111,7 @@ export function Header() {
               className="text-foreground/80 hover:text-foreground"
             >
               <a href={`tel:${salonInfo.phone.replace(/\s/g, '')}`}>
-                <Phone className="h-4 w-4 mr-2" />
+                <Phone className="mr-2 h-4 w-4" />
                 <span className="hidden xl:inline">{salonInfo.phone}</span>
               </a>
             </Button>
@@ -146,7 +138,7 @@ export function Header() {
               variant="ghost"
               size="icon"
               asChild
-              className="relative text-foreground/80 hover:text-foreground"
+              className="text-foreground/80 hover:text-foreground relative"
             >
               <Link href="/warenkorb" aria-label="Warenkorb">
                 <ShoppingBag className="h-4 w-4" />
@@ -170,9 +162,9 @@ export function Header() {
             </Button>
 
             {/* Book Appointment CTA */}
-            <Button asChild className="ml-2 btn-glow">
+            <Button asChild className="btn-glow ml-2">
               <Link href="/termin-buchen">
-                <Calendar className="h-4 w-4 mr-2" />
+                <Calendar className="mr-2 h-4 w-4" />
                 Termin buchen
               </Link>
             </Button>
@@ -181,12 +173,7 @@ export function Header() {
           {/* Mobile Menu */}
           <div className="flex items-center gap-2 lg:hidden">
             {/* Mobile Cart */}
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="relative text-foreground/80"
-            >
+            <Button variant="ghost" size="icon" asChild className="text-foreground/80 relative">
               <Link href="/warenkorb" aria-label="Warenkorb">
                 <ShoppingBag className="h-5 w-5" />
               </Link>
@@ -195,16 +182,12 @@ export function Header() {
             {/* Mobile Menu Trigger */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Menu öffnen"
-                >
+                <Button variant="ghost" size="icon" aria-label="Menu öffnen">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
-                <div className="flex flex-col h-full">
+                <div className="flex h-full flex-col">
                   {/* Mobile Navigation */}
                   <nav className="flex flex-col gap-1 py-6">
                     {navigation.map((item) => (
@@ -212,7 +195,7 @@ export function Header() {
                         key={item.href}
                         href={item.href}
                         className={cn(
-                          'px-4 py-3 text-base font-medium transition-colors rounded-lg',
+                          'rounded-lg px-4 py-3 text-base font-medium transition-colors',
                           pathname === item.href
                             ? 'text-primary bg-primary/10'
                             : 'text-foreground/80 hover:text-foreground hover:bg-muted'
@@ -226,41 +209,25 @@ export function Header() {
                   {/* Mobile Actions */}
                   <div className="mt-auto space-y-3 border-t pt-6">
                     {/* Phone */}
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      asChild
-                    >
+                    <Button variant="outline" className="w-full justify-start" asChild>
                       <a href={`tel:${salonInfo.phone.replace(/\s/g, '')}`}>
-                        <Phone className="h-4 w-4 mr-3" />
+                        <Phone className="mr-3 h-4 w-4" />
                         {salonInfo.phone}
                       </a>
                     </Button>
 
                     {/* Instagram */}
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      asChild
-                    >
-                      <a
-                        href={salonInfo.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Instagram className="h-4 w-4 mr-3" />
+                    <Button variant="outline" className="w-full justify-start" asChild>
+                      <a href={salonInfo.instagram} target="_blank" rel="noopener noreferrer">
+                        <Instagram className="mr-3 h-4 w-4" />
                         Instagram
                       </a>
                     </Button>
 
                     {/* Login */}
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      asChild
-                    >
+                    <Button variant="outline" className="w-full justify-start" asChild>
                       <Link href="/login">
-                        <User className="h-4 w-4 mr-3" />
+                        <User className="mr-3 h-4 w-4" />
                         Anmelden
                       </Link>
                     </Button>
@@ -268,7 +235,7 @@ export function Header() {
                     {/* Book Appointment CTA */}
                     <Button className="w-full" asChild>
                       <Link href="/termin-buchen">
-                        <Calendar className="h-4 w-4 mr-2" />
+                        <Calendar className="mr-2 h-4 w-4" />
                         Termin buchen
                       </Link>
                     </Button>

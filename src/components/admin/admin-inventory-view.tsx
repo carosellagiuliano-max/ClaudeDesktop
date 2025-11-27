@@ -16,13 +16,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -129,8 +123,14 @@ function getMovementTypeLabel(type: string): string {
   return labels[type] || type;
 }
 
-function getMovementTypeBadge(type: string): { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string } {
-  const badges: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
+function getMovementTypeBadge(type: string): {
+  variant: 'default' | 'secondary' | 'destructive' | 'outline';
+  label: string;
+} {
+  const badges: Record<
+    string,
+    { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }
+  > = {
     sale: { variant: 'destructive', label: 'Verkauf' },
     purchase: { variant: 'default', label: 'Einkauf' },
     adjustment: { variant: 'secondary', label: 'Korrektur' },
@@ -145,11 +145,7 @@ function getMovementTypeBadge(type: string): { variant: 'default' | 'secondary' 
 // COMPONENT
 // ============================================
 
-export function AdminInventoryView({
-  products,
-  movements,
-  stats,
-}: AdminInventoryViewProps) {
+export function AdminInventoryView({ products, movements, stats }: AdminInventoryViewProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [stockFilter, setStockFilter] = useState<'all' | 'low' | 'out'>('all');
   const [adjustDialogOpen, setAdjustDialogOpen] = useState(false);
@@ -212,9 +208,7 @@ export function AdminInventoryView({
         throw new Error('Fehler beim Anpassen des Bestands');
       }
 
-      toast.success(
-        `Bestand ${adjustmentType === 'add' ? 'erhöht' : 'reduziert'}: ${qty} Stück`
-      );
+      toast.success(`Bestand ${adjustmentType === 'add' ? 'erhöht' : 'reduziert'}: ${qty} Stück`);
       setAdjustDialogOpen(false);
 
       // Refresh page to get updated data
@@ -259,9 +253,7 @@ export function AdminInventoryView({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Inventar</h1>
-          <p className="text-muted-foreground">
-            Bestandsübersicht und Lagerbewegungen
-          </p>
+          <p className="text-muted-foreground">Bestandsübersicht und Lagerbewegungen</p>
         </div>
         <Button variant="outline" onClick={handleExportCSV}>
           <Download className="mr-2 h-4 w-4" />
@@ -274,13 +266,11 @@ export function AdminInventoryView({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Produkte</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+            <Package className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalProducts}</div>
-            <p className="text-xs text-muted-foreground">
-              mit Bestandsverfolgung
-            </p>
+            <p className="text-muted-foreground text-xs">mit Bestandsverfolgung</p>
           </CardContent>
         </Card>
 
@@ -290,12 +280,8 @@ export function AdminInventoryView({
             <AlertTriangle className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
-              {stats.lowStockCount}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              unter Schwellwert
-            </p>
+            <div className="text-2xl font-bold text-yellow-600">{stats.lowStockCount}</div>
+            <p className="text-muted-foreground text-xs">unter Schwellwert</p>
           </CardContent>
         </Card>
 
@@ -305,12 +291,8 @@ export function AdminInventoryView({
             <TrendingDown className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
-              {stats.outOfStockCount}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Produkte ohne Bestand
-            </p>
+            <div className="text-2xl font-bold text-red-600">{stats.outOfStockCount}</div>
+            <p className="text-muted-foreground text-xs">Produkte ohne Bestand</p>
           </CardContent>
         </Card>
 
@@ -321,9 +303,7 @@ export function AdminInventoryView({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatPrice(stats.totalValue)}</div>
-            <p className="text-xs text-muted-foreground">
-              Gesamtwert (Einkaufspreis)
-            </p>
+            <p className="text-muted-foreground text-xs">Gesamtwert (Einkaufspreis)</p>
           </CardContent>
         </Card>
       </div>
@@ -339,8 +319,8 @@ export function AdminInventoryView({
         <TabsContent value="products" className="space-y-4">
           {/* Filters */}
           <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <div className="relative max-w-sm flex-1">
+              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
                 placeholder="Suchen nach Name oder SKU..."
                 value={searchTerm}
@@ -389,24 +369,20 @@ export function AdminInventoryView({
                   filteredProducts.map((product) => (
                     <TableRow key={product.id}>
                       <TableCell className="font-medium">{product.name}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {product.sku || '-'}
-                      </TableCell>
+                      <TableCell className="text-muted-foreground">{product.sku || '-'}</TableCell>
                       <TableCell>{product.categoryName || '-'}</TableCell>
                       <TableCell className="text-right">
                         <span
                           className={cn(
                             'font-medium',
                             product.stockQuantity <= 0 && 'text-red-600',
-                            product.isLowStock &&
-                              product.stockQuantity > 0 &&
-                              'text-yellow-600'
+                            product.isLowStock && product.stockQuantity > 0 && 'text-yellow-600'
                           )}
                         >
                           {product.stockQuantity}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right text-muted-foreground">
+                      <TableCell className="text-muted-foreground text-right">
                         {product.lowStockThreshold}
                       </TableCell>
                       <TableCell>
@@ -446,9 +422,7 @@ export function AdminInventoryView({
                 <History className="h-5 w-5" />
                 Letzte Lagerbewegungen
               </CardTitle>
-              <CardDescription>
-                Die letzten 50 Bestandsänderungen
-              </CardDescription>
+              <CardDescription>Die letzten 50 Bestandsänderungen</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -479,9 +453,7 @@ export function AdminInventoryView({
                           <TableCell className="text-muted-foreground">
                             {formatDate(movement.createdAt)}
                           </TableCell>
-                          <TableCell className="font-medium">
-                            {movement.productName}
-                          </TableCell>
+                          <TableCell className="font-medium">{movement.productName}</TableCell>
                           <TableCell>
                             <Badge variant={badge.variant}>{badge.label}</Badge>
                           </TableCell>
@@ -497,13 +469,13 @@ export function AdminInventoryView({
                               {movement.quantity}
                             </span>
                           </TableCell>
-                          <TableCell className="text-right text-muted-foreground">
+                          <TableCell className="text-muted-foreground text-right">
                             {movement.previousQuantity}
                           </TableCell>
                           <TableCell className="text-right font-medium">
                             {movement.newQuantity}
                           </TableCell>
-                          <TableCell className="max-w-[150px] truncate text-muted-foreground">
+                          <TableCell className="text-muted-foreground max-w-[150px] truncate">
                             {movement.notes || '-'}
                           </TableCell>
                           <TableCell className="text-muted-foreground">

@@ -73,11 +73,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Fetch user profile
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
     if (error) {
       console.error('Error fetching profile:', error);
@@ -89,10 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Fetch user roles
   const fetchRoles = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
-      .from('user_roles')
-      .select('*')
-      .eq('profile_id', userId);
+    const { data, error } = await supabase.from('user_roles').select('*').eq('profile_id', userId);
 
     if (error) {
       console.error('Error fetching roles:', error);
@@ -105,7 +98,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Load user data (profile + roles)
   const loadUserData = useCallback(
     async (userId: string) => {
-      const [profileData, rolesData] = await Promise.all([fetchProfile(userId), fetchRoles(userId)]);
+      const [profileData, rolesData] = await Promise.all([
+        fetchProfile(userId),
+        fetchRoles(userId),
+      ]);
 
       setProfile(profileData);
       setRoles(rolesData);
@@ -148,21 +144,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, newSession: Session | null) => {
-      setSession(newSession);
+    } = supabase.auth.onAuthStateChange(
+      async (event: AuthChangeEvent, newSession: Session | null) => {
+        setSession(newSession);
 
-      if (newSession?.user) {
-        setUser(newSession.user as AuthUser);
-        await loadUserData(newSession.user.id);
-      } else {
-        setUser(null);
-        setProfile(null);
-        setRoles([]);
-        setCurrentSalonId(null);
+        if (newSession?.user) {
+          setUser(newSession.user as AuthUser);
+          await loadUserData(newSession.user.id);
+        } else {
+          setUser(null);
+          setProfile(null);
+          setRoles([]);
+          setCurrentSalonId(null);
+        }
+
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
-    });
+    );
 
     return () => {
       subscription.unsubscribe();
@@ -177,8 +175,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     (role: RoleName, salonId?: string): boolean => {
       const targetSalonId = salonId || currentSalonId;
       return roles.some(
-        (r) =>
-          r.role_name === role && (r.salon_id === targetSalonId || r.salon_id === null) // Global roles
+        (r) => r.role_name === role && (r.salon_id === targetSalonId || r.salon_id === null) // Global roles
       );
     },
     [roles, currentSalonId]

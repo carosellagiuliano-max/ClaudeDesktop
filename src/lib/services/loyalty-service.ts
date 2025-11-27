@@ -331,9 +331,7 @@ export class LoyaltyService {
       return { nextTier: null, pointsNeeded: 0, progress: 0 };
     }
 
-    const currentTierIndex = program.tiers.findIndex(
-      (t) => t.id === loyalty.currentTier?.id
-    );
+    const currentTierIndex = program.tiers.findIndex((t) => t.id === loyalty.currentTier?.id);
 
     if (currentTierIndex === -1 || currentTierIndex >= program.tiers.length - 1) {
       // Already at highest tier

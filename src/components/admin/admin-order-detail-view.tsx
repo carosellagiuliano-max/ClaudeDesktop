@@ -136,7 +136,10 @@ function formatDate(dateString: string): string {
 }
 
 function getStatusConfig(status: string) {
-  const config: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+  const config: Record<
+    string,
+    { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }
+  > = {
     pending: { label: 'Ausstehend', variant: 'secondary' },
     processing: { label: 'In Bearbeitung', variant: 'default' },
     shipped: { label: 'Versendet', variant: 'default' },
@@ -148,7 +151,10 @@ function getStatusConfig(status: string) {
 }
 
 function getPaymentStatusConfig(status: string) {
-  const config: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+  const config: Record<
+    string,
+    { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }
+  > = {
     pending: { label: 'Ausstehend', variant: 'secondary' },
     succeeded: { label: 'Bezahlt', variant: 'default' },
     failed: { label: 'Fehlgeschlagen', variant: 'destructive' },
@@ -177,11 +183,7 @@ function getEventLabel(eventType: string): string {
 // COMPONENT
 // ============================================
 
-export function AdminOrderDetailView({
-  order,
-  items,
-  events,
-}: AdminOrderDetailViewProps) {
+export function AdminOrderDetailView({ order, items, events }: AdminOrderDetailViewProps) {
   const router = useRouter();
   const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
@@ -327,7 +329,7 @@ export function AdminOrderDetailView({
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Order Items */}
           <Card>
             <CardHeader>
@@ -353,28 +355,36 @@ export function AdminOrderDetailView({
                         <div>
                           <p className="font-medium">{item.productName}</p>
                           {item.variantName && (
-                            <p className="text-sm text-muted-foreground">{item.variantName}</p>
+                            <p className="text-muted-foreground text-sm">{item.variantName}</p>
                           )}
                           {item.sku && (
-                            <p className="text-xs text-muted-foreground">SKU: {item.sku}</p>
+                            <p className="text-muted-foreground text-xs">SKU: {item.sku}</p>
                           )}
                         </div>
                       </TableCell>
                       <TableCell className="text-center">{item.quantity}</TableCell>
-                      <TableCell className="text-right">{formatCurrency(item.unitPriceCents)}</TableCell>
-                      <TableCell className="text-right">{formatCurrency(item.totalCents)}</TableCell>
+                      <TableCell className="text-right">
+                        {formatCurrency(item.unitPriceCents)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {formatCurrency(item.totalCents)}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
                     <TableCell colSpan={3}>Zwischensumme</TableCell>
-                    <TableCell className="text-right">{formatCurrency(order.subtotalCents)}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(order.subtotalCents)}
+                    </TableCell>
                   </TableRow>
                   {order.shippingCents > 0 && (
                     <TableRow>
                       <TableCell colSpan={3}>Versand</TableCell>
-                      <TableCell className="text-right">{formatCurrency(order.shippingCents)}</TableCell>
+                      <TableCell className="text-right">
+                        {formatCurrency(order.shippingCents)}
+                      </TableCell>
                     </TableRow>
                   )}
                   {order.taxCents > 0 && (
@@ -384,8 +394,12 @@ export function AdminOrderDetailView({
                     </TableRow>
                   )}
                   <TableRow>
-                    <TableCell colSpan={3} className="font-bold">Total</TableCell>
-                    <TableCell className="text-right font-bold">{formatCurrency(order.totalCents)}</TableCell>
+                    <TableCell colSpan={3} className="font-bold">
+                      Total
+                    </TableCell>
+                    <TableCell className="text-right font-bold">
+                      {formatCurrency(order.totalCents)}
+                    </TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
@@ -402,23 +416,23 @@ export function AdminOrderDetailView({
             </CardHeader>
             <CardContent>
               {events.length === 0 ? (
-                <p className="text-center py-4 text-muted-foreground">Keine Ereignisse</p>
+                <p className="text-muted-foreground py-4 text-center">Keine Ereignisse</p>
               ) : (
                 <div className="space-y-4">
                   {events.map((event, index) => (
                     <div key={event.id} className="flex gap-4">
                       <div className="flex flex-col items-center">
-                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        <div className="bg-primary h-2 w-2 rounded-full" />
                         {index < events.length - 1 && (
-                          <div className="w-0.5 flex-1 bg-border mt-2" />
+                          <div className="bg-border mt-2 w-0.5 flex-1" />
                         )}
                       </div>
                       <div className="flex-1 pb-4">
                         <p className="font-medium">{getEventLabel(event.eventType)}</p>
                         {event.description && (
-                          <p className="text-sm text-muted-foreground">{event.description}</p>
+                          <p className="text-muted-foreground text-sm">{event.description}</p>
                         )}
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-muted-foreground mt-1 text-xs">
                           {formatDate(event.createdAt)}
                         </p>
                       </div>
@@ -448,21 +462,21 @@ export function AdminOrderDetailView({
                   </p>
                   <a
                     href={`mailto:${order.customer.email}`}
-                    className="text-sm text-primary hover:underline block"
+                    className="text-primary block text-sm hover:underline"
                   >
                     {order.customer.email}
                   </a>
                   {order.customer.phone && (
                     <a
                       href={`tel:${order.customer.phone}`}
-                      className="text-sm text-muted-foreground block"
+                      className="text-muted-foreground block text-sm"
                     >
                       {order.customer.phone}
                     </a>
                   )}
                   <Button
                     variant="link"
-                    className="p-0 h-auto"
+                    className="h-auto p-0"
                     onClick={() => router.push(`/admin/kunden/${order.customer!.id}`)}
                   >
                     Kundenprofil ansehen
@@ -485,9 +499,11 @@ export function AdminOrderDetailView({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <address className="not-italic text-sm">
+                <address className="text-sm not-italic">
                   <p>{order.shippingAddress.street}</p>
-                  <p>{order.shippingAddress.postalCode} {order.shippingAddress.city}</p>
+                  <p>
+                    {order.shippingAddress.postalCode} {order.shippingAddress.city}
+                  </p>
                   <p>{order.shippingAddress.country}</p>
                 </address>
               </CardContent>
@@ -504,12 +520,12 @@ export function AdminOrderDetailView({
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Status</span>
+                <span className="text-muted-foreground text-sm">Status</span>
                 <Badge variant={paymentStatusConfig.variant}>{paymentStatusConfig.label}</Badge>
               </div>
               {order.paymentIntentId && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Payment ID</span>
+                  <span className="text-muted-foreground text-sm">Payment ID</span>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -517,7 +533,11 @@ export function AdminOrderDetailView({
                     onClick={() => handleCopy(order.paymentIntentId!)}
                   >
                     {order.paymentIntentId.slice(0, 15)}...
-                    {copied ? <Check className="ml-1 h-3 w-3" /> : <Copy className="ml-1 h-3 w-3" />}
+                    {copied ? (
+                      <Check className="ml-1 h-3 w-3" />
+                    ) : (
+                      <Copy className="ml-1 h-3 w-3" />
+                    )}
                   </Button>
                 </div>
               )}
@@ -558,9 +578,7 @@ export function AdminOrderDetailView({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                  {order.notes}
-                </p>
+                <p className="text-muted-foreground text-sm whitespace-pre-wrap">{order.notes}</p>
               </CardContent>
             </Card>
           )}
@@ -576,7 +594,8 @@ export function AdminOrderDetailView({
               Erstattung durchführen
             </DialogTitle>
             <DialogDescription>
-              Der Betrag wird über Stripe erstattet. Diese Aktion kann nicht rückgängig gemacht werden.
+              Der Betrag wird über Stripe erstattet. Diese Aktion kann nicht rückgängig gemacht
+              werden.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -590,8 +609,9 @@ export function AdminOrderDetailView({
                 max={order.totalCents}
                 min={1}
               />
-              <p className="text-sm text-muted-foreground">
-                Max. {formatCurrency(order.totalCents)} | Eingegebener Betrag: {formatCurrency(refundAmount)}
+              <p className="text-muted-foreground text-sm">
+                Max. {formatCurrency(order.totalCents)} | Eingegebener Betrag:{' '}
+                {formatCurrency(refundAmount)}
               </p>
             </div>
             <div className="space-y-2">
@@ -653,7 +673,8 @@ export function AdminOrderDetailView({
           <DialogHeader>
             <DialogTitle>Sendungsverfolgung</DialogTitle>
             <DialogDescription>
-              Geben Sie die Tracking-Nummer ein. Der Bestellstatus wird auf &quot;Versendet&quot; gesetzt.
+              Geben Sie die Tracking-Nummer ein. Der Bestellstatus wird auf &quot;Versendet&quot;
+              gesetzt.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">

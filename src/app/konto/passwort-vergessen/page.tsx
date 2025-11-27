@@ -27,21 +27,21 @@ export default async function PasswordForgottenPage() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+    <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
           <Link href="/" className="inline-flex items-center gap-2">
-            <Scissors className="h-8 w-8 text-primary" />
+            <Scissors className="text-primary h-8 w-8" />
             <span className="text-2xl font-bold">SCHNITTWERK</span>
           </Link>
         </div>
 
         {/* Reset Card */}
         <Card className="border-border/50">
-          <CardHeader className="text-center pb-2">
+          <CardHeader className="pb-2 text-center">
             <CardTitle className="text-2xl">Passwort vergessen?</CardTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Kein Problem! Wir senden Ihnen einen Link zum Zurücksetzen.
             </p>
           </CardHeader>
@@ -51,7 +51,7 @@ export default async function PasswordForgottenPage() {
         </Card>
 
         {/* Footer */}
-        <p className="text-center text-sm text-muted-foreground mt-8">
+        <p className="text-muted-foreground mt-8 text-center text-sm">
           <Link href="/" className="hover:text-primary">
             Zurück zur Startseite
           </Link>
