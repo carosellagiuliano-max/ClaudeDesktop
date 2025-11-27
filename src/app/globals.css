@@ -1,0 +1,385 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   SCHNITTWERK DESIGN TOKENS
+   Luxury Salon - Modern, Calm, Clean
+   "Apple Store meets high-end beauty brand"
+   ============================================ */
+
+@theme inline {
+  /* Core colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Component colors */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* SCHNITTWERK Brand Colors */
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-cream: var(--cream);
+  --color-charcoal: var(--charcoal);
+
+  /* Chart colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Border radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Base radius */
+  --radius: 0.75rem;
+
+  /* SCHNITTWERK Brand Colors (Light Mode) */
+  /* Gold: #D4AF37 -> oklch(0.76 0.12 85) */
+  --gold: oklch(0.76 0.12 85);
+  --gold-light: oklch(0.85 0.08 85);
+  --gold-dark: oklch(0.65 0.14 85);
+
+  /* Cream/Warm White */
+  --cream: oklch(0.98 0.01 90);
+
+  /* Charcoal/Elegant Dark */
+  --charcoal: oklch(0.25 0.01 260);
+
+  /* Core Theme Colors */
+  --background: oklch(0.995 0.005 90);
+  --foreground: oklch(0.18 0.01 260);
+
+  /* Cards with subtle warmth */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.01 260);
+
+  /* Popovers */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.01 260);
+
+  /* Primary = Gold (Brand Color) */
+  --primary: oklch(0.76 0.12 85);
+  --primary-foreground: oklch(0.15 0.01 260);
+
+  /* Secondary = Elegant Gray */
+  --secondary: oklch(0.96 0.005 260);
+  --secondary-foreground: oklch(0.25 0.01 260);
+
+  /* Muted = Soft Gray */
+  --muted: oklch(0.96 0.005 260);
+  --muted-foreground: oklch(0.50 0.01 260);
+
+  /* Accent = Light Gold */
+  --accent: oklch(0.94 0.04 85);
+  --accent-foreground: oklch(0.25 0.01 260);
+
+  /* Destructive = Elegant Red */
+  --destructive: oklch(0.55 0.22 25);
+
+  /* Borders & Inputs */
+  --border: oklch(0.90 0.01 260);
+  --input: oklch(0.90 0.01 260);
+  --ring: oklch(0.76 0.12 85);
+
+  /* Chart colors - warm palette */
+  --chart-1: oklch(0.76 0.12 85);
+  --chart-2: oklch(0.65 0.10 160);
+  --chart-3: oklch(0.55 0.08 220);
+  --chart-4: oklch(0.70 0.15 45);
+  --chart-5: oklch(0.60 0.12 320);
+
+  /* Sidebar */
+  --sidebar: oklch(0.98 0.005 90);
+  --sidebar-foreground: oklch(0.18 0.01 260);
+  --sidebar-primary: oklch(0.76 0.12 85);
+  --sidebar-primary-foreground: oklch(0.15 0.01 260);
+  --sidebar-accent: oklch(0.94 0.04 85);
+  --sidebar-accent-foreground: oklch(0.25 0.01 260);
+  --sidebar-border: oklch(0.90 0.01 260);
+  --sidebar-ring: oklch(0.76 0.12 85);
+}
+
+.dark {
+  /* SCHNITTWERK Dark Mode - Elegant & Luxurious */
+  --background: oklch(0.14 0.01 260);
+  --foreground: oklch(0.96 0.005 90);
+
+  /* Cards */
+  --card: oklch(0.18 0.01 260);
+  --card-foreground: oklch(0.96 0.005 90);
+
+  /* Popovers */
+  --popover: oklch(0.18 0.01 260);
+  --popover-foreground: oklch(0.96 0.005 90);
+
+  /* Primary = Gold (slightly brighter in dark mode) */
+  --primary: oklch(0.80 0.14 85);
+  --primary-foreground: oklch(0.14 0.01 260);
+
+  /* Secondary */
+  --secondary: oklch(0.25 0.01 260);
+  --secondary-foreground: oklch(0.96 0.005 90);
+
+  /* Muted */
+  --muted: oklch(0.25 0.01 260);
+  --muted-foreground: oklch(0.65 0.01 260);
+
+  /* Accent */
+  --accent: oklch(0.30 0.04 85);
+  --accent-foreground: oklch(0.96 0.005 90);
+
+  /* Destructive */
+  --destructive: oklch(0.65 0.20 25);
+
+  /* Borders & Inputs */
+  --border: oklch(0.28 0.01 260);
+  --input: oklch(0.28 0.01 260);
+  --ring: oklch(0.80 0.14 85);
+
+  /* Chart colors - dark mode */
+  --chart-1: oklch(0.80 0.14 85);
+  --chart-2: oklch(0.70 0.12 160);
+  --chart-3: oklch(0.75 0.10 45);
+  --chart-4: oklch(0.65 0.15 280);
+  --chart-5: oklch(0.70 0.14 320);
+
+  /* Sidebar */
+  --sidebar: oklch(0.16 0.01 260);
+  --sidebar-foreground: oklch(0.96 0.005 90);
+  --sidebar-primary: oklch(0.80 0.14 85);
+  --sidebar-primary-foreground: oklch(0.14 0.01 260);
+  --sidebar-accent: oklch(0.25 0.03 85);
+  --sidebar-accent-foreground: oklch(0.96 0.005 90);
+  --sidebar-border: oklch(0.28 0.01 260);
+  --sidebar-ring: oklch(0.80 0.14 85);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+
+  /* Focus visible styles */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+@layer base {
+  h1 {
+    @apply text-4xl font-bold tracking-tight lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  h4 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+
+  p {
+    @apply leading-7;
+  }
+
+  /* Links */
+  a:not([class]) {
+    @apply text-primary underline-offset-4 hover:underline;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+@layer utilities {
+  /* Glass effect for cards */
+  .glass {
+    @apply bg-background/80 backdrop-blur-lg border border-border/50;
+  }
+
+  /* Gold gradient text */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold-dark via-gold to-gold-light bg-clip-text text-transparent;
+  }
+
+  /* Subtle shadow for elevated elements */
+  .shadow-elegant {
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 0.03),
+      0 4px 8px oklch(0 0 0 / 0.04),
+      0 12px 24px oklch(0 0 0 / 0.05);
+  }
+
+  /* Container with max-width */
+  .container-narrow {
+    @apply mx-auto max-w-4xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  /* Hide scrollbar but allow scrolling */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@layer utilities {
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slide-up 0.4s ease-out;
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale in animation */
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* ============================================
+   COMPONENT OVERRIDES
+   ============================================ */
+
+@layer components {
+  /* Button hover glow effect */
+  .btn-glow:hover {
+    box-shadow: 0 0 20px oklch(0.76 0.12 85 / 0.3);
+  }
+
+  /* Card hover lift */
+  .card-hover {
+    @apply transition-all duration-300;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-1;
+    box-shadow:
+      0 4px 12px oklch(0 0 0 / 0.05),
+      0 20px 40px oklch(0 0 0 / 0.08);
+  }
+}
