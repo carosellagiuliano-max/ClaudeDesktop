@@ -352,7 +352,8 @@ CREATE OR REPLACE FUNCTION submit_feedback_by_token(
 RETURNS UUID AS $$
 DECLARE
   v_request feedback_requests%ROWTYPE;
-  v_appointment appointments%ROWTYPE;
+  v_staff_id UUID;
+  v_service_id UUID;
   v_feedback_id UUID;
 BEGIN
   -- Get and validate request
@@ -367,10 +368,16 @@ BEGIN
     RAISE EXCEPTION 'Invalid or expired feedback token';
   END IF;
 
-  -- Get appointment details
-  SELECT * INTO v_appointment
-  FROM appointments
-  WHERE id = v_request.appointment_id;
+  -- Get appointment details (staff_id from appointments, service_id from appointment_services)
+  SELECT a.staff_id INTO v_staff_id
+  FROM appointments a
+  WHERE a.id = v_request.appointment_id;
+
+  -- Get first service from appointment_services
+  SELECT aps.service_id INTO v_service_id
+  FROM appointment_services aps
+  WHERE aps.appointment_id = v_request.appointment_id
+  LIMIT 1;
 
   -- Create feedback
   INSERT INTO customer_feedback (
@@ -378,7 +385,7 @@ BEGIN
     rating, comment, service_quality, cleanliness, wait_time, value_for_money
   ) VALUES (
     v_request.salon_id, v_request.customer_id, v_request.appointment_id,
-    v_appointment.staff_id, v_appointment.service_id,
+    v_staff_id, v_service_id,
     p_rating, p_comment, p_service_quality, p_cleanliness, p_wait_time, p_value_for_money
   )
   RETURNING id INTO v_feedback_id;
@@ -407,7 +414,7 @@ ON marketing_logs FOR SELECT
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff WHERE user_id = auth.uid()
+    SELECT salon_id FROM staff WHERE profile_id = auth.uid()
   )
 );
 
@@ -418,9 +425,9 @@ TO authenticated
 USING (
   salon_id IS NULL OR
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role IN ('admin', 'manager')
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name IN ('admin', 'manager')
   )
 );
 
@@ -430,7 +437,7 @@ ON customer_feedback FOR ALL
 TO authenticated
 USING (
   customer_id IN (
-    SELECT id FROM customers WHERE user_id = auth.uid()
+    SELECT id FROM customers WHERE profile_id = auth.uid()
   )
 );
 
@@ -440,7 +447,7 @@ ON customer_feedback FOR SELECT
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff WHERE user_id = auth.uid()
+    SELECT salon_id FROM staff WHERE profile_id = auth.uid()
   )
 );
 
@@ -450,9 +457,9 @@ ON customer_feedback FOR UPDATE
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role IN ('admin', 'manager')
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name IN ('admin', 'manager')
   )
 );
 
