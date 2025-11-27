@@ -144,8 +144,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           reason,
         },
       })
-      .catch(() => {
-        // Table might not exist
+      .then(({ error }) => {
+        if (error) console.warn('Payment event logging failed:', error);
       });
 
     return NextResponse.json({

@@ -545,12 +545,11 @@ export async function confirmAppointment(
       accepted_at: new Date().toISOString(),
     }));
 
-    await supabase
-      .from('legal_document_acceptances')
-      .insert(acceptances)
-      .catch((err) => {
-        console.warn('Failed to record legal acceptances:', err);
-      });
+    try {
+      await supabase.from('legal_document_acceptances').insert(acceptances);
+    } catch (err) {
+      console.warn('Failed to record legal acceptances:', err);
+    }
   }
 
   // Get salon info for email
@@ -687,8 +686,8 @@ export async function markAppointmentNoShow(
       return { success: false, error: 'Fehler beim Markieren als No-Show.' };
     }
 
-    // Create audit log
-    await supabase
+    // Create audit log (fire and forget)
+    supabase
       .from('audit_logs')
       .insert({
         action: 'mark_no_show',
@@ -703,7 +702,9 @@ export async function markAppointmentNoShow(
           timestamp: new Date().toISOString(),
         },
       })
-      .catch((e) => console.warn('Audit log failed:', e));
+      .then(({ error }) => {
+        if (error) console.warn('Audit log failed:', error);
+      });
 
     return { success: true, noShowFeeCents };
   } catch (error) {

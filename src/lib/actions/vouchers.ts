@@ -143,8 +143,8 @@ export async function redeemVoucher(
       return { data: null, error: 'Fehler beim Einlösen des Gutscheins' };
     }
 
-    // Record the redemption transaction
-    await supabase
+    // Record the redemption transaction (fire and forget)
+    supabase
       .from('voucher_transactions')
       .insert({
         voucher_id: input.voucherId,
@@ -154,9 +154,8 @@ export async function redeemVoucher(
         reference_id: input.referenceId,
         customer_id: input.customerId,
       })
-      .catch(() => {
-        // Transaction logging failed but redemption succeeded
-        console.warn('Failed to log voucher transaction');
+      .then(({ error }) => {
+        if (error) console.warn('Failed to log voucher transaction:', error);
       });
 
     revalidatePath('/admin/vouchers');
