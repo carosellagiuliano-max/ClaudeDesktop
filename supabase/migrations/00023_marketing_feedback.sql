@@ -257,7 +257,7 @@ CREATE OR REPLACE VIEW v_feedback_summary AS
 SELECT
   cf.salon_id,
   cf.staff_id,
-  st.first_name || ' ' || st.last_name as staff_name,
+  st.display_name as staff_name,
   COUNT(*) as total_reviews,
   ROUND(AVG(cf.rating), 2) as average_rating,
   COUNT(*) FILTER (WHERE cf.rating = 5) as five_star,
@@ -271,7 +271,7 @@ SELECT
 FROM customer_feedback cf
 LEFT JOIN staff st ON cf.staff_id = st.id
 WHERE cf.status = 'approved'
-GROUP BY cf.salon_id, cf.staff_id, st.first_name, st.last_name;
+GROUP BY cf.salon_id, cf.staff_id, st.display_name;
 
 COMMENT ON VIEW v_feedback_summary IS 'Customer feedback summary by salon and staff';
 
@@ -281,7 +281,7 @@ SELECT
   cf.*,
   c.first_name || ' ' || c.last_name as customer_name,
   s.name as service_name,
-  st.first_name || ' ' || st.last_name as staff_name
+  st.display_name as staff_name
 FROM customer_feedback cf
 JOIN customers c ON cf.customer_id = c.id
 LEFT JOIN services s ON cf.service_id = s.id
@@ -353,6 +353,7 @@ RETURNS UUID AS $$
 DECLARE
   v_request feedback_requests%ROWTYPE;
   v_appointment appointments%ROWTYPE;
+  v_service_id UUID;
   v_feedback_id UUID;
 BEGIN
   -- Get and validate request
@@ -372,13 +373,20 @@ BEGIN
   FROM appointments
   WHERE id = v_request.appointment_id;
 
+  -- Get first service from appointment_services (primary service)
+  SELECT service_id INTO v_service_id
+  FROM appointment_services
+  WHERE appointment_id = v_request.appointment_id
+  ORDER BY sort_order ASC, created_at ASC
+  LIMIT 1;
+
   -- Create feedback
   INSERT INTO customer_feedback (
     salon_id, customer_id, appointment_id, staff_id, service_id,
     rating, comment, service_quality, cleanliness, wait_time, value_for_money
   ) VALUES (
     v_request.salon_id, v_request.customer_id, v_request.appointment_id,
-    v_appointment.staff_id, v_appointment.service_id,
+    v_appointment.staff_id, v_service_id,
     p_rating, p_comment, p_service_quality, p_cleanliness, p_wait_time, p_value_for_money
   )
   RETURNING id INTO v_feedback_id;
@@ -407,7 +415,7 @@ ON marketing_logs FOR SELECT
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff WHERE user_id = auth.uid()
+    SELECT salon_id FROM staff WHERE profile_id = auth.uid()
   )
 );
 
@@ -418,9 +426,9 @@ TO authenticated
 USING (
   salon_id IS NULL OR
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role IN ('admin', 'manager')
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name IN ('admin', 'manager')
   )
 );
 
@@ -430,7 +438,7 @@ ON customer_feedback FOR ALL
 TO authenticated
 USING (
   customer_id IN (
-    SELECT id FROM customers WHERE user_id = auth.uid()
+    SELECT id FROM customers WHERE profile_id = auth.uid()
   )
 );
 
@@ -440,7 +448,7 @@ ON customer_feedback FOR SELECT
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff WHERE user_id = auth.uid()
+    SELECT salon_id FROM staff WHERE profile_id = auth.uid()
   )
 );
 
@@ -450,9 +458,9 @@ ON customer_feedback FOR UPDATE
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role IN ('admin', 'manager')
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name IN ('admin', 'manager')
   )
 );
 

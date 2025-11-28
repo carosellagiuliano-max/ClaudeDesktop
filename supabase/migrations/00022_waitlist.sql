@@ -184,6 +184,7 @@ BEGIN
     notified_at = NOW(),
     notification_expires_at = NOW() + INTERVAL '30 minutes'
   FROM customers c
+  JOIN profiles p ON c.profile_id = p.id
   WHERE w.customer_id = c.id
     AND w.salon_id = p_salon_id
     AND w.service_id = p_service_id
@@ -198,8 +199,8 @@ BEGIN
   RETURNING
     w.id,
     w.customer_id,
-    c.phone,
-    c.email;
+    p.phone,
+    p.email;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -256,13 +257,14 @@ CREATE OR REPLACE VIEW v_active_waitlist AS
 SELECT
   w.*,
   c.first_name || ' ' || c.last_name AS customer_name,
-  c.phone AS customer_phone,
-  c.email AS customer_email,
+  p.phone AS customer_phone,
+  p.email AS customer_email,
   s.name AS service_name,
   s.duration_minutes,
-  COALESCE(st.first_name || ' ' || st.last_name, 'Beliebig') AS staff_name
+  COALESCE(st.display_name, 'Beliebig') AS staff_name
 FROM waitlist w
 JOIN customers c ON w.customer_id = c.id
+JOIN profiles p ON c.profile_id = p.id
 JOIN services s ON w.service_id = s.id
 LEFT JOIN staff st ON w.staff_id = st.id
 WHERE w.status IN ('waiting', 'notified');
@@ -303,7 +305,7 @@ ON waitlist FOR SELECT
 TO authenticated
 USING (
   customer_id IN (
-    SELECT id FROM customers WHERE user_id = auth.uid()
+    SELECT id FROM customers WHERE profile_id = auth.uid()
   )
 );
 
@@ -313,7 +315,7 @@ ON waitlist FOR ALL
 TO authenticated
 USING (
   customer_id IN (
-    SELECT id FROM customers WHERE user_id = auth.uid()
+    SELECT id FROM customers WHERE profile_id = auth.uid()
   )
 );
 
@@ -323,7 +325,7 @@ ON waitlist FOR SELECT
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff WHERE user_id = auth.uid()
+    SELECT salon_id FROM staff WHERE profile_id = auth.uid()
   )
 );
 
@@ -333,9 +335,9 @@ ON waitlist FOR UPDATE
 TO authenticated
 USING (
   salon_id IN (
-    SELECT salon_id FROM staff
-    WHERE user_id = auth.uid()
-    AND role IN ('admin', 'manager', 'mitarbeiter')
+    SELECT ur.salon_id FROM user_roles ur
+    WHERE ur.profile_id = auth.uid()
+    AND ur.role_name IN ('admin', 'manager', 'mitarbeiter')
   )
 );
 
